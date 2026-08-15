@@ -1,5 +1,6 @@
 import 'package:isar_community/isar.dart';
 
+import '../../core/macro_goals.dart';
 import '../local/collections/app_settings.dart';
 import '../local/collections/enums.dart';
 
@@ -57,6 +58,33 @@ class SettingsRepository {
       ..proteinGoal = protein
       ..carbsGoal = carbs
       ..fatGoal = fat;
+    await save(settings);
+  }
+
+  /// Verschuift het dagdoel en schaalt de macro's mee, zodat de verhouding
+  /// blijft staan zonder dat je alles opnieuw invult.
+  Future<void> setKcalGoal(int kcal) async {
+    final settings = await get();
+    final current = MacroGoals(
+      protein: settings.proteinGoal,
+      carbs: settings.carbsGoal,
+      fat: settings.fatGoal,
+    );
+    final scaled = current.scaledTo(settings.kcalGoal, kcal);
+    settings
+      ..kcalGoal = kcal
+      ..proteinGoal = scaled.protein
+      ..carbsGoal = scaled.carbs
+      ..fatGoal = scaled.fat;
+    await save(settings);
+  }
+
+  Future<void> setMacroGoals(MacroGoals goals) async {
+    final settings = await get();
+    settings
+      ..proteinGoal = goals.protein
+      ..carbsGoal = goals.carbs
+      ..fatGoal = goals.fat;
     await save(settings);
   }
 }

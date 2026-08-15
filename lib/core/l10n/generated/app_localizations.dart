@@ -835,6 +835,432 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Log {kcal} kcal'**
   String logKcal(int kcal);
+
+  /// No description provided for @kcalOver.
+  ///
+  /// In nl, this message translates to:
+  /// **'kcal over'**
+  String get kcalOver;
+
+  /// No description provided for @eatenOfGoal.
+  ///
+  /// In nl, this message translates to:
+  /// **'{eaten} van {goal} kcal gegeten'**
+  String eatenOfGoal(int eaten, int goal);
+
+  /// No description provided for @showAll.
+  ///
+  /// In nl, this message translates to:
+  /// **'Alles zien'**
+  String get showAll;
+
+  /// No description provided for @showLess.
+  ///
+  /// In nl, this message translates to:
+  /// **'Minder'**
+  String get showLess;
+
+  /// No description provided for @fiber.
+  ///
+  /// In nl, this message translates to:
+  /// **'Vezels'**
+  String get fiber;
+
+  /// No description provided for @sugars.
+  ///
+  /// In nl, this message translates to:
+  /// **'Waarvan suikers'**
+  String get sugars;
+
+  /// No description provided for @satFat.
+  ///
+  /// In nl, this message translates to:
+  /// **'Waarvan verzadigd'**
+  String get satFat;
+
+  /// No description provided for @salt.
+  ///
+  /// In nl, this message translates to:
+  /// **'Zout'**
+  String get salt;
+
+  /// No description provided for @sugarsLower.
+  ///
+  /// In nl, this message translates to:
+  /// **'waarvan suikers'**
+  String get sugarsLower;
+
+  /// No description provided for @satFatLower.
+  ///
+  /// In nl, this message translates to:
+  /// **'waarvan verzadigd'**
+  String get satFatLower;
+
+  /// No description provided for @water.
+  ///
+  /// In nl, this message translates to:
+  /// **'Water'**
+  String get water;
+
+  /// No description provided for @waterProgress.
+  ///
+  /// In nl, this message translates to:
+  /// **'{amount} L van {goal} L'**
+  String waterProgress(String amount, String goal);
+
+  /// No description provided for @waterHint.
+  ///
+  /// In nl, this message translates to:
+  /// **'Eén glas is 250 ml · tik om bij te vullen'**
+  String get waterHint;
+
+  /// No description provided for @waterDone.
+  ///
+  /// In nl, this message translates to:
+  /// **'Doel gehaald. Tik een glas om te corrigeren.'**
+  String get waterDone;
+
+  /// No description provided for @calendar.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kalender'**
+  String get calendar;
+
+  /// No description provided for @toToday.
+  ///
+  /// In nl, this message translates to:
+  /// **'Naar vandaag'**
+  String get toToday;
+
+  /// No description provided for @previousDay.
+  ///
+  /// In nl, this message translates to:
+  /// **'Vorige dag'**
+  String get previousDay;
+
+  /// No description provided for @nextDay.
+  ///
+  /// In nl, this message translates to:
+  /// **'Volgende dag'**
+  String get nextDay;
+
+  /// No description provided for @previousWeek.
+  ///
+  /// In nl, this message translates to:
+  /// **'Vorige week'**
+  String get previousWeek;
+
+  /// No description provided for @nextWeek.
+  ///
+  /// In nl, this message translates to:
+  /// **'Volgende week'**
+  String get nextWeek;
+
+  /// No description provided for @logInMeal.
+  ///
+  /// In nl, this message translates to:
+  /// **'Loggen in {meal}'**
+  String logInMeal(String meal);
+
+  /// No description provided for @quickAddHint.
+  ///
+  /// In nl, this message translates to:
+  /// **'tik + om direct te boeken'**
+  String get quickAddHint;
+
+  /// No description provided for @searchDatabase.
+  ///
+  /// In nl, this message translates to:
+  /// **'Zoeken in database'**
+  String get searchDatabase;
+
+  /// No description provided for @createNewProduct.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nieuw product aanmaken'**
+  String get createNewProduct;
+
+  /// No description provided for @nothingFound.
+  ///
+  /// In nl, this message translates to:
+  /// **'Niets gevonden'**
+  String get nothingFound;
+
+  /// No description provided for @nothingFoundHint.
+  ///
+  /// In nl, this message translates to:
+  /// **'Zoek online of maak het product zelf aan.'**
+  String get nothingFoundHint;
+
+  /// No description provided for @editPortion.
+  ///
+  /// In nl, this message translates to:
+  /// **'Portie wijzigen'**
+  String get editPortion;
+
+  /// No description provided for @inGrams.
+  ///
+  /// In nl, this message translates to:
+  /// **'in gram'**
+  String get inGrams;
+
+  /// No description provided for @gramsUnit.
+  ///
+  /// In nl, this message translates to:
+  /// **'gram'**
+  String get gramsUnit;
+
+  /// No description provided for @portionTotal.
+  ///
+  /// In nl, this message translates to:
+  /// **'1 {label} = {grams} g · totaal {total} g'**
+  String portionTotal(String label, int grams, int total);
+
+  /// No description provided for @per100Short.
+  ///
+  /// In nl, this message translates to:
+  /// **'{value} /100g'**
+  String per100Short(String value);
+
+  /// No description provided for @weekAverage.
+  ///
+  /// In nl, this message translates to:
+  /// **'kcal gemiddeld · doel {goal}'**
+  String weekAverage(int goal);
+
+  /// No description provided for @weekLoggedDays.
+  ///
+  /// In nl, this message translates to:
+  /// **'{logged} van {total} dagen gelogd'**
+  String weekLoggedDays(int logged, int total);
+
+  /// No description provided for @nothingLoggedTap.
+  ///
+  /// In nl, this message translates to:
+  /// **'niets gelogd — tik om aan te vullen'**
+  String get nothingLoggedTap;
+
+  /// No description provided for @notYetHappened.
+  ///
+  /// In nl, this message translates to:
+  /// **'nog niet geweest'**
+  String get notYetHappened;
+
+  /// No description provided for @goalsIntro.
+  ///
+  /// In nl, this message translates to:
+  /// **'Je macro’s tellen op tot je kcal-doel. Pas het doel aan, de rest schuift mee.'**
+  String get goalsIntro;
+
+  /// No description provided for @dayGoal.
+  ///
+  /// In nl, this message translates to:
+  /// **'Dagdoel'**
+  String get dayGoal;
+
+  /// No description provided for @kcalPerDay.
+  ///
+  /// In nl, this message translates to:
+  /// **'kcal per dag'**
+  String get kcalPerDay;
+
+  /// No description provided for @goalsMoreSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'kcal en macro-verdeling'**
+  String get goalsMoreSub;
+
+  /// No description provided for @weightMoreSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'wekelijks bijhouden'**
+  String get weightMoreSub;
+
+  /// No description provided for @ownProducts.
+  ///
+  /// In nl, this message translates to:
+  /// **'Eigen producten'**
+  String get ownProducts;
+
+  /// No description provided for @ownProductsSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'zelf ingevoerde voedingswaarden'**
+  String get ownProductsSub;
+
+  /// No description provided for @settingsMoreSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'thema, weergave, export'**
+  String get settingsMoreSub;
+
+  /// No description provided for @restartOnboarding.
+  ///
+  /// In nl, this message translates to:
+  /// **'Onboarding opnieuw'**
+  String get restartOnboarding;
+
+  /// No description provided for @restartOnboardingSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'bekijk de eerste keer'**
+  String get restartOnboardingSub;
+
+  /// No description provided for @moreFootnote.
+  ///
+  /// In nl, this message translates to:
+  /// **'Voedingswaarden uit NEVO 2025 en Open Food Facts. Alles staat op je telefoon; export via Instellingen.'**
+  String get moreFootnote;
+
+  /// No description provided for @weightDeltaIn30.
+  ///
+  /// In nl, this message translates to:
+  /// **'kg · {delta} in 30 dagen'**
+  String weightDeltaIn30(String delta);
+
+  /// No description provided for @logWeightToday.
+  ///
+  /// In nl, this message translates to:
+  /// **'Weeg vandaag: {kg} kg'**
+  String logWeightToday(String kg);
+
+  /// No description provided for @measurements.
+  ///
+  /// In nl, this message translates to:
+  /// **'Metingen'**
+  String get measurements;
+
+  /// No description provided for @displaySection.
+  ///
+  /// In nl, this message translates to:
+  /// **'Weergave'**
+  String get displaySection;
+
+  /// No description provided for @dataSection.
+  ///
+  /// In nl, this message translates to:
+  /// **'Gegevens'**
+  String get dataSection;
+
+  /// No description provided for @exportDataSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'alles als JSON, blijft op je telefoon'**
+  String get exportDataSub;
+
+  /// No description provided for @stepOf.
+  ///
+  /// In nl, this message translates to:
+  /// **'Stap {step} van {total}'**
+  String stepOf(int step, int total);
+
+  /// No description provided for @obGoalTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Waar wil je naartoe?'**
+  String get obGoalTitle;
+
+  /// No description provided for @obGoalBody.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kalorie rekent je dagdoel uit en houdt het daarna simpel: één cijfer op het startscherm, de rest eronder.'**
+  String get obGoalBody;
+
+  /// No description provided for @obLose.
+  ///
+  /// In nl, this message translates to:
+  /// **'Afvallen'**
+  String get obLose;
+
+  /// No description provided for @obMaintain.
+  ///
+  /// In nl, this message translates to:
+  /// **'Op gewicht blijven'**
+  String get obMaintain;
+
+  /// No description provided for @obGain.
+  ///
+  /// In nl, this message translates to:
+  /// **'Aankomen'**
+  String get obGain;
+
+  /// No description provided for @obPaceTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Hoe snel?'**
+  String get obPaceTitle;
+
+  /// No description provided for @obPaceBody.
+  ///
+  /// In nl, this message translates to:
+  /// **'Dit bepaalt je dagdoel. Je kunt het later in Doelen aanpassen zonder alles opnieuw in te vullen.'**
+  String get obPaceBody;
+
+  /// No description provided for @obPaceCalm.
+  ///
+  /// In nl, this message translates to:
+  /// **'Rustig · 0,25 kg/week'**
+  String get obPaceCalm;
+
+  /// No description provided for @obPaceNormal.
+  ///
+  /// In nl, this message translates to:
+  /// **'Normaal · 0,5 kg/week'**
+  String get obPaceNormal;
+
+  /// No description provided for @obPaceFast.
+  ///
+  /// In nl, this message translates to:
+  /// **'Snel · 0,75 kg/week'**
+  String get obPaceFast;
+
+  /// No description provided for @obDoneTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Klaar. Loggen kost één tik.'**
+  String get obDoneTitle;
+
+  /// No description provided for @obDoneBody.
+  ///
+  /// In nl, this message translates to:
+  /// **'Je recente producten staan bovenaan het logvel met de portie die je vorige keer koos. Tik de plus en het staat erin.'**
+  String get obDoneBody;
+
+  /// No description provided for @obFootnote.
+  ///
+  /// In nl, this message translates to:
+  /// **'Alles blijft op je telefoon. Geen account, geen tracking.'**
+  String get obFootnote;
+
+  /// No description provided for @next.
+  ///
+  /// In nl, this message translates to:
+  /// **'Verder'**
+  String get next;
+
+  /// No description provided for @begin.
+  ///
+  /// In nl, this message translates to:
+  /// **'Beginnen'**
+  String get begin;
+
+  /// No description provided for @deleted.
+  ///
+  /// In nl, this message translates to:
+  /// **'Verwijderd'**
+  String get deleted;
+
+  /// No description provided for @removeEntry.
+  ///
+  /// In nl, this message translates to:
+  /// **'Regel verwijderen'**
+  String get removeEntry;
+
+  /// No description provided for @scanSimulateHint.
+  ///
+  /// In nl, this message translates to:
+  /// **'Houd de barcode in het kader. Gevonden producten worden direct geopend met de laatst gebruikte portie.'**
+  String get scanSimulateHint;
 }
 
 class _AppLocalizationsDelegate

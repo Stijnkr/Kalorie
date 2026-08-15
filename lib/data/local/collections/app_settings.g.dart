@@ -22,30 +22,35 @@ const AppSettingsSchema = CollectionSchema(
       name: r'carbsGoal',
       type: IsarType.double,
     ),
-    r'fatGoal': PropertySchema(id: 1, name: r'fatGoal', type: IsarType.double),
-    r'kcalGoal': PropertySchema(id: 2, name: r'kcalGoal', type: IsarType.long),
+    r'catalogVersion': PropertySchema(
+      id: 1,
+      name: r'catalogVersion',
+      type: IsarType.long,
+    ),
+    r'fatGoal': PropertySchema(id: 2, name: r'fatGoal', type: IsarType.double),
+    r'kcalGoal': PropertySchema(id: 3, name: r'kcalGoal', type: IsarType.long),
     r'nevoImportedAt': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'nevoImportedAt',
       type: IsarType.dateTime,
     ),
     r'nevoVersion': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'nevoVersion',
       type: IsarType.string,
     ),
     r'onboardingDone': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'onboardingDone',
       type: IsarType.bool,
     ),
     r'proteinGoal': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'proteinGoal',
       type: IsarType.double,
     ),
     r'theme': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'theme',
       type: IsarType.byte,
       enumMap: _AppSettingsthemeEnumValueMap,
@@ -89,13 +94,14 @@ void _appSettingsSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeDouble(offsets[0], object.carbsGoal);
-  writer.writeDouble(offsets[1], object.fatGoal);
-  writer.writeLong(offsets[2], object.kcalGoal);
-  writer.writeDateTime(offsets[3], object.nevoImportedAt);
-  writer.writeString(offsets[4], object.nevoVersion);
-  writer.writeBool(offsets[5], object.onboardingDone);
-  writer.writeDouble(offsets[6], object.proteinGoal);
-  writer.writeByte(offsets[7], object.theme.index);
+  writer.writeLong(offsets[1], object.catalogVersion);
+  writer.writeDouble(offsets[2], object.fatGoal);
+  writer.writeLong(offsets[3], object.kcalGoal);
+  writer.writeDateTime(offsets[4], object.nevoImportedAt);
+  writer.writeString(offsets[5], object.nevoVersion);
+  writer.writeBool(offsets[6], object.onboardingDone);
+  writer.writeDouble(offsets[7], object.proteinGoal);
+  writer.writeByte(offsets[8], object.theme.index);
 }
 
 AppSettings _appSettingsDeserialize(
@@ -106,15 +112,16 @@ AppSettings _appSettingsDeserialize(
 ) {
   final object = AppSettings();
   object.carbsGoal = reader.readDouble(offsets[0]);
-  object.fatGoal = reader.readDouble(offsets[1]);
+  object.catalogVersion = reader.readLong(offsets[1]);
+  object.fatGoal = reader.readDouble(offsets[2]);
   object.id = id;
-  object.kcalGoal = reader.readLong(offsets[2]);
-  object.nevoImportedAt = reader.readDateTimeOrNull(offsets[3]);
-  object.nevoVersion = reader.readStringOrNull(offsets[4]);
-  object.onboardingDone = reader.readBool(offsets[5]);
-  object.proteinGoal = reader.readDouble(offsets[6]);
+  object.kcalGoal = reader.readLong(offsets[3]);
+  object.nevoImportedAt = reader.readDateTimeOrNull(offsets[4]);
+  object.nevoVersion = reader.readStringOrNull(offsets[5]);
+  object.onboardingDone = reader.readBool(offsets[6]);
+  object.proteinGoal = reader.readDouble(offsets[7]);
   object.theme =
-      _AppSettingsthemeValueEnumMap[reader.readByteOrNull(offsets[7])] ??
+      _AppSettingsthemeValueEnumMap[reader.readByteOrNull(offsets[8])] ??
       ThemeModeSetting.system;
   return object;
 }
@@ -129,18 +136,20 @@ P _appSettingsDeserializeProp<P>(
     case 0:
       return (reader.readDouble(offset)) as P;
     case 1:
-      return (reader.readDouble(offset)) as P;
-    case 2:
       return (reader.readLong(offset)) as P;
-    case 3:
-      return (reader.readDateTimeOrNull(offset)) as P;
-    case 4:
-      return (reader.readStringOrNull(offset)) as P;
-    case 5:
-      return (reader.readBool(offset)) as P;
-    case 6:
+    case 2:
       return (reader.readDouble(offset)) as P;
+    case 3:
+      return (reader.readLong(offset)) as P;
+    case 4:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 5:
+      return (reader.readStringOrNull(offset)) as P;
+    case 6:
+      return (reader.readBool(offset)) as P;
     case 7:
+      return (reader.readDouble(offset)) as P;
+    case 8:
       return (_AppSettingsthemeValueEnumMap[reader.readByteOrNull(offset)] ??
               ThemeModeSetting.system)
           as P;
@@ -326,6 +335,61 @@ extension AppSettingsQueryFilter
           includeUpper: includeUpper,
 
           epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterFilterCondition>
+  catalogVersionEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'catalogVersion', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterFilterCondition>
+  catalogVersionGreaterThan(int value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'catalogVersion',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterFilterCondition>
+  catalogVersionLessThan(int value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'catalogVersion',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterFilterCondition>
+  catalogVersionBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'catalogVersion',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
         ),
       );
     });
@@ -914,6 +978,19 @@ extension AppSettingsQuerySortBy
     });
   }
 
+  QueryBuilder<AppSettings, AppSettings, QAfterSortBy> sortByCatalogVersion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'catalogVersion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterSortBy>
+  sortByCatalogVersionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'catalogVersion', Sort.desc);
+    });
+  }
+
   QueryBuilder<AppSettings, AppSettings, QAfterSortBy> sortByFatGoal() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fatGoal', Sort.asc);
@@ -1012,6 +1089,19 @@ extension AppSettingsQuerySortThenBy
   QueryBuilder<AppSettings, AppSettings, QAfterSortBy> thenByCarbsGoalDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'carbsGoal', Sort.desc);
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterSortBy> thenByCatalogVersion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'catalogVersion', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterSortBy>
+  thenByCatalogVersionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'catalogVersion', Sort.desc);
     });
   }
 
@@ -1122,6 +1212,12 @@ extension AppSettingsQueryWhereDistinct
     });
   }
 
+  QueryBuilder<AppSettings, AppSettings, QDistinct> distinctByCatalogVersion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'catalogVersion');
+    });
+  }
+
   QueryBuilder<AppSettings, AppSettings, QDistinct> distinctByFatGoal() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'fatGoal');
@@ -1178,6 +1274,12 @@ extension AppSettingsQueryProperty
   QueryBuilder<AppSettings, double, QQueryOperations> carbsGoalProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'carbsGoal');
+    });
+  }
+
+  QueryBuilder<AppSettings, int, QQueryOperations> catalogVersionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'catalogVersion');
     });
   }
 

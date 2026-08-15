@@ -14,11 +14,21 @@ class WeightRepository {
         .watch(fireImmediately: true);
   }
 
+  Future<WeightEntry?> latest() {
+    return _isar.weightEntries.where().sortByDateKeyDesc().findFirst();
+  }
+
+  /// Eén meting per dag: opnieuw wegen overschrijft die van vandaag.
   Future<void> upsert(int dateKey, double kg) {
-    final entry = WeightEntry()
-      ..dateKey = dateKey
-      ..kg = kg;
-    return _isar.writeTxn(() => _isar.weightEntries.put(entry));
+    return _isar.writeTxn(() async {
+      final existing =
+          await _isar.weightEntries.filter().dateKeyEqualTo(dateKey).findFirst();
+      final entry = existing ?? WeightEntry();
+      entry
+        ..dateKey = dateKey
+        ..kg = kg;
+      await _isar.weightEntries.put(entry);
+    });
   }
 
   Future<void> delete(int id) {

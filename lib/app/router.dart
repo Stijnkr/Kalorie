@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../core/l10n/generated/app_localizations.dart';
-import '../core/widgets/panel.dart';
 import '../features/add_food/add_food_screen.dart';
 import '../features/add_food/amount_screen.dart';
 import '../features/food_edit/food_edit_screen.dart';
 import '../features/goals/goals_screen.dart';
 import '../features/history/history_screen.dart';
+import '../features/more/more_screen.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import '../features/scanner/scanner_screen.dart';
 import '../features/settings/settings_screen.dart';
@@ -118,56 +116,4 @@ GoRouter createRouter({required bool onboardingDone}) {
       ),
     ],
   );
-}
-
-class MoreScreen extends ConsumerWidget {
-  const MoreScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.more)),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
-            child: Text(
-              l10n.moreSection,
-              style: Theme.of(context).textTheme.labelSmall,
-            ),
-          ),
-          KaloriePanel(
-            child: Column(
-              children: [
-                ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  leading: const Icon(Icons.flag_outlined),
-                  title: Text(l10n.goals),
-                  subtitle: Text(l10n.goalsSubtitle),
-                  onTap: () => context.push('/goals'),
-                ),
-                const KalorieHairline(indent: 56),
-                ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  leading: const Icon(Icons.monitor_weight_outlined),
-                  title: Text(l10n.weight),
-                  subtitle: Text(l10n.weightSubtitle),
-                  onTap: () => context.push('/weight'),
-                ),
-                const KalorieHairline(indent: 56),
-                ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  leading: const Icon(Icons.tune),
-                  title: Text(l10n.settings),
-                  onTap: () => context.push('/settings'),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }

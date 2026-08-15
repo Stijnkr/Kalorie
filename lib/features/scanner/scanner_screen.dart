@@ -4,7 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../../app/theme.dart';
 import '../../core/l10n/generated/app_localizations.dart';
+import '../../core/widgets/kalorie_ui.dart';
+import '../../core/widgets/stroke_icon.dart';
 import '../../data/providers.dart';
 import '../../data/remote/off_mapper.dart';
 import '../../data/remote/rate_limiter.dart';
@@ -18,13 +21,26 @@ class ScannerScreen extends ConsumerStatefulWidget {
   ConsumerState<ScannerScreen> createState() => _ScannerScreenState();
 }
 
-class _ScannerScreenState extends ConsumerState<ScannerScreen> {
+class _ScannerScreenState extends ConsumerState<ScannerScreen>
+    with SingleTickerProviderStateMixin {
   final _controller = MobileScannerController();
   final _manual = TextEditingController();
+  late final AnimationController _scanLine;
   bool _busy = false;
+  bool _manualOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scanLine = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1600),
+    )..repeat(reverse: true);
+  }
 
   @override
   void dispose() {
+    _scanLine.dispose();
     _controller.dispose();
     _manual.dispose();
     super.dispose();
@@ -37,6 +53,14 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
     try {
       final repo = ref.read(foodRepositoryProvider);
       var food = await repo.getByBarcode(code);
+      if (food == null) {
+        try {
+          food =
+              await ref.read(catalogRepositoryProvider).getRemoteByBarcode(code);
+        } catch (_) {
+          food = null;
+        }
+      }
       if (food == null) {
         try {
           final product = await ref.read(offRemoteProvider).getByBarcode(code);
@@ -77,47 +101,172 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    const ink = KalorieColors.paperDark;
+    const paper = KalorieColors.inkDark;
+    const accent = KalorieColors.sageDark;
+
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.scanBarcode)),
-      body: Column(
+      backgroundColor: ink,
+      body: Stack(
+        fit: StackFit.expand,
         children: [
-          Expanded(
-            child: Stack(
-              children: [
-                MobileScanner(
-                  controller: _controller,
-                  onDetect: (capture) {
-                    final code = capture.barcodes.firstOrNull?.rawValue;
-                    if (code != null) _onCode(code);
-                  },
-                ),
-                if (_busy)
-                  const ColoredBox(
-                    color: Color(0x66000000),
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-              ],
-            ),
+          MobileScanner(
+            controller: _controller,
+            onDetect: (capture) {
+              final code = capture.barcodes.firstOrNull?.rawValue;
+              if (code != null) _onCode(code);
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+          const ColoredBox(color: Color(0x59121411)),
+          SafeArea(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(l10n.scanHint, textAlign: TextAlign.center),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: _manual,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: l10n.enterBarcode,
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.arrow_forward),
-                      onPressed: () => _onCode(_manual.text.trim()),
-                    ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(6, 4, 6, 2),
+                  child: Row(
+                    children: [
+                      KalorieTapTarget(
+                        onTap: () => context.pop(),
+                        child: const StrokeIcon(
+                          StrokeShape.close,
+                          size: 14,
+                          color: paper,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          l10n.scanBarcode,
+                          style: const TextStyle(
+                            color: paper,
+                            fontSize: 17,
+                            height: 1.2,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      KalorieTapTarget(
+                        tooltip: l10n.enterBarcode,
+                        onTap: () => setState(() => _manualOpen = !_manualOpen),
+                        child: const StrokeIcon(
+                          StrokeShape.barcode,
+                          size: 16,
+                          color: accent,
+                        ),
+                      ),
+                    ],
                   ),
-                  onSubmitted: _onCode,
                 ),
+                Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final top = constraints.maxHeight * 0.22;
+                      return Stack(
+                        children: [
+                          Positioned(
+                            left: 44,
+                            right: 44,
+                            top: top,
+                            height: 210,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: paper.withValues(alpha: 0.5),
+                                  width: 1.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                          AnimatedBuilder(
+                            animation: _scanLine,
+                            builder: (context, child) {
+                              final curve = Curves.easeInOut
+                                  .transform(_scanLine.value);
+                              return Positioned(
+                                left: 60,
+                                right: 60,
+                                top: top + 14 + curve * 182,
+                                child: child!,
+                              );
+                            },
+                            child: Container(
+                              height: 2,
+                              decoration: BoxDecoration(
+                                color: accent,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: accent.withValues(alpha: 0.7),
+                                    blurRadius: 14,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 32,
+                            right: 32,
+                            bottom: 24,
+                            child: Text(
+                              l10n.scanSimulateHint,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: paper.withValues(alpha: 0.72),
+                                fontSize: 14,
+                                height: 1.5,
+                              ),
+                            ),
+                          ),
+                          if (_busy)
+                            const Center(
+                              child: CircularProgressIndicator(color: accent),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                if (_manualOpen)
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      24,
+                      0,
+                      24,
+                      16 + MediaQuery.viewInsetsOf(context).bottom,
+                    ),
+                    child: TextField(
+                      controller: _manual,
+                      autofocus: true,
+                      keyboardType: TextInputType.number,
+                      style: const TextStyle(color: paper, fontSize: 15),
+                      decoration: InputDecoration(
+                        hintText: l10n.enterBarcode,
+                        hintStyle: TextStyle(
+                          color: paper.withValues(alpha: 0.5),
+                        ),
+                        filled: true,
+                        fillColor: paper.withValues(alpha: 0.08),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: paper.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: accent),
+                        ),
+                        suffixIcon: IconButton(
+                          color: accent,
+                          icon: const Icon(Icons.arrow_forward),
+                          onPressed: () => _onCode(_manual.text.trim()),
+                        ),
+                      ),
+                      onSubmitted: _onCode,
+                    ),
+                  )
+                else
+                  const SizedBox(height: 32),
               ],
             ),
           ),

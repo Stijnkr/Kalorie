@@ -1,0 +1,136 @@
+category,pattern,label,grams
+# Standaardporties per NEVO-voedingsmiddelgroep. Eerste match wint; een lege
+# pattern is de fallback voor de hele groep. Exacte porties per product staan in
+# portions.csv en gaan hier altijd overheen.
+Aardappelen en knolgewassen,frites|fritessticks,1 portie,150
+Aardappelen en knolgewassen,puree,1 opscheplepel,150
+Aardappelen en knolgewassen,krokket|kroketten|rosti|schijfjes|partjes|bolletjes|wafeltjes|rondjes|gnocchi,1 stuk,50
+Aardappelen en knolgewassen,,1 portie,150
+Alcoholische dranken,bier|shandy|cider|breezer,1 glas,250
+Alcoholische dranken,wijn|port|sherry|vermouth|madeira|muskaat,1 glas,100
+Alcoholische dranken,jenever|likeur|whisky|rum|wodka|cognac|brandewijn|vieux|campari|bitter|advocaat|irish,1 glaasje,35
+Alcoholische dranken,,1 glas,100
+Brood,cracker|toast|soepstengel,1 stuk,7
+Brood,croutons,1 portie,15
+Brood,beschuit,1 stuk,10
+Brood,knackebrod,1 stuk,12
+Brood,wafel,1 stuk,8
+Brood,croissant|brioche|stol|focaccia,1 stuk,50
+Brood,broodje|bol |bol$|ciabatta|pita|stokbrood,1 stuk,60
+Brood,,1 snee,35
+Diversen,cacaopoeder|cacaoproduct,1 eetlepel,5
+Diversen,spijs,1 portie,25
+Diversen,,1 theelepel,5
+Eieren,eidooier,1 stuk,17
+Eieren,eiwit,1 stuk,33
+Eieren,eipoeder,1 eetlepel,10
+Eieren,,1 ei,50
+Flesvoeding en preparaten,maaltijdvervanger|sportvoeding,1 portie,100
+Flesvoeding en preparaten,,1 fles,150
+Fruit,appelmoes|moes,1 schaaltje,100
+Fruit,gedroogd|rozijnen|dadels|vijgen|tuttifrutti|studentenhaver,1 handje,25
+Fruit,olijven,1 portie,20
+Fruit,bessen|frambozen|bramen|aardbeien|kersen|druiven|cranberry,1 schaaltje,100
+Fruit,banaan,1 stuk,120
+Fruit,appel,1 stuk,130
+Fruit,peer|peren,1 stuk,150
+Fruit,kiwi,1 stuk,75
+Fruit,meloen|ananas|mango|papaja,1 portie,150
+Fruit,perzik|pruimen|abrikozen|nectarine,1 stuk,80
+Fruit,mandarijn|citroen|grapefruit|sinaasappel,1 stuk,130
+Fruit,babyvoeding,1 potje,125
+Fruit,,1 stuk,120
+Gebak en koek,taart|vlaai,1 punt,100
+Gebak en koek,reep,1 reep,30
+Gebak en koek,cake|brownie|tompouce|berliner|soes|appelflap|appelcarre|beignet|oliebol|donut|baklava|tulumba|bojo,1 stuk,60
+Gebak en koek,biscuit|koekje|sprits|bokkenpootje|speculaas|kruidnoten|wafel|kokosmakronen|lange vinger,1 stuk,12
+Gebak en koek,broodje,1 stuk,60
+Gebak en koek,,1 stuk,25
+Graanproducten en meelsoorten,meel|bloem|maizena|zetmeel|bindmiddel|bakmix|zemelen|kiemen|poeder|tapioca,1 eetlepel,15
+Graanproducten en meelsoorten,pasta|noodles|rijst|couscous|quinoa|gierst|gort|bulgur,1 opscheplepel,50
+Graanproducten en meelsoorten,ontbijtproduct|muesli|vlokken|topping,1 portie,45
+Graanproducten en meelsoorten,pannenkoek,1 stuk,60
+Graanproducten en meelsoorten,wrap|tortilla,1 stuk,45
+Graanproducten en meelsoorten,poffertjes,1 portie,60
+Graanproducten en meelsoorten,bladerdeeg|pasteibakje|paneermeel,1 stuk,30
+Graanproducten en meelsoorten,,1 portie,50
+Groente,tomaat,1 stuk,80
+Groente,komkommer,1 portie,50
+Groente,paprika,1/2 stuk,75
+Groente,sla|andijvie rauw|postelein|raapstelen|veldsla,1 portie,30
+Groente,augurk,1 stuk,30
+Groente,zeewier,1 portie,10
+Groente,champignon|cantharel|paddenstoel,1 portie,50
+Groente,,1 opscheplepel,50
+Hartig broodbeleg,salade,1 eetlepel,20
+Hartig broodbeleg,,1 eetlepel,15
+Hartige sauzen,jus|smeltjus,1 opscheplepel,40
+Hartige sauzen,dressing|mayonaise|halvanaise|aioli|ketchup|mosterd|pesto|tapenade|chutney|piccalilly|salsa|guacamole|tzatziki|ketjap|sambal,1 eetlepel,15
+Hartige sauzen,saus (frites|cocktail|party|tafel|knoflook|joppie|sla-|barbecue|schaschlik|chili|soja),1 eetlepel,15
+Hartige sauzen,saus,1 opscheplepel,40
+Hartige sauzen,,1 eetlepel,15
+Hartige snacks en zoutjes,bitterbal|soesje|nugget|rempejek|zoutje|zoutjes|pepsels,1 stuk,20
+Hartige snacks en zoutjes,kroket|frikandel|loempia|nasischijf|bamibal|bamischijf|kaassouffle|kipkorn|berenklauw|viandel|gefrituurde,1 stuk,70
+Hartige snacks en zoutjes,broodje,1 stuk,100
+Hartige snacks en zoutjes,fritessticks,1 portie,100
+Hartige snacks en zoutjes,,1 portie,30
+Kaas,zuivelspread|smeerkaas|creme,1 eetlepel,15
+Kaas,hutten|cottage,1 bakje,100
+Kaas,geraspt|rasp,1 eetlepel,10
+Kaas,,1 plak,20
+Kruiden en specerijen,bouillonblokje,1 blokje,4
+Kruiden en specerijen,bouillonpoeder|soeppoeder|juspoeder|aroma|smaakversterker|mix,1 theelepel,3
+Kruiden en specerijen,sambal|mosterd|pasta|tamarinde,1 theelepel,5
+Kruiden en specerijen,,1 theelepel,2
+Melk en melkproducten,\bijs\b,1 bolletje,50
+Melk en melkproducten,milkshake|drinkontbijt|yoghurtdrank|melkdrank|zuiveldrank|kefir,1 glas,200
+Melk en melkproducten,melkpoeder|poeder,1 eetlepel,10
+Melk en melkproducten,room|topping|gecondenseerde,1 eetlepel,15
+Melk en melkproducten,^pap|krentjebrij,1 schaaltje,250
+Melk en melkproducten,melk,1 glas,200
+Melk en melkproducten,,1 schaaltje,150
+Niet-alcoholische dranken,siroop|diksap,1 scheut,20
+Niet-alcoholische dranken,koffie|thee,1 kop,125
+Niet-alcoholische dranken,,1 glas,200
+Noten en zaden,zaad|pitten|hennep|chia|sesam|maanzaad,1 eetlepel,10
+Noten en zaden,,1 handje,25
+Peulvruchten,,1 opscheplepel,75
+Samengestelde gerechten,pizza,1 pizza,300
+Samengestelde gerechten,broodje|tosti,1 stuk,120
+Samengestelde gerechten,salade,1 portie,150
+Samengestelde gerechten,babyvoeding|kindervoeding,1 potje,200
+Samengestelde gerechten,pannenkoek,1 stuk,100
+Samengestelde gerechten,sate,1 stokje,60
+Samengestelde gerechten,,1 portie,250
+Soepen,,1 kom,250
+"Suiker, snoep, zoet beleg en zoete sauzen",hagelslag|vlokken|kokosbrood|broodbeleg|muisjes,1 eetlepel,12
+"Suiker, snoep, zoet beleg en zoete sauzen",candybar,1 stuk,45
+"Suiker, snoep, zoet beleg en zoete sauzen",dessertsaus|siroop,1 eetlepel,20
+"Suiker, snoep, zoet beleg en zoete sauzen",jam|marmelade|stroop|honing|^pasta|spread|gember|boter chocolade|speculoos,1 eetlepel,15
+"Suiker, snoep, zoet beleg en zoete sauzen",\bijs\b,1 bolletje,50
+"Suiker, snoep, zoet beleg en zoete sauzen",chocolade|noga|marsepein|fudge|borstplaat,1 portie,25
+"Suiker, snoep, zoet beleg en zoete sauzen",bonbon|toffee|snoepje|zuurtjes|pepermunt|winegum|fruitgom|spekkie|marshmallow|drop|kauwgom|kauwbonbon|stophoest|salmiak,1 stuk,5
+"Suiker, snoep, zoet beleg en zoete sauzen",^suiker|suikerklontje|glazuur,1 theelepel,4
+"Suiker, snoep, zoet beleg en zoete sauzen",,1 portie,20
+Vetten en oliën,olie|bak-|frituur|braadvet|uitgesmolten,1 eetlepel,10
+Vetten en oliën,creme,1 eetlepel,15
+Vetten en oliën,boter|margarine|halvarine|smeltjus|vet,1 snee,5
+Vetten en oliën,,1 eetlepel,10
+"Vis, schaal- en schelpdieren",vissticks|lekkerbekje|kibbeling,1 stuk,30
+"Vis, schaal- en schelpdieren",ansjovis|sardines|kaviaar|kuit|hom,1 portie,30
+"Vis, schaal- en schelpdieren",tonijn,1 blik,100
+"Vis, schaal- en schelpdieren",garnalen|mosselen|oesters|krab|kreeft|inktvis,1 portie,100
+"Vis, schaal- en schelpdieren",haring|bokking|makreel|paling|zalm gerookt,1 stuk,100
+"Vis, schaal- en schelpdieren",,1 portie,125
+Vlees en gevogelte,knak|cocktailworst,1 stuk,25
+Vlees en gevogelte,worst,1 stuk,75
+Vlees en gevogelte,gehaktbal|vink|schnitzel|burger|hamburger|slavink|blinde,1 stuk,100
+Vlees en gevogelte,spek|bacon,1 portie,25
+Vlees en gevogelte,sate,1 stokje,60
+Vlees en gevogelte,,1 portie,100
+Vleesvervangers en zuivelvervangers,drink|creamer|santen|kokosmelk,1 glas,150
+Vleesvervangers en zuivelvervangers,burger|schnitzel|balletjes|falafel|worst|filet|vissticks,1 stuk,80
+Vleesvervangers en zuivelvervangers,dessert,1 schaaltje,125
+Vleesvervangers en zuivelvervangers,,1 portie,100
+Vleeswaren,pate|smeerworst|zult|leverkaas,1 portie,15
+Vleeswaren,,1 plak,15

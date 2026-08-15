@@ -1,4 +1,5 @@
-// Converts a NEVO-online CSV export to the compact JSON Kalorie ships.
+// Converts a NEVO-online CSV export to compact JSON.
+// Prefer the Python pipeline: python3 tool/food_db/cli.py nevo-import <csv>
 //
 // Usage:
 //   dart run tool/nevo_convert.dart path/to/nevo.csv assets/nevo/nevo_2025_9_0.min.json

@@ -37,7 +37,9 @@
   "addToMeal": "Add to {meal}",
   "@addToMeal": {
     "placeholders": {
-      "meal": { "type": "String" }
+      "meal": {
+        "type": "String"
+      }
     }
   },
   "todayEmpty": "Nothing logged yet",
@@ -71,7 +73,9 @@
   "version": "Version {version}",
   "@version": {
     "placeholders": {
-      "version": { "type": "String" }
+      "version": {
+        "type": "String"
+      }
     }
   },
   "name": "Name",
@@ -94,7 +98,9 @@
   "ofGoal": "of {goal} kcal",
   "@ofGoal": {
     "placeholders": {
-      "goal": { "type": "int" }
+      "goal": {
+        "type": "int"
+      }
     }
   },
   "historyEmpty": "No days logged yet",
@@ -107,7 +113,9 @@
   "deleteEntryBody": "{name} will be removed from this day.",
   "@deleteEntryBody": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "copied": "Updated",
@@ -142,21 +150,188 @@
   "loggedSnack": "{name} · {amount}",
   "@loggedSnack": {
     "placeholders": {
-      "name": { "type": "String" },
-      "amount": { "type": "String" }
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
     }
   },
   "adjust": "Adjust",
   "servingEquals": "1 serving = {grams} g",
   "@servingEquals": {
     "placeholders": {
-      "grams": { "type": "int" }
+      "grams": {
+        "type": "int"
+      }
     }
   },
   "logKcal": "Log {kcal} kcal",
   "@logKcal": {
     "placeholders": {
-      "kcal": { "type": "int" }
+      "kcal": {
+        "type": "int"
+      }
     }
-  }
+  },
+  "kcalOver": "kcal left",
+  "eatenOfGoal": "{eaten} of {goal} kcal eaten",
+  "@eatenOfGoal": {
+    "placeholders": {
+      "eaten": {
+        "type": "int"
+      },
+      "goal": {
+        "type": "int"
+      }
+    }
+  },
+  "showAll": "Show all",
+  "showLess": "Less",
+  "fiber": "Fibre",
+  "sugars": "Of which sugars",
+  "satFat": "Of which saturated",
+  "salt": "Salt",
+  "sugarsLower": "of which sugars",
+  "satFatLower": "of which saturated",
+  "water": "Water",
+  "waterProgress": "{amount} L of {goal} L",
+  "@waterProgress": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "waterHint": "One glass is 250 ml · tap to top up",
+  "waterDone": "Goal reached. Tap a glass to correct.",
+  "calendar": "Calendar",
+  "toToday": "Go to today",
+  "previousDay": "Previous day",
+  "nextDay": "Next day",
+  "previousWeek": "Previous week",
+  "nextWeek": "Next week",
+  "logInMeal": "Log in {meal}",
+  "@logInMeal": {
+    "placeholders": {
+      "meal": {
+        "type": "String"
+      }
+    }
+  },
+  "quickAddHint": "tap + to log straight away",
+  "searchDatabase": "Search the database",
+  "createNewProduct": "Create a new food",
+  "nothingFound": "Nothing found",
+  "nothingFoundHint": "Search online or add the food yourself.",
+  "editPortion": "Edit serving",
+  "inGrams": "in grams",
+  "gramsUnit": "grams",
+  "portionTotal": "1 {label} = {grams} g · {total} g total",
+  "@portionTotal": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "grams": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "per100Short": "{value} /100g",
+  "@per100Short": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "weekAverage": "kcal average · goal {goal}",
+  "@weekAverage": {
+    "placeholders": {
+      "goal": {
+        "type": "int"
+      }
+    }
+  },
+  "weekLoggedDays": "{logged} of {total} days logged",
+  "@weekLoggedDays": {
+    "placeholders": {
+      "logged": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "nothingLoggedTap": "nothing logged — tap to fill in",
+  "notYetHappened": "not yet",
+  "goalsIntro": "Your macros add up to your kcal goal. Change the goal and the rest follows.",
+  "dayGoal": "Daily goal",
+  "kcalPerDay": "kcal per day",
+  "goalsMoreSub": "kcal and macro split",
+  "weightMoreSub": "track it weekly",
+  "ownProducts": "Custom foods",
+  "ownProductsSub": "nutrition you entered yourself",
+  "settingsMoreSub": "theme, display, export",
+  "restartOnboarding": "Onboarding again",
+  "restartOnboardingSub": "see the first run",
+  "moreFootnote": "Nutrition from NEVO 2025 and Open Food Facts. Everything stays on your phone; export via Settings.",
+  "weightDeltaIn30": "kg · {delta} in 30 days",
+  "@weightDeltaIn30": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "logWeightToday": "Weigh in today: {kg} kg",
+  "@logWeightToday": {
+    "placeholders": {
+      "kg": {
+        "type": "String"
+      }
+    }
+  },
+  "measurements": "Measurements",
+  "displaySection": "Appearance",
+  "dataSection": "Data",
+  "exportDataSub": "everything as JSON, stays on your phone",
+  "stepOf": "Step {step} of {total}",
+  "@stepOf": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "obGoalTitle": "Where are you heading?",
+  "obGoalBody": "Kalorie works out your daily goal and keeps it simple after that: one number on the home screen, the rest below it.",
+  "obLose": "Lose weight",
+  "obMaintain": "Stay the same",
+  "obGain": "Gain weight",
+  "obPaceTitle": "How fast?",
+  "obPaceBody": "This sets your daily goal. You can change it later in Goals without filling everything in again.",
+  "obPaceCalm": "Easy · 0.25 kg/week",
+  "obPaceNormal": "Normal · 0.5 kg/week",
+  "obPaceFast": "Fast · 0.75 kg/week",
+  "obDoneTitle": "Done. Logging takes one tap.",
+  "obDoneBody": "Your recent foods sit at the top of the log sheet with the serving you picked last time. Tap the plus and it's in.",
+  "obFootnote": "Everything stays on your phone. No account, no tracking.",
+  "next": "Next",
+  "begin": "Start",
+  "deleted": "Deleted",
+  "removeEntry": "Remove row",
+  "scanSimulateHint": "Hold the barcode inside the frame. Foods that are found open straight away with the serving you used last."
 }

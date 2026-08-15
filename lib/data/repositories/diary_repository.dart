@@ -66,6 +66,10 @@ class DiaryRepository {
       ..protein = NutrientMath.scale(food.protein100g, amountG)
       ..carbs = NutrientMath.scale(food.carbs100g, amountG)
       ..fat = NutrientMath.scale(food.fat100g, amountG)
+      ..fiber = NutrientMath.scaleOrNull(food.fiber100g, amountG)
+      ..sugars = NutrientMath.scaleOrNull(food.sugars100g, amountG)
+      ..satFat = NutrientMath.scaleOrNull(food.satFat100g, amountG)
+      ..salt = NutrientMath.scaleOrNull(food.salt100g, amountG)
       ..createdAt = DateTime.now();
 
     return _isar.writeTxn(() async {
@@ -78,6 +82,11 @@ class DiaryRepository {
 
   Future<void> delete(int id) {
     return _isar.writeTxn(() => _isar.diaryEntries.delete(id));
+  }
+
+  /// Zet een verwijderde regel terug op zijn oude id, voor "Ongedaan".
+  Future<void> restore(DiaryEntry entry) {
+    return _isar.writeTxn(() => _isar.diaryEntries.put(entry));
   }
 
   Future<void> update({
@@ -99,7 +108,11 @@ class DiaryRepository {
       ..kcal = NutrientMath.scale(food.kcal100g, amountG)
       ..protein = NutrientMath.scale(food.protein100g, amountG)
       ..carbs = NutrientMath.scale(food.carbs100g, amountG)
-      ..fat = NutrientMath.scale(food.fat100g, amountG);
+      ..fat = NutrientMath.scale(food.fat100g, amountG)
+      ..fiber = NutrientMath.scaleOrNull(food.fiber100g, amountG)
+      ..sugars = NutrientMath.scaleOrNull(food.sugars100g, amountG)
+      ..satFat = NutrientMath.scaleOrNull(food.satFat100g, amountG)
+      ..salt = NutrientMath.scaleOrNull(food.salt100g, amountG);
     return _isar.writeTxn(() => _isar.diaryEntries.put(entry));
   }
 

@@ -32,12 +32,12 @@ dependencies:
 
   openfoodfacts: ^3.27.0
   mobile_scanner: ^7.0.0
-  fl_chart: ^1.0.0
 
   connectivity_plus: ^6.1.0
   collection: ^1.19.0
   freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
+  http: ^1.2.2
   share_plus: ^10.1.4
 
 dev_dependencies:
@@ -58,4 +58,5 @@ flutter:
   generate: true
   assets:
     - assets/nevo/
+    - assets/food/
     - assets/legal/

@@ -1,0 +1,36 @@
+nevo_code,alias
+# Handmatige zoekwoorden op echte NEVO-codes. NEVO levert zelf al synoniemen en
+# de importer draait "Melk karne-" automatisch om naar "karnemelk"; hier staat
+# alleen wat spreektaal is en in geen van beide zit.
+1314,spiegelei
+1314,gebakken ei
+84,gekookt ei
+84,hardgekookt ei
+83,rauw ei
+390,biertje
+390,pilsje
+2503,griekse yoghurt
+5271,griekse yoghurt magere
+654,hüttenkäse
+654,cottage cheese
+395,cola
+400,cola zonder cafeine
+1456,patat
+1456,friet
+2108,patat
+2108,friet
+620,fritessticks
+5507,eiwitreep
+5508,eiwitreep
+246,volkorenbrood
+246,bruin volkoren brood
+236,bruinbrood
+248,witbrood
+241,witbrood
+213,havermout
+213,oatmeal
+601,olijfolie
+305,magere kwark
+307,volle kwark
+5295,skyr
+5261,skyr vruchten

@@ -6,13 +6,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../app/theme.dart';
+import '../../core/constants.dart';
+import '../../core/day_summary.dart';
 import '../../core/l10n/generated/app_localizations.dart';
-import '../../core/widgets/empty_state.dart';
-import '../../core/widgets/food_tile.dart';
+import '../../core/widgets/kalorie_ui.dart';
+import '../../core/widgets/panel.dart';
+import '../../core/widgets/stroke_icon.dart';
+import '../../data/local/collections/enums.dart';
 import '../../data/local/collections/food.dart';
 import '../../data/providers.dart';
 import '../../data/remote/off_mapper.dart';
 import '../../data/remote/rate_limiter.dart';
+import 'quick_log.dart';
 
 part 'add_food_screen.g.dart';
 
@@ -109,12 +115,15 @@ class FoodSearch extends _$FoodSearch {
     }
     state = state.copyWith(onlineLoading: true, clearError: true);
     try {
-      final products = await ref.read(offRemoteProvider).search(q);
-      final mapped = <Food>[];
-      for (final product in products) {
-        final food = mapOffProduct(product);
-        if (food == null) continue;
-        mapped.add(await ref.read(foodRepositoryProvider).cacheOffProduct(food));
+      final catalog = ref.read(catalogRepositoryProvider);
+      var mapped = List<Food>.from(await catalog.searchRemote(q));
+      if (mapped.isEmpty) {
+        final products = await ref.read(offRemoteProvider).search(q);
+        for (final product in products) {
+          final food = mapOffProduct(product);
+          if (food == null) continue;
+          mapped.add(await ref.read(foodRepositoryProvider).cacheOffProduct(food));
+        }
       }
       state = state.copyWith(remote: mapped, onlineLoading: false);
     } on RateLimitedException {
@@ -125,158 +134,302 @@ class FoodSearch extends _$FoodSearch {
   }
 }
 
-class AddFoodScreen extends ConsumerWidget {
+class AddFoodScreen extends ConsumerStatefulWidget {
   const AddFoodScreen({super.key, this.initialMeal});
 
   final String? initialMeal;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AddFoodScreen> createState() => _AddFoodScreenState();
+}
+
+class _AddFoodScreenState extends ConsumerState<AddFoodScreen> {
+  late final TextEditingController _query;
+  bool _busy = false;
+
+  MealType get _meal => widget.initialMeal == null
+      ? mealForNow()
+      : MealType.values.firstWhere(
+          (m) => m.name == widget.initialMeal,
+          orElse: mealForNow,
+        );
+
+  String get _mealQuery => '?meal=${_meal.name}';
+
+  @override
+  void initState() {
+    super.initState();
+    _query = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) ref.read(foodSearchProvider.notifier).reset();
+    });
+  }
+
+  @override
+  void dispose() {
+    _query.dispose();
+    super.dispose();
+  }
+
+  Future<void> _quickAdd(Food food) async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    try {
+      await quickLogFood(context, ref, food: food, meal: _meal);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     final search = ref.watch(foodSearchProvider);
-    final mealQuery =
-        initialMeal == null ? '' : '?meal=$initialMeal';
+    final querying = search.query.trim().isNotEmpty;
+    final items = [
+      ...search.local,
+      ...search.remote.where((r) => search.local.every((l) => l.id != r.id)),
+    ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.add),
-        actions: [
-          IconButton(
-            tooltip: l10n.scanBarcode,
-            onPressed: () => context.push('/add/scan$mealQuery'),
-            icon: const Icon(Icons.qr_code_scanner),
-          ),
-          IconButton(
-            tooltip: l10n.newProduct,
-            onPressed: () => context.push('/add/custom'),
-            icon: const Icon(Icons.add),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-            child: TextField(
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: l10n.searchHint,
-                prefixIcon: const Icon(Icons.search),
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            KalorieOverlayHeader(
+              title: l10n.add,
+              onBack: () => context.pop(),
+              action: KalorieTapTarget(
+                tooltip: l10n.scanBarcode,
+                onTap: () => context.push('/add/scan$_mealQuery'),
+                child: StrokeIcon(
+                  StrokeShape.barcode,
+                  size: 16,
+                  color: theme.colorScheme.primary,
+                ),
               ),
-              onChanged: (v) =>
-                  ref.read(foodSearchProvider.notifier).setQuery(v),
             ),
-          ),
-          if (search.query.isEmpty)
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
-              child: Wrap(
-                spacing: 8,
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 10),
+              child: TextField(
+                controller: _query,
+                autofocus: true,
+                textInputAction: TextInputAction.search,
+                decoration: InputDecoration(hintText: l10n.searchHint),
+                onChanged: (v) =>
+                    ref.read(foodSearchProvider.notifier).setQuery(v),
+              ),
+            ),
+            if (!querying)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                child: Row(
+                  children: [
+                    KaloriePill(
+                      label: l10n.recents,
+                      selected: search.filter == FoodFilter.recents,
+                      onTap: () => ref
+                          .read(foodSearchProvider.notifier)
+                          .setFilter(FoodFilter.recents),
+                    ),
+                    const SizedBox(width: 8),
+                    KaloriePill(
+                      label: l10n.favorites,
+                      selected: search.filter == FoodFilter.favorites,
+                      onTap: () => ref
+                          .read(foodSearchProvider.notifier)
+                          .setFilter(FoodFilter.favorites),
+                    ),
+                  ],
+                ),
+              ),
+            Expanded(
+              child: ListView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
                 children: [
-                  ChoiceChip(
-                    label: Text(l10n.recents),
-                    selected: search.filter == FoodFilter.recents,
-                    onSelected: (_) => ref
-                        .read(foodSearchProvider.notifier)
-                        .setFilter(FoodFilter.recents),
-                  ),
-                  ChoiceChip(
-                    label: Text(l10n.favorites),
-                    selected: search.filter == FoodFilter.favorites,
-                    onSelected: (_) => ref
-                        .read(foodSearchProvider.notifier)
-                        .setFilter(FoodFilter.favorites),
+                  if (items.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 34, 8, 12),
+                      child: Column(
+                        children: [
+                          Text(
+                            l10n.nothingFound,
+                            style: theme.textTheme.titleSmall,
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            l10n.nothingFoundHint,
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.bodySmall
+                                ?.copyWith(color: context.tones.hint),
+                          ),
+                        ],
+                      ),
+                    )
+                  else
+                    KaloriePanel(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          for (var i = 0; i < items.length; i++) ...[
+                            if (i != 0) const KalorieHairline(),
+                            _ResultRow(
+                              food: items[i],
+                              enabled: !_busy,
+                              onOpen: () => context
+                                  .push('/add/amount/${items[i].id}$_mealQuery'),
+                              onQuickAdd: () => _quickAdd(items[i]),
+                              onFavorite: () async {
+                                await ref
+                                    .read(foodRepositoryProvider)
+                                    .toggleFavorite(items[i].id);
+                                await ref
+                                    .read(foodSearchProvider.notifier)
+                                    .reload();
+                              },
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  if (search.query.trim().length >= 3) ...[
+                    const SizedBox(height: 12),
+                    if (search.onlineLoading)
+                      const Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(child: CircularProgressIndicator()),
+                      )
+                    else
+                      TextButton(
+                        onPressed: () =>
+                            ref.read(foodSearchProvider.notifier).searchOnline(),
+                        child: Text(l10n.searchOnline),
+                      ),
+                  ],
+                  if (search.error != null)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(4, 12, 4, 0),
+                      child: Text(
+                        switch (search.error) {
+                          'offline' => l10n.offline,
+                          'rate' => l10n.rateLimited,
+                          _ => l10n.networkError,
+                        },
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ),
+                  const SizedBox(height: 4),
+                  TextButton(
+                    onPressed: () => context.push('/add/custom'),
+                    child: Text(l10n.createNewProduct),
                   ),
                 ],
               ),
             ),
-          Expanded(
-            child: _Results(
-              search: search,
-              mealQuery: mealQuery,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
-class _Results extends ConsumerWidget {
-  const _Results({required this.search, required this.mealQuery});
+class _ResultRow extends StatelessWidget {
+  const _ResultRow({
+    required this.food,
+    required this.enabled,
+    required this.onOpen,
+    required this.onQuickAdd,
+    required this.onFavorite,
+  });
 
-  final FoodSearchState search;
-  final String mealQuery;
+  final Food food;
+  final bool enabled;
+  final VoidCallback onOpen;
+  final VoidCallback onQuickAdd;
+  final VoidCallback onFavorite;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final items = [
-      ...search.local,
-      ...search.remote.where(
-        (r) => search.local.every((l) => l.id != r.id),
-      ),
-    ];
+    final theme = Theme.of(context);
+    final tones = context.tones;
+    final brand = food.brand;
+    final per100 = '${displayKcal(food.kcal100g)} kcal / 100 g';
+    final subtitle =
+        brand != null && brand.isNotEmpty ? '$brand · $per100' : per100;
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
-      children: [
-        if (items.isEmpty)
-          EmptyState(
-            title: l10n.noResults,
-            subtitle: l10n.noResultsHint,
-            action: TextButton(
-              onPressed: () => context.push('/add/custom'),
-              child: Text(l10n.newProduct),
-            ),
-          )
-        else
-          ...items.map(
-            (food) => FoodTile(
-              food: food,
-              onTap: () => context.push('/add/amount/${food.id}$mealQuery'),
-              trailing: IconButton(
-                icon: Icon(
-                  food.isFavorite ? Icons.star : Icons.star_border,
-                  size: 20,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 62),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 10, 12, 10),
+        child: Row(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: enabled ? onOpen : null,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      food.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                    Text(
+                      subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          theme.textTheme.bodySmall?.copyWith(color: tones.hint),
+                    ),
+                  ],
                 ),
-                onPressed: () async {
-                  await ref.read(foodRepositoryProvider).toggleFavorite(food.id);
-                  await ref.read(foodSearchProvider.notifier).reload();
-                },
               ),
             ),
-          ),
-        if (search.query.trim().length >= 3) ...[
-          const SizedBox(height: 12),
-          if (search.onlineLoading)
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Center(child: CircularProgressIndicator()),
-            )
-          else
-            TextButton(
-              onPressed: () =>
-                  ref.read(foodSearchProvider.notifier).searchOnline(),
-              child: Text(l10n.searchOnline),
+            KalorieTapTarget(
+              size: 36,
+              tooltip: l10n.favorite,
+              onTap: onFavorite,
+              child: _FavoriteDiamond(on: food.isFavorite),
             ),
-        ],
-        if (search.error == 'offline')
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Text(l10n.offline),
-          ),
-        if (search.error == 'rate')
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Text(l10n.rateLimited),
-          ),
-        if (search.error == 'network')
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Text(l10n.networkError),
-          ),
-      ],
+            KalorieQuickAdd(
+              onTap: onQuickAdd,
+              enabled: enabled,
+              tooltip: l10n.addToMeal(food.name),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Ruitje in plaats van een ster: past bij de rustige vormentaal.
+class _FavoriteDiamond extends StatelessWidget {
+  const _FavoriteDiamond({required this.on});
+
+  final bool on;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = context.tones.sageSoft;
+    return Transform.rotate(
+      angle: 0.7853981633974483,
+      child: Container(
+        width: 11,
+        height: 11,
+        decoration: BoxDecoration(
+          color: on ? color : Colors.transparent,
+          borderRadius: BorderRadius.circular(2),
+          border: Border.all(color: color, width: 1.4),
+        ),
+      ),
     );
   }
 }

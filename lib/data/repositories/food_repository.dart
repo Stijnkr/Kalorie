@@ -2,6 +2,7 @@ import 'package:isar_community/isar.dart';
 
 import '../../core/constants.dart';
 import '../../core/food_search_rank.dart';
+import '../food/match_key.dart';
 import '../local/collections/enums.dart';
 import '../local/collections/food.dart';
 
@@ -13,23 +14,37 @@ class FoodRepository {
   Future<Food?> getById(int id) => _isar.foods.get(id);
 
   Future<Food?> getByBarcode(String barcode) {
-    return _isar.foods.filter().barcodeEqualTo(barcode).findFirst();
+    final normalized = MatchKey.normalizeBarcode(barcode) ?? barcode;
+    return _isar.foods.filter().barcodeEqualTo(normalized).findFirst();
   }
 
   Future<Food?> getByNevoCode(String code) {
     return _isar.foods.filter().nevoCodeEqualTo(code).findFirst();
   }
 
+  Future<Food?> getByCatalogId(String id) {
+    return _isar.foods.filter().catalogIdEqualTo(id).findFirst();
+  }
+
   Future<List<Food>> searchLocal(String query, {int limit = 60}) async {
-    final q = query.trim().toLowerCase();
+    final q = MatchKey.normalizeSearch(query);
     if (q.isEmpty) {
       return recents(limit: limit);
     }
+    // NEVO zet het kenmerk achteraan ("Kwark magere", "Tarwebrood volkoren"),
+    // dus elk woord los matchen i.p.v. de hele query als één string.
+    final tokens = q.split(' ').where((t) => t.isNotEmpty).toList();
     final matches = await _isar.foods
         .filter()
-        .nameNormalizedContains(q)
-        .or()
-        .brandContains(q, caseSensitive: false)
+        .allOf(
+          tokens,
+          (food, token) => food.group(
+            (g) => g
+                .nameNormalizedContains(token)
+                .or()
+                .brandContains(token, caseSensitive: false),
+          ),
+        )
         .findAll();
     matches.sort((a, b) => compareFoodSearch(a, b, q));
     if (matches.length <= limit) return matches;
@@ -94,9 +109,11 @@ class FoodRepository {
         incoming.servingG = existing.servingG ?? incoming.servingG;
         incoming.servingLabel = existing.servingLabel ?? incoming.servingLabel;
       }
-      incoming.source = FoodSource.off;
-      incoming.cachedAt = DateTime.now();
-      incoming.nameNormalized = normalizeName(incoming.name);
+      incoming
+        ..source = FoodSource.off
+        ..kind = FoodKind.branded
+        ..cachedAt = DateTime.now()
+        ..nameNormalized = normalizeName(incoming.name);
       await _isar.foods.put(incoming);
       return incoming;
     });

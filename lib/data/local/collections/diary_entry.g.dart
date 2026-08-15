@@ -27,31 +27,35 @@ const DiaryEntrySchema = CollectionSchema(
     ),
     r'dateKey': PropertySchema(id: 4, name: r'dateKey', type: IsarType.long),
     r'fat': PropertySchema(id: 5, name: r'fat', type: IsarType.double),
-    r'foodId': PropertySchema(id: 6, name: r'foodId', type: IsarType.long),
+    r'fiber': PropertySchema(id: 6, name: r'fiber', type: IsarType.double),
+    r'foodId': PropertySchema(id: 7, name: r'foodId', type: IsarType.long),
     r'foodName': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'foodName',
       type: IsarType.string,
     ),
-    r'kcal': PropertySchema(id: 8, name: r'kcal', type: IsarType.double),
+    r'kcal': PropertySchema(id: 9, name: r'kcal', type: IsarType.double),
     r'meal': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'meal',
       type: IsarType.byte,
       enumMap: _DiaryEntrymealEnumValueMap,
     ),
-    r'protein': PropertySchema(id: 10, name: r'protein', type: IsarType.double),
+    r'protein': PropertySchema(id: 11, name: r'protein', type: IsarType.double),
+    r'salt': PropertySchema(id: 12, name: r'salt', type: IsarType.double),
+    r'satFat': PropertySchema(id: 13, name: r'satFat', type: IsarType.double),
     r'servingLabel': PropertySchema(
-      id: 11,
+      id: 14,
       name: r'servingLabel',
       type: IsarType.string,
     ),
     r'source': PropertySchema(
-      id: 12,
+      id: 15,
       name: r'source',
       type: IsarType.byte,
       enumMap: _DiaryEntrysourceEnumValueMap,
     ),
+    r'sugars': PropertySchema(id: 16, name: r'sugars', type: IsarType.double),
   },
 
   estimateSize: _diaryEntryEstimateSize,
@@ -117,13 +121,17 @@ void _diaryEntrySerialize(
   writer.writeDateTime(offsets[3], object.createdAt);
   writer.writeLong(offsets[4], object.dateKey);
   writer.writeDouble(offsets[5], object.fat);
-  writer.writeLong(offsets[6], object.foodId);
-  writer.writeString(offsets[7], object.foodName);
-  writer.writeDouble(offsets[8], object.kcal);
-  writer.writeByte(offsets[9], object.meal.index);
-  writer.writeDouble(offsets[10], object.protein);
-  writer.writeString(offsets[11], object.servingLabel);
-  writer.writeByte(offsets[12], object.source.index);
+  writer.writeDouble(offsets[6], object.fiber);
+  writer.writeLong(offsets[7], object.foodId);
+  writer.writeString(offsets[8], object.foodName);
+  writer.writeDouble(offsets[9], object.kcal);
+  writer.writeByte(offsets[10], object.meal.index);
+  writer.writeDouble(offsets[11], object.protein);
+  writer.writeDouble(offsets[12], object.salt);
+  writer.writeDouble(offsets[13], object.satFat);
+  writer.writeString(offsets[14], object.servingLabel);
+  writer.writeByte(offsets[15], object.source.index);
+  writer.writeDouble(offsets[16], object.sugars);
 }
 
 DiaryEntry _diaryEntryDeserialize(
@@ -139,18 +147,22 @@ DiaryEntry _diaryEntryDeserialize(
   object.createdAt = reader.readDateTime(offsets[3]);
   object.dateKey = reader.readLong(offsets[4]);
   object.fat = reader.readDouble(offsets[5]);
-  object.foodId = reader.readLong(offsets[6]);
-  object.foodName = reader.readString(offsets[7]);
+  object.fiber = reader.readDoubleOrNull(offsets[6]);
+  object.foodId = reader.readLong(offsets[7]);
+  object.foodName = reader.readString(offsets[8]);
   object.id = id;
-  object.kcal = reader.readDouble(offsets[8]);
+  object.kcal = reader.readDouble(offsets[9]);
   object.meal =
-      _DiaryEntrymealValueEnumMap[reader.readByteOrNull(offsets[9])] ??
+      _DiaryEntrymealValueEnumMap[reader.readByteOrNull(offsets[10])] ??
       MealType.breakfast;
-  object.protein = reader.readDouble(offsets[10]);
-  object.servingLabel = reader.readStringOrNull(offsets[11]);
+  object.protein = reader.readDouble(offsets[11]);
+  object.salt = reader.readDoubleOrNull(offsets[12]);
+  object.satFat = reader.readDoubleOrNull(offsets[13]);
+  object.servingLabel = reader.readStringOrNull(offsets[14]);
   object.source =
-      _DiaryEntrysourceValueEnumMap[reader.readByteOrNull(offsets[12])] ??
+      _DiaryEntrysourceValueEnumMap[reader.readByteOrNull(offsets[15])] ??
       FoodSource.off;
+  object.sugars = reader.readDoubleOrNull(offsets[16]);
   return object;
 }
 
@@ -174,23 +186,31 @@ P _diaryEntryDeserializeProp<P>(
     case 5:
       return (reader.readDouble(offset)) as P;
     case 6:
-      return (reader.readLong(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 7:
-      return (reader.readString(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 8:
-      return (reader.readDouble(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 9:
+      return (reader.readDouble(offset)) as P;
+    case 10:
       return (_DiaryEntrymealValueEnumMap[reader.readByteOrNull(offset)] ??
               MealType.breakfast)
           as P;
-    case 10:
-      return (reader.readDouble(offset)) as P;
     case 11:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDouble(offset)) as P;
     case 12:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 13:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 14:
+      return (reader.readStringOrNull(offset)) as P;
+    case 15:
       return (_DiaryEntrysourceValueEnumMap[reader.readByteOrNull(offset)] ??
               FoodSource.off)
           as P;
+    case 16:
+      return (reader.readDoubleOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -922,6 +942,96 @@ extension DiaryEntryQueryFilter
     });
   }
 
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> fiberIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'fiber'),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> fiberIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'fiber'),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> fiberEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'fiber',
+          value: value,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> fiberGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'fiber',
+          value: value,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> fiberLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'fiber',
+          value: value,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> fiberBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'fiber',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
   QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> foodIdEqualTo(
     int value,
   ) {
@@ -1395,6 +1505,187 @@ extension DiaryEntryQueryFilter
     });
   }
 
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> saltIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'salt'),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> saltIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'salt'),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> saltEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'salt',
+          value: value,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> saltGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'salt',
+          value: value,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> saltLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'salt',
+          value: value,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> saltBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'salt',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> satFatIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'satFat'),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition>
+  satFatIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'satFat'),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> satFatEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'satFat',
+          value: value,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> satFatGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'satFat',
+          value: value,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> satFatLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'satFat',
+          value: value,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> satFatBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'satFat',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
   QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition>
   servingLabelIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -1612,6 +1903,97 @@ extension DiaryEntryQueryFilter
       );
     });
   }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> sugarsIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'sugars'),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition>
+  sugarsIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'sugars'),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> sugarsEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'sugars',
+          value: value,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> sugarsGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'sugars',
+          value: value,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> sugarsLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'sugars',
+          value: value,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterFilterCondition> sugarsBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'sugars',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
 }
 
 extension DiaryEntryQueryObject
@@ -1694,6 +2076,18 @@ extension DiaryEntryQuerySortBy
     });
   }
 
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> sortByFiber() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fiber', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> sortByFiberDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fiber', Sort.desc);
+    });
+  }
+
   QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> sortByFoodId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'foodId', Sort.asc);
@@ -1754,6 +2148,30 @@ extension DiaryEntryQuerySortBy
     });
   }
 
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> sortBySalt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'salt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> sortBySaltDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'salt', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> sortBySatFat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'satFat', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> sortBySatFatDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'satFat', Sort.desc);
+    });
+  }
+
   QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> sortByServingLabel() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'servingLabel', Sort.asc);
@@ -1775,6 +2193,18 @@ extension DiaryEntryQuerySortBy
   QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> sortBySourceDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'source', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> sortBySugars() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sugars', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> sortBySugarsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sugars', Sort.desc);
     });
   }
 }
@@ -1853,6 +2283,18 @@ extension DiaryEntryQuerySortThenBy
     });
   }
 
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> thenByFiber() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fiber', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> thenByFiberDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fiber', Sort.desc);
+    });
+  }
+
   QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> thenByFoodId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'foodId', Sort.asc);
@@ -1925,6 +2367,30 @@ extension DiaryEntryQuerySortThenBy
     });
   }
 
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> thenBySalt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'salt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> thenBySaltDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'salt', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> thenBySatFat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'satFat', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> thenBySatFatDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'satFat', Sort.desc);
+    });
+  }
+
   QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> thenByServingLabel() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'servingLabel', Sort.asc);
@@ -1946,6 +2412,18 @@ extension DiaryEntryQuerySortThenBy
   QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> thenBySourceDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'source', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> thenBySugars() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sugars', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QAfterSortBy> thenBySugarsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sugars', Sort.desc);
     });
   }
 }
@@ -1990,6 +2468,12 @@ extension DiaryEntryQueryWhereDistinct
     });
   }
 
+  QueryBuilder<DiaryEntry, DiaryEntry, QDistinct> distinctByFiber() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'fiber');
+    });
+  }
+
   QueryBuilder<DiaryEntry, DiaryEntry, QDistinct> distinctByFoodId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'foodId');
@@ -2022,6 +2506,18 @@ extension DiaryEntryQueryWhereDistinct
     });
   }
 
+  QueryBuilder<DiaryEntry, DiaryEntry, QDistinct> distinctBySalt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'salt');
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QDistinct> distinctBySatFat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'satFat');
+    });
+  }
+
   QueryBuilder<DiaryEntry, DiaryEntry, QDistinct> distinctByServingLabel({
     bool caseSensitive = true,
   }) {
@@ -2033,6 +2529,12 @@ extension DiaryEntryQueryWhereDistinct
   QueryBuilder<DiaryEntry, DiaryEntry, QDistinct> distinctBySource() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'source');
+    });
+  }
+
+  QueryBuilder<DiaryEntry, DiaryEntry, QDistinct> distinctBySugars() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'sugars');
     });
   }
 }
@@ -2081,6 +2583,12 @@ extension DiaryEntryQueryProperty
     });
   }
 
+  QueryBuilder<DiaryEntry, double?, QQueryOperations> fiberProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'fiber');
+    });
+  }
+
   QueryBuilder<DiaryEntry, int, QQueryOperations> foodIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'foodId');
@@ -2111,6 +2619,18 @@ extension DiaryEntryQueryProperty
     });
   }
 
+  QueryBuilder<DiaryEntry, double?, QQueryOperations> saltProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'salt');
+    });
+  }
+
+  QueryBuilder<DiaryEntry, double?, QQueryOperations> satFatProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'satFat');
+    });
+  }
+
   QueryBuilder<DiaryEntry, String?, QQueryOperations> servingLabelProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'servingLabel');
@@ -2120,6 +2640,12 @@ extension DiaryEntryQueryProperty
   QueryBuilder<DiaryEntry, FoodSource, QQueryOperations> sourceProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'source');
+    });
+  }
+
+  QueryBuilder<DiaryEntry, double?, QQueryOperations> sugarsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'sugars');
     });
   }
 }

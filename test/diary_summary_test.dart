@@ -37,4 +37,37 @@ void main() {
     expect(summary.protein, closeTo(5.9, 0.01));
     expect(summary.entries, hasLength(2));
   });
+
+  test('zonder aanvullende waarden blijft "Alles zien" weg', () {
+    final summary = DaySummary.fromEntries(20260815, [_entry()]);
+    expect(summary.hasExtras, isFalse);
+    expect(summary.fiber, isNull);
+  });
+
+  test('telt alleen de regels die de waarde kennen', () {
+    final summary = DaySummary.fromEntries(20260815, [
+      _entry(fiber: 4.2, salt: 0.3),
+      _entry(fiber: 1.8),
+      _entry(),
+    ]);
+    expect(summary.hasExtras, isTrue);
+    expect(summary.fiber, closeTo(6, 0.01));
+    expect(summary.salt, closeTo(0.3, 0.01));
+    expect(summary.sugars, isNull);
+  });
 }
+
+DiaryEntry _entry({double? fiber, double? salt}) => DiaryEntry()
+  ..dateKey = 20260815
+  ..meal = MealType.lunch
+  ..foodId = 3
+  ..foodName = 'Brood'
+  ..source = FoodSource.nevo
+  ..amountG = 70
+  ..kcal = 165
+  ..protein = 6.6
+  ..carbs = 26.6
+  ..fat = 2.2
+  ..fiber = fiber
+  ..salt = salt
+  ..createdAt = DateTime(2026, 8, 15);

@@ -399,4 +399,244 @@ class AppLocalizationsEn extends AppLocalizations {
   String logKcal(int kcal) {
     return 'Log $kcal kcal';
   }
+
+  @override
+  String get kcalOver => 'kcal left';
+
+  @override
+  String eatenOfGoal(int eaten, int goal) {
+    return '$eaten of $goal kcal eaten';
+  }
+
+  @override
+  String get showAll => 'Show all';
+
+  @override
+  String get showLess => 'Less';
+
+  @override
+  String get fiber => 'Fibre';
+
+  @override
+  String get sugars => 'Of which sugars';
+
+  @override
+  String get satFat => 'Of which saturated';
+
+  @override
+  String get salt => 'Salt';
+
+  @override
+  String get sugarsLower => 'of which sugars';
+
+  @override
+  String get satFatLower => 'of which saturated';
+
+  @override
+  String get water => 'Water';
+
+  @override
+  String waterProgress(String amount, String goal) {
+    return '$amount L of $goal L';
+  }
+
+  @override
+  String get waterHint => 'One glass is 250 ml · tap to top up';
+
+  @override
+  String get waterDone => 'Goal reached. Tap a glass to correct.';
+
+  @override
+  String get calendar => 'Calendar';
+
+  @override
+  String get toToday => 'Go to today';
+
+  @override
+  String get previousDay => 'Previous day';
+
+  @override
+  String get nextDay => 'Next day';
+
+  @override
+  String get previousWeek => 'Previous week';
+
+  @override
+  String get nextWeek => 'Next week';
+
+  @override
+  String logInMeal(String meal) {
+    return 'Log in $meal';
+  }
+
+  @override
+  String get quickAddHint => 'tap + to log straight away';
+
+  @override
+  String get searchDatabase => 'Search the database';
+
+  @override
+  String get createNewProduct => 'Create a new food';
+
+  @override
+  String get nothingFound => 'Nothing found';
+
+  @override
+  String get nothingFoundHint => 'Search online or add the food yourself.';
+
+  @override
+  String get editPortion => 'Edit serving';
+
+  @override
+  String get inGrams => 'in grams';
+
+  @override
+  String get gramsUnit => 'grams';
+
+  @override
+  String portionTotal(String label, int grams, int total) {
+    return '1 $label = $grams g · $total g total';
+  }
+
+  @override
+  String per100Short(String value) {
+    return '$value /100g';
+  }
+
+  @override
+  String weekAverage(int goal) {
+    return 'kcal average · goal $goal';
+  }
+
+  @override
+  String weekLoggedDays(int logged, int total) {
+    return '$logged of $total days logged';
+  }
+
+  @override
+  String get nothingLoggedTap => 'nothing logged — tap to fill in';
+
+  @override
+  String get notYetHappened => 'not yet';
+
+  @override
+  String get goalsIntro =>
+      'Your macros add up to your kcal goal. Change the goal and the rest follows.';
+
+  @override
+  String get dayGoal => 'Daily goal';
+
+  @override
+  String get kcalPerDay => 'kcal per day';
+
+  @override
+  String get goalsMoreSub => 'kcal and macro split';
+
+  @override
+  String get weightMoreSub => 'track it weekly';
+
+  @override
+  String get ownProducts => 'Custom foods';
+
+  @override
+  String get ownProductsSub => 'nutrition you entered yourself';
+
+  @override
+  String get settingsMoreSub => 'theme, display, export';
+
+  @override
+  String get restartOnboarding => 'Onboarding again';
+
+  @override
+  String get restartOnboardingSub => 'see the first run';
+
+  @override
+  String get moreFootnote =>
+      'Nutrition from NEVO 2025 and Open Food Facts. Everything stays on your phone; export via Settings.';
+
+  @override
+  String weightDeltaIn30(String delta) {
+    return 'kg · $delta in 30 days';
+  }
+
+  @override
+  String logWeightToday(String kg) {
+    return 'Weigh in today: $kg kg';
+  }
+
+  @override
+  String get measurements => 'Measurements';
+
+  @override
+  String get displaySection => 'Appearance';
+
+  @override
+  String get dataSection => 'Data';
+
+  @override
+  String get exportDataSub => 'everything as JSON, stays on your phone';
+
+  @override
+  String stepOf(int step, int total) {
+    return 'Step $step of $total';
+  }
+
+  @override
+  String get obGoalTitle => 'Where are you heading?';
+
+  @override
+  String get obGoalBody =>
+      'Kalorie works out your daily goal and keeps it simple after that: one number on the home screen, the rest below it.';
+
+  @override
+  String get obLose => 'Lose weight';
+
+  @override
+  String get obMaintain => 'Stay the same';
+
+  @override
+  String get obGain => 'Gain weight';
+
+  @override
+  String get obPaceTitle => 'How fast?';
+
+  @override
+  String get obPaceBody =>
+      'This sets your daily goal. You can change it later in Goals without filling everything in again.';
+
+  @override
+  String get obPaceCalm => 'Easy · 0.25 kg/week';
+
+  @override
+  String get obPaceNormal => 'Normal · 0.5 kg/week';
+
+  @override
+  String get obPaceFast => 'Fast · 0.75 kg/week';
+
+  @override
+  String get obDoneTitle => 'Done. Logging takes one tap.';
+
+  @override
+  String get obDoneBody =>
+      'Your recent foods sit at the top of the log sheet with the serving you picked last time. Tap the plus and it\'s in.';
+
+  @override
+  String get obFootnote =>
+      'Everything stays on your phone. No account, no tracking.';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get begin => 'Start';
+
+  @override
+  String get deleted => 'Deleted';
+
+  @override
+  String get removeEntry => 'Remove row';
+
+  @override
+  String get scanSimulateHint =>
+      'Hold the barcode inside the frame. Foods that are found open straight away with the serving you used last.';
 }

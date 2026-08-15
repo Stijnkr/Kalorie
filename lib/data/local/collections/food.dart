@@ -11,6 +11,12 @@ class Food {
   @enumerated
   late FoodSource source;
 
+  @enumerated
+  FoodKind kind = FoodKind.generic;
+
+  @Index()
+  String? catalogId;
+
   @Index()
   String? barcode;
 
@@ -33,8 +39,20 @@ class Food {
   late double carbs100g;
   late double fat100g;
 
+  double? fiber100g;
+  double? sugars100g;
+  double? satFat100g;
+  double? salt100g;
+  double? alcohol100g;
+  String? nutrientsJson;
+
   double? servingG;
   String? servingLabel;
+
+  int qualityScore = 0;
+  int popularity = 0;
+  int nlRelevance = 0;
+  int dataVersion = 1;
 
   @Index()
   late bool isFavorite;

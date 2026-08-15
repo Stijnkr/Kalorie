@@ -37,7 +37,9 @@
   "addToMeal": "Toevoegen aan {meal}",
   "@addToMeal": {
     "placeholders": {
-      "meal": { "type": "String" }
+      "meal": {
+        "type": "String"
+      }
     }
   },
   "todayEmpty": "Nog niets gelogd",
@@ -71,7 +73,9 @@
   "version": "Versie {version}",
   "@version": {
     "placeholders": {
-      "version": { "type": "String" }
+      "version": {
+        "type": "String"
+      }
     }
   },
   "name": "Naam",
@@ -94,7 +98,9 @@
   "ofGoal": "van {goal} kcal",
   "@ofGoal": {
     "placeholders": {
-      "goal": { "type": "int" }
+      "goal": {
+        "type": "int"
+      }
     }
   },
   "historyEmpty": "Nog geen dagen gelogd",
@@ -107,7 +113,9 @@
   "deleteEntryBody": "{name} wordt uit deze dag gehaald.",
   "@deleteEntryBody": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "copied": "Aangepast",
@@ -142,21 +150,188 @@
   "loggedSnack": "{name} · {amount}",
   "@loggedSnack": {
     "placeholders": {
-      "name": { "type": "String" },
-      "amount": { "type": "String" }
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
     }
   },
   "adjust": "Aanpassen",
   "servingEquals": "1 portie = {grams} g",
   "@servingEquals": {
     "placeholders": {
-      "grams": { "type": "int" }
+      "grams": {
+        "type": "int"
+      }
     }
   },
   "logKcal": "Log {kcal} kcal",
   "@logKcal": {
     "placeholders": {
-      "kcal": { "type": "int" }
+      "kcal": {
+        "type": "int"
+      }
     }
-  }
+  },
+  "kcalOver": "kcal over",
+  "eatenOfGoal": "{eaten} van {goal} kcal gegeten",
+  "@eatenOfGoal": {
+    "placeholders": {
+      "eaten": {
+        "type": "int"
+      },
+      "goal": {
+        "type": "int"
+      }
+    }
+  },
+  "showAll": "Alles zien",
+  "showLess": "Minder",
+  "fiber": "Vezels",
+  "sugars": "Waarvan suikers",
+  "satFat": "Waarvan verzadigd",
+  "salt": "Zout",
+  "sugarsLower": "waarvan suikers",
+  "satFatLower": "waarvan verzadigd",
+  "water": "Water",
+  "waterProgress": "{amount} L van {goal} L",
+  "@waterProgress": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "waterHint": "Eén glas is 250 ml · tik om bij te vullen",
+  "waterDone": "Doel gehaald. Tik een glas om te corrigeren.",
+  "calendar": "Kalender",
+  "toToday": "Naar vandaag",
+  "previousDay": "Vorige dag",
+  "nextDay": "Volgende dag",
+  "previousWeek": "Vorige week",
+  "nextWeek": "Volgende week",
+  "logInMeal": "Loggen in {meal}",
+  "@logInMeal": {
+    "placeholders": {
+      "meal": {
+        "type": "String"
+      }
+    }
+  },
+  "quickAddHint": "tik + om direct te boeken",
+  "searchDatabase": "Zoeken in database",
+  "createNewProduct": "Nieuw product aanmaken",
+  "nothingFound": "Niets gevonden",
+  "nothingFoundHint": "Zoek online of maak het product zelf aan.",
+  "editPortion": "Portie wijzigen",
+  "inGrams": "in gram",
+  "gramsUnit": "gram",
+  "portionTotal": "1 {label} = {grams} g · totaal {total} g",
+  "@portionTotal": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "grams": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "per100Short": "{value} /100g",
+  "@per100Short": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "weekAverage": "kcal gemiddeld · doel {goal}",
+  "@weekAverage": {
+    "placeholders": {
+      "goal": {
+        "type": "int"
+      }
+    }
+  },
+  "weekLoggedDays": "{logged} van {total} dagen gelogd",
+  "@weekLoggedDays": {
+    "placeholders": {
+      "logged": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "nothingLoggedTap": "niets gelogd — tik om aan te vullen",
+  "notYetHappened": "nog niet geweest",
+  "goalsIntro": "Je macro’s tellen op tot je kcal-doel. Pas het doel aan, de rest schuift mee.",
+  "dayGoal": "Dagdoel",
+  "kcalPerDay": "kcal per dag",
+  "goalsMoreSub": "kcal en macro-verdeling",
+  "weightMoreSub": "wekelijks bijhouden",
+  "ownProducts": "Eigen producten",
+  "ownProductsSub": "zelf ingevoerde voedingswaarden",
+  "settingsMoreSub": "thema, weergave, export",
+  "restartOnboarding": "Onboarding opnieuw",
+  "restartOnboardingSub": "bekijk de eerste keer",
+  "moreFootnote": "Voedingswaarden uit NEVO 2025 en Open Food Facts. Alles staat op je telefoon; export via Instellingen.",
+  "weightDeltaIn30": "kg · {delta} in 30 dagen",
+  "@weightDeltaIn30": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "logWeightToday": "Weeg vandaag: {kg} kg",
+  "@logWeightToday": {
+    "placeholders": {
+      "kg": {
+        "type": "String"
+      }
+    }
+  },
+  "measurements": "Metingen",
+  "displaySection": "Weergave",
+  "dataSection": "Gegevens",
+  "exportDataSub": "alles als JSON, blijft op je telefoon",
+  "stepOf": "Stap {step} van {total}",
+  "@stepOf": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "obGoalTitle": "Waar wil je naartoe?",
+  "obGoalBody": "Kalorie rekent je dagdoel uit en houdt het daarna simpel: één cijfer op het startscherm, de rest eronder.",
+  "obLose": "Afvallen",
+  "obMaintain": "Op gewicht blijven",
+  "obGain": "Aankomen",
+  "obPaceTitle": "Hoe snel?",
+  "obPaceBody": "Dit bepaalt je dagdoel. Je kunt het later in Doelen aanpassen zonder alles opnieuw in te vullen.",
+  "obPaceCalm": "Rustig · 0,25 kg/week",
+  "obPaceNormal": "Normaal · 0,5 kg/week",
+  "obPaceFast": "Snel · 0,75 kg/week",
+  "obDoneTitle": "Klaar. Loggen kost één tik.",
+  "obDoneBody": "Je recente producten staan bovenaan het logvel met de portie die je vorige keer koos. Tik de plus en het staat erin.",
+  "obFootnote": "Alles blijft op je telefoon. Geen account, geen tracking.",
+  "next": "Verder",
+  "begin": "Beginnen",
+  "deleted": "Verwijderd",
+  "removeEntry": "Regel verwijderen",
+  "scanSimulateHint": "Houd de barcode in het kader. Gevonden producten worden direct geopend met de laatst gebruikte portie."
 }

@@ -29,5 +29,12 @@ class DiaryEntry {
   late double carbs;
   late double fat;
 
+  /// Vastgelegd bij het loggen, zodat "Alles zien" op de dagkaart klopt ook als
+  /// het product later verandert. Null wanneer de bron ze niet kent.
+  double? fiber;
+  double? sugars;
+  double? satFat;
+  double? salt;
+
   late DateTime createdAt;
 }

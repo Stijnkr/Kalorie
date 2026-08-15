@@ -1,7 +1,11 @@
 # Food Database Architecture — Kalorie
 
 Datum: 2026-08-15
-Status: plan (nog niet geïmplementeerd)
+Status: stap 1 en 2 af. Volledige NEVO 2025/9.0 (2328 producten) met porties en
+aliassen staat zowel in de app-snapshot als in Supabase (catalogusversie 4).
+Zoek-RPC en ranking zijn gelijkgetrokken met de app. Volgende: stap 3, de
+selectieve OFF branded laag, plus een popularity-seed — nu scoort elk
+NEVO-product identiek en beslist de naamlengte de volgorde.
 
 ## Context (wat er nu is)
 
@@ -38,7 +42,7 @@ Kalorie/
     nevo_import.py                  # NEVO CSV/XLS → products
     off_import.py                   # OFF dump → gefilterde branded products
     dedupe.py                       # OFF↔OFF + candidate queue
-    portions.py                     # NEVO-porties + NL defaults
+    portions.py                     # groepsregels + exacte porties (data/portion_rules.csv, data/portions.csv)
     aliases.py                      # synoniemen (havermout/havervlokken)
     publish.py                      # upsert naar Supabase
     snapshot.py                     # gzip JSON snapshot voor de app
@@ -339,8 +343,8 @@ Stappen:
 1. Parse alle nutrient-kolommen via `nutrient_defs` mapping (niet alleen ENERCC/PROT/CHO/FAT).
 2. Skip rijen zonder naam of zonder ENERCC.
 3. `kind=generic`, `is_published=true`, scores 100.
-4. Porties: NEVO portion-file als die er is; anders behouden we de bestaande handmatige porties (snee 35 g, etc.) in `tool/food_db/data/nevo_portions.csv`.
-5. Aliases: kleine handmatige lijst (`havervlokken` → havermout, `volk. brood` → volkorenbrood).
+4. Porties: NEVO levert er geen (`Hoeveelheid` is overal "per 100g"), dus eigen overlay: `data/portion_rules.csv` geeft elke voedingsmiddelgroep een default via naampatronen (brood → 1 snee 35 g, cracker → 1 stuk 7 g), `data/portions.csv` overschrijft per NEVO-code waar dat misgaat (droge pasta, kipfilet). Dekking is 100%.
+5. Aliases: NEVO's `Synoniem`-kolom + automatische omkering van het streepje-achtervoegsel (`Melk karne-` → `karnemelk`) + handmatige spreektaal in `data/aliases.csv` (`spiegelei`, `patat`, `biertje`).
 6. Upsert op `nevo_code`. Kalorie-overrides (`source_primary=kalorie` of suggestion accepted) niet overschrijven.
 7. Schrijf `assets/food/nevo_snapshot.min.json` voor offline v1.
 8. Log in `import_runs`.

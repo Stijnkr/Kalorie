@@ -5,9 +5,11 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../data/local/collections/app_settings.dart';
 import '../data/local/collections/diary_entry.dart';
 import '../data/local/collections/food.dart';
+import '../data/local/collections/water_entry.dart';
 import '../data/local/collections/weight_entry.dart';
-import '../data/nevo/nevo_importer.dart';
 import '../data/remote/off_client.dart';
+import '../data/repositories/catalog_repository.dart';
+import '../data/repositories/food_repository.dart';
 
 class KalorieBootstrap {
   KalorieBootstrap._();
@@ -22,6 +24,7 @@ class KalorieBootstrap {
         FoodSchema,
         DiaryEntrySchema,
         WeightEntrySchema,
+        WaterEntrySchema,
         AppSettingsSchema,
       ],
       directory: dir.path,
@@ -35,7 +38,7 @@ class KalorieBootstrap {
       }
     });
 
-    await NevoImporter.importIfNeeded(db);
+    await CatalogRepository(db, FoodRepository(db)).importSnapshotIfNeeded();
     configureOffClient();
 
     isar = db;

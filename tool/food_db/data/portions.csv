@@ -1,0 +1,25 @@
+nevo_code,label,grams
+# Exacte porties per NEVO-code. Gaan altijd over portion_rules.csv heen.
+# Alleen invullen waar de groepsregel de plank misslaat (droog vs gekookt,
+# stuksgrootte, etc.).
+4,1 portie,90
+811,1 portie,90
+659,1 portie,200
+2157,1 portie,200
+5,1 portie,75
+712,1 portie,75
+658,1 opscheplepel,75
+1014,1 opscheplepel,75
+1889,1 portie,75
+5518,1 portie,75
+2158,1 portie,150
+5539,1 portie,150
+3153,1 portie,75
+3154,1 portie,150
+213,1 portie,40
+209,1 portie,30
+2081,1 portie,30
+5126,1 portie,30
+1634,1 filet,150
+1392,1 filet,150
+1096,1 portie,50

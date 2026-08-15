@@ -9,6 +9,11 @@ abstract final class KalorieColors {
   static const muted = Color(0xFF6E736C);
   static const mutedStrong = Color(0xFF545A54);
   static const surface = Color(0xFFFBFAF6);
+  static const hint = Color(0xFF8A8F88);
+  static const faint = Color(0xFFB3ABA0);
+  static const handle = Color(0xFFD6CEC2);
+  static const dashed = Color(0xFFC9C1B5);
+  static const danger = Color(0xFF8C4A3A);
 
   static const paperDark = Color(0xFF121411);
   static const inkDark = Color(0xFFE7E2D8);
@@ -17,20 +22,104 @@ abstract final class KalorieColors {
   static const mutedDark = Color(0xFF9A9C94);
   static const mutedStrongDark = Color(0xFFB8BAB2);
   static const surfaceDark = Color(0xFF1B1C18);
+  static const hintDark = Color(0xFF83867E);
+  static const faintDark = Color(0xFF5F625B);
+  static const handleDark = Color(0xFF3A3C35);
+  static const dashedDark = Color(0xFF4A4C44);
+  static const dangerDark = Color(0xFFD08A76);
 }
 
 abstract final class KalorieSpace {
-  static const xxs = 4.0;
-  static const xs = 8.0;
-  static const sm = 12.0;
-  static const md = 16.0;
-  static const lg = 24.0;
-  static const xl = 28.0;
-  static const screen = 24.0;
+  /// Marge rondom de kaarten op een scherm.
+  static const screen = 16.0;
   static const radius = 12.0;
   static const radiusSheet = 16.0;
   static const buttonHeight = 52.0;
+
+  /// Hoogte van de tabbalk uit het prototype (inclusief homebalk-ruimte).
+  static const tabBar = 66.0;
 }
+
+/// Tinten die Material niet kent maar het prototype wel: subtiel grijs voor
+/// subtitels, haarlijn-grijs voor chevrons, en de doorschijnende sage-vlakken.
+@immutable
+class KalorieTones extends ThemeExtension<KalorieTones> {
+  const KalorieTones({
+    required this.hint,
+    required this.faint,
+    required this.handle,
+    required this.dashed,
+    required this.tint,
+    required this.track,
+    required this.sageSoft,
+    required this.danger,
+  });
+
+  /// Subtitels onder een naam (13 px).
+  final Color hint;
+
+  /// Chevrons, kruisjes, lege waarden.
+  final Color faint;
+
+  /// Greep bovenaan een bottom sheet.
+  final Color handle;
+
+  /// Streepjeslijn van het dagdoel in de weekgrafiek.
+  final Color dashed;
+
+  /// Vlak achter de ronde plus-knop.
+  final Color tint;
+
+  /// Achtergrond van voortgangsbalkjes.
+  final Color track;
+
+  final Color sageSoft;
+  final Color danger;
+
+  @override
+  KalorieTones copyWith({
+    Color? hint,
+    Color? faint,
+    Color? handle,
+    Color? dashed,
+    Color? tint,
+    Color? track,
+    Color? sageSoft,
+    Color? danger,
+  }) {
+    return KalorieTones(
+      hint: hint ?? this.hint,
+      faint: faint ?? this.faint,
+      handle: handle ?? this.handle,
+      dashed: dashed ?? this.dashed,
+      tint: tint ?? this.tint,
+      track: track ?? this.track,
+      sageSoft: sageSoft ?? this.sageSoft,
+      danger: danger ?? this.danger,
+    );
+  }
+
+  @override
+  KalorieTones lerp(ThemeExtension<KalorieTones>? other, double t) {
+    if (other is! KalorieTones) return this;
+    return KalorieTones(
+      hint: Color.lerp(hint, other.hint, t)!,
+      faint: Color.lerp(faint, other.faint, t)!,
+      handle: Color.lerp(handle, other.handle, t)!,
+      dashed: Color.lerp(dashed, other.dashed, t)!,
+      tint: Color.lerp(tint, other.tint, t)!,
+      track: Color.lerp(track, other.track, t)!,
+      sageSoft: Color.lerp(sageSoft, other.sageSoft, t)!,
+      danger: Color.lerp(danger, other.danger, t)!,
+    );
+  }
+}
+
+extension KalorieToneAccess on BuildContext {
+  KalorieTones get tones => Theme.of(this).extension<KalorieTones>()!;
+}
+
+const _tnum = [FontFeature.tabularFigures()];
 
 ThemeData kalorieTheme({required Brightness brightness}) {
   final isDark = brightness == Brightness.dark;
@@ -42,14 +131,27 @@ ThemeData kalorieTheme({required Brightness brightness}) {
       isDark ? KalorieColors.mutedStrongDark : KalorieColors.mutedStrong;
   final rule = isDark ? KalorieColors.ruleDark : KalorieColors.rule;
   final surface = isDark ? KalorieColors.surfaceDark : KalorieColors.surface;
+  final danger = isDark ? KalorieColors.dangerDark : KalorieColors.danger;
+  final onSage = isDark ? KalorieColors.paperDark : Colors.white;
+
+  final tones = KalorieTones(
+    hint: isDark ? KalorieColors.hintDark : KalorieColors.hint,
+    faint: isDark ? KalorieColors.faintDark : KalorieColors.faint,
+    handle: isDark ? KalorieColors.handleDark : KalorieColors.handle,
+    dashed: isDark ? KalorieColors.dashedDark : KalorieColors.dashed,
+    tint: sage.withValues(alpha: isDark ? 0.16 : 0.10),
+    track: sage.withValues(alpha: isDark ? 0.20 : 0.13),
+    sageSoft: isDark ? KalorieColors.sageDark : KalorieColors.sageSoft,
+    danger: danger,
+  );
 
   final scheme = ColorScheme(
     brightness: brightness,
     primary: sage,
-    onPrimary: isDark ? KalorieColors.paperDark : Colors.white,
+    onPrimary: onSage,
     secondary: sage,
-    onSecondary: isDark ? KalorieColors.paperDark : Colors.white,
-    error: const Color(0xFF8C4A3A),
+    onSecondary: onSage,
+    error: danger,
     onError: Colors.white,
     surface: surface,
     onSurface: ink,
@@ -57,9 +159,109 @@ ThemeData kalorieTheme({required Brightness brightness}) {
     outlineVariant: rule,
   );
 
-  final textTheme = ThemeData(brightness: brightness).textTheme.apply(
+  final base = ThemeData(brightness: brightness).textTheme.apply(
     bodyColor: ink,
     displayColor: ink,
+  );
+
+  final textTheme = base.copyWith(
+    // 56 px — "kcal over" op de dagkaart en het gewicht.
+    displayLarge: base.displayLarge?.copyWith(
+      fontSize: 56,
+      fontWeight: FontWeight.w500,
+      height: 0.95,
+      letterSpacing: -1.6,
+      fontFeatures: _tnum,
+    ),
+    // 44 px — kcal in het portiescherm.
+    displayMedium: base.displayMedium?.copyWith(
+      fontSize: 44,
+      fontWeight: FontWeight.w500,
+      height: 1,
+      letterSpacing: -1.2,
+      fontFeatures: _tnum,
+    ),
+    // 40 px — dagdoel in Doelen.
+    displaySmall: base.displaySmall?.copyWith(
+      fontSize: 40,
+      fontWeight: FontWeight.w500,
+      height: 1,
+      letterSpacing: -1,
+      fontFeatures: _tnum,
+    ),
+    // 34 px — onboarding-kop.
+    headlineLarge: base.headlineLarge?.copyWith(
+      fontSize: 34,
+      fontWeight: FontWeight.w500,
+      height: 1.12,
+      letterSpacing: -1,
+    ),
+    // 28 px — productnaam in het portiescherm.
+    headlineMedium: base.headlineMedium?.copyWith(
+      fontSize: 28,
+      fontWeight: FontWeight.w500,
+      height: 1.15,
+      letterSpacing: -0.6,
+    ),
+    // 22 px — macrocijfer, weekgemiddelde.
+    headlineSmall: base.headlineSmall?.copyWith(
+      fontSize: 22,
+      fontWeight: FontWeight.w500,
+      height: 1.1,
+      fontFeatures: _tnum,
+    ),
+    // 17 px — schermtitels en kcal-waarden in rijen.
+    titleMedium: base.titleMedium?.copyWith(
+      fontSize: 17,
+      fontWeight: FontWeight.w500,
+      height: 1.2,
+      letterSpacing: 0,
+      fontFeatures: _tnum,
+    ),
+    // 15 px medium — links en knoplabels binnen kaarten.
+    titleSmall: base.titleSmall?.copyWith(
+      fontSize: 15,
+      fontWeight: FontWeight.w500,
+      height: 1.2,
+      letterSpacing: 0,
+    ),
+    bodyLarge: base.bodyLarge?.copyWith(
+      fontSize: 15,
+      height: 1.55,
+      fontWeight: FontWeight.w400,
+      color: mutedStrong,
+    ),
+    bodyMedium: base.bodyMedium?.copyWith(
+      fontSize: 15,
+      height: 1.35,
+      fontWeight: FontWeight.w400,
+    ),
+    bodySmall: base.bodySmall?.copyWith(
+      fontSize: 13,
+      height: 1.35,
+      fontWeight: FontWeight.w400,
+      color: muted,
+    ),
+    labelLarge: base.labelLarge?.copyWith(
+      fontSize: 15,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0,
+    ),
+    labelMedium: base.labelMedium?.copyWith(
+      fontSize: 12,
+      height: 1.5,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0,
+      color: muted,
+    ),
+    // 11 px met spatiëring — rubriekkopjes als "MAALTIJD".
+    labelSmall: base.labelSmall?.copyWith(
+      fontSize: 11,
+      height: 1,
+      letterSpacing: 1.2,
+      fontWeight: FontWeight.w400,
+      color: muted,
+    ),
   );
 
   return ThemeData(
@@ -67,155 +269,144 @@ ThemeData kalorieTheme({required Brightness brightness}) {
     colorScheme: scheme,
     scaffoldBackgroundColor: paper,
     canvasColor: paper,
-    textTheme: textTheme.copyWith(
-      displayLarge: textTheme.displayLarge?.copyWith(
-        fontSize: 56,
-        fontWeight: FontWeight.w500,
-        height: 0.95,
-        letterSpacing: -1.6,
-        fontFeatures: const [FontFeature.tabularFigures()],
-      ),
-      headlineMedium: textTheme.headlineMedium?.copyWith(
-        fontSize: 28,
-        fontWeight: FontWeight.w500,
-        letterSpacing: -0.6,
-      ),
-      titleMedium: textTheme.titleMedium?.copyWith(
-        fontSize: 17,
-        fontWeight: FontWeight.w500,
-        letterSpacing: 0.1,
-      ),
-      bodyMedium: textTheme.bodyMedium?.copyWith(
-        fontSize: 15,
-        height: 1.4,
-        fontWeight: FontWeight.w400,
-      ),
-      bodySmall: textTheme.bodySmall?.copyWith(
-        fontSize: 13,
-        height: 1.35,
-        color: muted,
-      ),
-      labelSmall: textTheme.labelSmall?.copyWith(
-        fontSize: 11,
-        letterSpacing: 1.2,
-        fontWeight: FontWeight.w500,
-        color: muted,
-      ),
-    ),
+    extensions: [tones],
+    textTheme: textTheme,
     appBarTheme: AppBarTheme(
       backgroundColor: paper,
       foregroundColor: ink,
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: false,
-      titleTextStyle: textTheme.titleMedium?.copyWith(
-        color: ink,
-        fontWeight: FontWeight.w500,
-        fontSize: 17,
-      ),
+      titleSpacing: 0,
+      titleTextStyle: textTheme.titleMedium?.copyWith(color: ink),
     ),
     dividerColor: rule,
-    dividerTheme: DividerThemeData(color: rule, thickness: 0.5, space: 1),
+    dividerTheme: DividerThemeData(color: rule, thickness: 1, space: 1),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: sage,
-      foregroundColor: isDark ? KalorieColors.paperDark : Colors.white,
+      foregroundColor: onSage,
       elevation: 0,
       focusElevation: 0,
       hoverElevation: 0,
       highlightElevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
-    navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: paper,
-      elevation: 0,
-      height: 64,
-      indicatorColor: Colors.transparent,
-      overlayColor: const WidgetStatePropertyAll(Colors.transparent),
-      labelTextStyle: WidgetStateProperty.resolveWith((states) {
-        final selected = states.contains(WidgetState.selected);
-        return TextStyle(
-          fontSize: 12,
-          fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-          color: selected ? ink : muted,
-        );
-      }),
-      iconTheme: WidgetStateProperty.resolveWith((states) {
-        final selected = states.contains(WidgetState.selected);
-        return IconThemeData(
-          size: selected ? 24 : 22,
-          color: selected ? sage : muted,
-        );
-      }),
-    ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: surface,
+      hintStyle: textTheme.bodyMedium?.copyWith(color: tones.hint),
+      labelStyle: textTheme.bodyMedium?.copyWith(color: muted),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(KalorieSpace.radius),
-        borderSide: BorderSide(color: rule),
+        borderSide: BorderSide(color: rule, width: 0.5),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(KalorieSpace.radius),
-        borderSide: BorderSide(color: rule),
+        borderSide: BorderSide(color: rule, width: 0.5),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(KalorieSpace.radius),
-        borderSide: BorderSide(color: sage, width: 1.4),
+        borderSide: BorderSide(color: sage, width: 1.2),
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(KalorieSpace.radius),
+        borderSide: BorderSide(color: danger, width: 1),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(KalorieSpace.radius),
+        borderSide: BorderSide(color: danger, width: 1.2),
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         backgroundColor: sage,
-        foregroundColor: isDark ? KalorieColors.paperDark : Colors.white,
+        foregroundColor: onSage,
+        disabledBackgroundColor: sage.withValues(alpha: 0.4),
+        disabledForegroundColor: onSage.withValues(alpha: 0.85),
         elevation: 0,
         minimumSize: const Size.fromHeight(KalorieSpace.buttonHeight),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        textStyle: textTheme.titleMedium,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(KalorieSpace.radiusSheet),
+        ),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: ink,
+        minimumSize: const Size.fromHeight(KalorieSpace.buttonHeight),
+        textStyle: textTheme.titleSmall,
+        side: BorderSide(color: rule, width: 0.5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(KalorieSpace.radiusSheet),
         ),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(foregroundColor: sage),
+      style: TextButton.styleFrom(
+        foregroundColor: sage,
+        textStyle: textTheme.titleSmall,
+      ),
+    ),
+    iconButtonTheme: IconButtonThemeData(
+      style: IconButton.styleFrom(
+        foregroundColor: muted,
+        minimumSize: const Size(44, 44),
+      ),
     ),
     chipTheme: ChipThemeData(
       backgroundColor: Colors.transparent,
-      selectedColor: sage.withValues(alpha: 0.12),
-      side: BorderSide(color: rule),
+      selectedColor: sage,
+      side: BorderSide(color: rule, width: 0.5),
       labelStyle: TextStyle(color: ink, fontSize: 13),
+      secondaryLabelStyle: TextStyle(color: onSage, fontSize: 13),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       showCheckmark: false,
     ),
     listTileTheme: ListTileThemeData(
       iconColor: mutedStrong,
       textColor: ink,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-      minVerticalPadding: 16,
-      subtitleTextStyle: TextStyle(
-        fontSize: 13,
-        height: 1.35,
-        color: muted.withValues(alpha: 0.82),
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+      minVerticalPadding: 14,
+      titleTextStyle: textTheme.bodyMedium,
+      subtitleTextStyle: textTheme.bodySmall?.copyWith(color: tones.hint),
     ),
     snackBarTheme: SnackBarThemeData(
       backgroundColor: ink,
-      contentTextStyle: TextStyle(color: paper, fontSize: 15),
+      contentTextStyle: TextStyle(color: paper, fontSize: 15, height: 1.3),
       actionTextColor: KalorieColors.sageDark,
       behavior: SnackBarBehavior.floating,
+      insetPadding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: paper,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      modalBarrierColor: KalorieColors.ink.withValues(alpha: 0.32),
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(KalorieSpace.radiusSheet),
+        ),
       ),
+      dragHandleColor: tones.handle,
       dragHandleSize: const Size(32, 4),
       showDragHandle: true,
     ),
     dialogTheme: DialogThemeData(
       backgroundColor: surface,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      surfaceTintColor: Colors.transparent,
+      titleTextStyle: textTheme.titleMedium,
+      contentTextStyle: textTheme.bodyMedium,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: sage,
+      linearTrackColor: tones.track,
+    ),
+    splashFactory: InkSparkle.splashFactory,
   );
 }

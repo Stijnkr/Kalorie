@@ -19,6 +19,7 @@ class AppSettings {
 
   DateTime? nevoImportedAt;
   String? nevoVersion;
+  int catalogVersion = 0;
 
   static AppSettings defaults() {
     return AppSettings()
@@ -28,6 +29,7 @@ class AppSettings {
       ..proteinGoal = 120
       ..carbsGoal = 250
       ..fatGoal = 70
-      ..theme = ThemeModeSetting.system;
+      ..theme = ThemeModeSetting.system
+      ..catalogVersion = 0;
   }
 }

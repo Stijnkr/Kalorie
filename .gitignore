@@ -1,3 +1,10 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+tool/food_db/.env
+tool/food_db/data/off_filtered.json
+
 # Miscellaneous
 *.class
 *.log
@@ -46,3 +53,7 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# NEVO source dump (RIVM licence — do not commit)
+NEVO2025_v9.0/
+*.zip

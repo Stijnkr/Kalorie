@@ -6,6 +6,7 @@ import '../local/collections/app_settings.dart';
 import '../local/collections/diary_entry.dart';
 import '../local/collections/enums.dart';
 import '../local/collections/food.dart';
+import '../local/collections/water_entry.dart';
 import '../local/collections/weight_entry.dart';
 
 class DataExporter {
@@ -23,6 +24,7 @@ class DataExporter {
         .findAll();
     final entries = await _isar.diaryEntries.where().findAll();
     final weights = await _isar.weightEntries.where().findAll();
+    final water = await _isar.waterEntries.where().findAll();
 
     final payload = {
       'app': 'Kalorie',
@@ -62,11 +64,18 @@ class DataExporter {
               'protein': e.protein,
               'carbs': e.carbs,
               'fat': e.fat,
+              'fiber': e.fiber,
+              'sugars': e.sugars,
+              'satFat': e.satFat,
+              'salt': e.salt,
             },
           )
           .toList(),
       'weight': weights
           .map((w) => {'dateKey': w.dateKey, 'kg': w.kg})
+          .toList(),
+      'water': water
+          .map((w) => {'dateKey': w.dateKey, 'glasses': w.glasses})
           .toList(),
     };
 
