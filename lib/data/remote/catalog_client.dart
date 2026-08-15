@@ -37,9 +37,17 @@ class CatalogClient {
     return [for (final row in rows) CatalogProduct.fromJson(row)];
   }
 
+  Uri _https(String url) {
+    final uri = Uri.parse(url);
+    if (uri.scheme != 'https') {
+      throw CatalogException('https verplicht');
+    }
+    return uri;
+  }
+
   Future<int> catalogVersion() async {
     if (!isConfigured) return 0;
-    final uri = Uri.parse(
+    final uri = _https(
       '${CatalogConfig.supabaseUrl}/rest/v1/catalog_meta?id=eq.1&select=version',
     );
     final response = await _http.get(uri, headers: _headers);
@@ -57,7 +65,7 @@ class CatalogClient {
     String name,
     Map<String, Object?> body,
   ) async {
-    final uri = Uri.parse('${CatalogConfig.supabaseUrl}/rest/v1/rpc/$name');
+    final uri = _https('${CatalogConfig.supabaseUrl}/rest/v1/rpc/$name');
     final response = await _http.post(
       uri,
       headers: _headers,

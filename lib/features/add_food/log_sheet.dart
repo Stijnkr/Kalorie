@@ -138,12 +138,16 @@ class _LogSheetState extends ConsumerState<LogSheet> {
                         onTap: () => _go('/add$_mealQuery'),
                       ),
                       _ActionRow(
+                        label: l10n.recipes,
+                        onTap: () => _go('/recipes$_mealQuery'),
+                      ),
+                      _ActionRow(
                         label: l10n.scanBarcode,
                         onTap: () => _go('/add/scan$_mealQuery'),
                       ),
                       _ActionRow(
                         label: l10n.createNewProduct,
-                        onTap: () => _go('/add/custom'),
+                        onTap: () => _go('/add/custom$_mealQuery'),
                       ),
                     ],
                   ),
@@ -175,14 +179,20 @@ class _QuickRow extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final tones = context.tones;
+    final liquid = ServingMath.looksLiquid(
+      name: food.name,
+      servingLabel: food.servingLabel,
+    );
     final grams = ServingMath.defaultGrams(
       lastAmountG: food.lastAmountG,
       servingG: food.servingG,
+      liquid: liquid,
     );
     final amount = ServingMath.describeShort(
       grams: grams,
       servingG: food.servingG,
       servingLabel: food.servingLabel,
+      liquid: liquid,
     );
     final brand = food.brand;
     final subtitle =

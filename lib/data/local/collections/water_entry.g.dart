@@ -18,7 +18,14 @@ const WaterEntrySchema = CollectionSchema(
   id: 7610063248208069204,
   properties: {
     r'dateKey': PropertySchema(id: 0, name: r'dateKey', type: IsarType.long),
-    r'glasses': PropertySchema(id: 1, name: r'glasses', type: IsarType.long),
+    r'deleted': PropertySchema(id: 1, name: r'deleted', type: IsarType.bool),
+    r'dirty': PropertySchema(id: 2, name: r'dirty', type: IsarType.bool),
+    r'glasses': PropertySchema(id: 3, name: r'glasses', type: IsarType.long),
+    r'updatedAt': PropertySchema(
+      id: 4,
+      name: r'updatedAt',
+      type: IsarType.dateTime,
+    ),
   },
 
   estimateSize: _waterEntryEstimateSize,
@@ -35,6 +42,32 @@ const WaterEntrySchema = CollectionSchema(
       properties: [
         IndexPropertySchema(
           name: r'dateKey',
+          type: IndexType.value,
+          caseSensitive: false,
+        ),
+      ],
+    ),
+    r'dirty': IndexSchema(
+      id: 624608328996418504,
+      name: r'dirty',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'dirty',
+          type: IndexType.value,
+          caseSensitive: false,
+        ),
+      ],
+    ),
+    r'deleted': IndexSchema(
+      id: 2416515181749931262,
+      name: r'deleted',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'deleted',
           type: IndexType.value,
           caseSensitive: false,
         ),
@@ -66,7 +99,10 @@ void _waterEntrySerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.dateKey);
-  writer.writeLong(offsets[1], object.glasses);
+  writer.writeBool(offsets[1], object.deleted);
+  writer.writeBool(offsets[2], object.dirty);
+  writer.writeLong(offsets[3], object.glasses);
+  writer.writeDateTime(offsets[4], object.updatedAt);
 }
 
 WaterEntry _waterEntryDeserialize(
@@ -77,8 +113,11 @@ WaterEntry _waterEntryDeserialize(
 ) {
   final object = WaterEntry();
   object.dateKey = reader.readLong(offsets[0]);
-  object.glasses = reader.readLong(offsets[1]);
+  object.deleted = reader.readBool(offsets[1]);
+  object.dirty = reader.readBool(offsets[2]);
+  object.glasses = reader.readLong(offsets[3]);
   object.id = id;
+  object.updatedAt = reader.readDateTime(offsets[4]);
   return object;
 }
 
@@ -92,7 +131,13 @@ P _waterEntryDeserializeProp<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
+      return (reader.readBool(offset)) as P;
+    case 2:
+      return (reader.readBool(offset)) as P;
+    case 3:
       return (reader.readLong(offset)) as P;
+    case 4:
+      return (reader.readDateTime(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -179,6 +224,22 @@ extension WaterEntryQueryWhereSort
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'dateKey'),
+      );
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterWhere> anyDirty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'dirty'),
+      );
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterWhere> anyDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'deleted'),
       );
     });
   }
@@ -358,6 +419,114 @@ extension WaterEntryQueryWhere
       );
     });
   }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterWhereClause> dirtyEqualTo(
+    bool dirty,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'dirty', value: [dirty]),
+      );
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterWhereClause> dirtyNotEqualTo(
+    bool dirty,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'dirty',
+                lower: [],
+                upper: [dirty],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'dirty',
+                lower: [dirty],
+                includeLower: false,
+                upper: [],
+              ),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'dirty',
+                lower: [dirty],
+                includeLower: false,
+                upper: [],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'dirty',
+                lower: [],
+                upper: [dirty],
+                includeUpper: false,
+              ),
+            );
+      }
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterWhereClause> deletedEqualTo(
+    bool deleted,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'deleted', value: [deleted]),
+      );
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterWhereClause> deletedNotEqualTo(
+    bool deleted,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'deleted',
+                lower: [],
+                upper: [deleted],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'deleted',
+                lower: [deleted],
+                includeLower: false,
+                upper: [],
+              ),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'deleted',
+                lower: [deleted],
+                includeLower: false,
+                upper: [],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'deleted',
+                lower: [],
+                upper: [deleted],
+                includeUpper: false,
+              ),
+            );
+      }
+    });
+  }
 }
 
 extension WaterEntryQueryFilter
@@ -415,6 +584,26 @@ extension WaterEntryQueryFilter
           upper: upper,
           includeUpper: includeUpper,
         ),
+      );
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterFilterCondition> deletedEqualTo(
+    bool value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'deleted', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterFilterCondition> dirtyEqualTo(
+    bool value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'dirty', value: value),
       );
     });
   }
@@ -534,6 +723,63 @@ extension WaterEntryQueryFilter
       );
     });
   }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterFilterCondition> updatedAtEqualTo(
+    DateTime value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'updatedAt', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterFilterCondition>
+  updatedAtGreaterThan(DateTime value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'updatedAt',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterFilterCondition> updatedAtLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'updatedAt',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterFilterCondition> updatedAtBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'updatedAt',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
+    });
+  }
 }
 
 extension WaterEntryQueryObject
@@ -556,6 +802,30 @@ extension WaterEntryQuerySortBy
     });
   }
 
+  QueryBuilder<WaterEntry, WaterEntry, QAfterSortBy> sortByDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deleted', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterSortBy> sortByDeletedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deleted', Sort.desc);
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterSortBy> sortByDirty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dirty', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterSortBy> sortByDirtyDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dirty', Sort.desc);
+    });
+  }
+
   QueryBuilder<WaterEntry, WaterEntry, QAfterSortBy> sortByGlasses() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'glasses', Sort.asc);
@@ -565,6 +835,18 @@ extension WaterEntryQuerySortBy
   QueryBuilder<WaterEntry, WaterEntry, QAfterSortBy> sortByGlassesDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'glasses', Sort.desc);
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterSortBy> sortByUpdatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterSortBy> sortByUpdatedAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.desc);
     });
   }
 }
@@ -580,6 +862,30 @@ extension WaterEntryQuerySortThenBy
   QueryBuilder<WaterEntry, WaterEntry, QAfterSortBy> thenByDateKeyDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dateKey', Sort.desc);
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterSortBy> thenByDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deleted', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterSortBy> thenByDeletedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deleted', Sort.desc);
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterSortBy> thenByDirty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dirty', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterSortBy> thenByDirtyDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dirty', Sort.desc);
     });
   }
 
@@ -606,6 +912,18 @@ extension WaterEntryQuerySortThenBy
       return query.addSortBy(r'id', Sort.desc);
     });
   }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterSortBy> thenByUpdatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QAfterSortBy> thenByUpdatedAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.desc);
+    });
+  }
 }
 
 extension WaterEntryQueryWhereDistinct
@@ -616,9 +934,27 @@ extension WaterEntryQueryWhereDistinct
     });
   }
 
+  QueryBuilder<WaterEntry, WaterEntry, QDistinct> distinctByDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'deleted');
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QDistinct> distinctByDirty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'dirty');
+    });
+  }
+
   QueryBuilder<WaterEntry, WaterEntry, QDistinct> distinctByGlasses() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'glasses');
+    });
+  }
+
+  QueryBuilder<WaterEntry, WaterEntry, QDistinct> distinctByUpdatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'updatedAt');
     });
   }
 }
@@ -637,9 +973,27 @@ extension WaterEntryQueryProperty
     });
   }
 
+  QueryBuilder<WaterEntry, bool, QQueryOperations> deletedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'deleted');
+    });
+  }
+
+  QueryBuilder<WaterEntry, bool, QQueryOperations> dirtyProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'dirty');
+    });
+  }
+
   QueryBuilder<WaterEntry, int, QQueryOperations> glassesProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'glasses');
+    });
+  }
+
+  QueryBuilder<WaterEntry, DateTime, QQueryOperations> updatedAtProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'updatedAt');
     });
   }
 }

@@ -5,6 +5,7 @@ import '../../core/food_search_rank.dart';
 import '../food/match_key.dart';
 import '../local/collections/enums.dart';
 import '../local/collections/food.dart';
+import '../sync/sync_stamp.dart';
 
 class FoodRepository {
   FoodRepository(this._isar);
@@ -45,6 +46,8 @@ class FoodRepository {
                 .brandContains(token, caseSensitive: false),
           ),
         )
+        .and()
+        .deletedEqualTo(false)
         .findAll();
     matches.sort((a, b) => compareFoodSearch(a, b, q));
     if (matches.length <= limit) return matches;
@@ -55,6 +58,8 @@ class FoodRepository {
     return _isar.foods
         .filter()
         .lastUsedAtIsNotNull()
+        .and()
+        .deletedEqualTo(false)
         .sortByLastUsedAtDesc()
         .limit(limit)
         .findAll();
@@ -64,18 +69,58 @@ class FoodRepository {
     return _isar.foods
         .filter()
         .isFavoriteEqualTo(true)
+        .and()
+        .deletedEqualTo(false)
         .sortByName()
         .limit(limit)
         .findAll();
   }
 
   Future<List<Food>> browse({int limit = 80}) {
-    return _isar.foods.where().sortByName().limit(limit).findAll();
+    return _isar.foods
+        .filter()
+        .deletedEqualTo(false)
+        .sortByName()
+        .limit(limit)
+        .findAll();
   }
 
   Future<int> upsert(Food food) {
     food.nameNormalized = normalizeName(food.name);
+    if (food.source == FoodSource.custom) {
+      // Alleen eigen producten gaan mee naar de server.
+      food.clientId ??= newClientId();
+      food
+        ..updatedAt = DateTime.now()
+        ..dirty = true
+        ..deleted = false;
+    }
     return _isar.writeTxn(() => _isar.foods.put(food));
+  }
+
+  /// Zachte verwijdering van een eigen product.
+  Future<void> deleteCustom(int id) {
+    return _isar.writeTxn(() async {
+      final food = await _isar.foods.get(id);
+      if (food == null || food.source != FoodSource.custom) return;
+      food
+        ..clientId ??= newClientId()
+        ..deleted = true
+        ..dirty = true
+        ..updatedAt = DateTime.now();
+      await _isar.foods.put(food);
+    });
+  }
+
+  Future<List<Food>> customFoods({int limit = 200}) {
+    return _isar.foods
+        .filter()
+        .sourceEqualTo(FoodSource.custom)
+        .and()
+        .deletedEqualTo(false)
+        .sortByName()
+        .limit(limit)
+        .findAll();
   }
 
   Future<Food> cacheOffProduct(Food incoming) async {
@@ -124,6 +169,12 @@ class FoodRepository {
       final food = await _isar.foods.get(id);
       if (food == null) return;
       food.isFavorite = !food.isFavorite;
+      if (food.source == FoodSource.custom) {
+        food
+          ..clientId ??= newClientId()
+          ..dirty = true
+          ..updatedAt = DateTime.now();
+      }
       await _isar.foods.put(food);
     });
   }

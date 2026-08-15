@@ -13,6 +13,8 @@ enum StrokeShape {
   ring,
   square,
   dots,
+  home,
+  trash,
 }
 
 class StrokeIcon extends StatelessWidget {
@@ -102,6 +104,15 @@ class _StrokePainter extends CustomPainter {
           ..lineTo(w * 0.92, h * 0.92)
           ..moveTo(w * 0.92, h * 0.08)
           ..lineTo(w * 0.08, h * 0.92);
+      case StrokeShape.home:
+        path
+          ..moveTo(w * 0.08, h * 0.48)
+          ..lineTo(w * 0.5, h * 0.1)
+          ..lineTo(w * 0.92, h * 0.48)
+          ..moveTo(w * 0.22, h * 0.42)
+          ..lineTo(w * 0.22, h * 0.9)
+          ..lineTo(w * 0.78, h * 0.9)
+          ..lineTo(w * 0.78, h * 0.42);
       case StrokeShape.calendar:
         final r = RRect.fromLTRBR(
           strokeWidth / 2,
@@ -150,6 +161,20 @@ class _StrokePainter extends CustomPainter {
           canvas.drawCircle(Offset(x, h / 2), radius, dot);
         }
         return;
+      case StrokeShape.trash:
+        path
+          ..moveTo(w * 0.18, h * 0.30)
+          ..lineTo(w * 0.82, h * 0.30)
+          ..moveTo(w * 0.28, h * 0.30)
+          ..lineTo(w * 0.34, h * 0.90)
+          ..lineTo(w * 0.66, h * 0.90)
+          ..lineTo(w * 0.72, h * 0.30)
+          ..moveTo(w * 0.38, h * 0.30)
+          ..lineTo(w * 0.40, h * 0.12)
+          ..lineTo(w * 0.60, h * 0.12)
+          ..lineTo(w * 0.62, h * 0.30)
+          ..moveTo(w * 0.50, h * 0.42)
+          ..lineTo(w * 0.50, h * 0.78);
     }
 
     canvas.drawPath(path, paint);

@@ -18,7 +18,14 @@ const WeightEntrySchema = CollectionSchema(
   id: -5509044357954421771,
   properties: {
     r'dateKey': PropertySchema(id: 0, name: r'dateKey', type: IsarType.long),
-    r'kg': PropertySchema(id: 1, name: r'kg', type: IsarType.double),
+    r'deleted': PropertySchema(id: 1, name: r'deleted', type: IsarType.bool),
+    r'dirty': PropertySchema(id: 2, name: r'dirty', type: IsarType.bool),
+    r'kg': PropertySchema(id: 3, name: r'kg', type: IsarType.double),
+    r'updatedAt': PropertySchema(
+      id: 4,
+      name: r'updatedAt',
+      type: IsarType.dateTime,
+    ),
   },
 
   estimateSize: _weightEntryEstimateSize,
@@ -35,6 +42,32 @@ const WeightEntrySchema = CollectionSchema(
       properties: [
         IndexPropertySchema(
           name: r'dateKey',
+          type: IndexType.value,
+          caseSensitive: false,
+        ),
+      ],
+    ),
+    r'dirty': IndexSchema(
+      id: 624608328996418504,
+      name: r'dirty',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'dirty',
+          type: IndexType.value,
+          caseSensitive: false,
+        ),
+      ],
+    ),
+    r'deleted': IndexSchema(
+      id: 2416515181749931262,
+      name: r'deleted',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'deleted',
           type: IndexType.value,
           caseSensitive: false,
         ),
@@ -66,7 +99,10 @@ void _weightEntrySerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.dateKey);
-  writer.writeDouble(offsets[1], object.kg);
+  writer.writeBool(offsets[1], object.deleted);
+  writer.writeBool(offsets[2], object.dirty);
+  writer.writeDouble(offsets[3], object.kg);
+  writer.writeDateTime(offsets[4], object.updatedAt);
 }
 
 WeightEntry _weightEntryDeserialize(
@@ -77,8 +113,11 @@ WeightEntry _weightEntryDeserialize(
 ) {
   final object = WeightEntry();
   object.dateKey = reader.readLong(offsets[0]);
+  object.deleted = reader.readBool(offsets[1]);
+  object.dirty = reader.readBool(offsets[2]);
   object.id = id;
-  object.kg = reader.readDouble(offsets[1]);
+  object.kg = reader.readDouble(offsets[3]);
+  object.updatedAt = reader.readDateTime(offsets[4]);
   return object;
 }
 
@@ -92,7 +131,13 @@ P _weightEntryDeserializeProp<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
+      return (reader.readBool(offset)) as P;
+    case 2:
+      return (reader.readBool(offset)) as P;
+    case 3:
       return (reader.readDouble(offset)) as P;
+    case 4:
+      return (reader.readDateTime(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -183,6 +228,22 @@ extension WeightEntryQueryWhereSort
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'dateKey'),
+      );
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterWhere> anyDirty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'dirty'),
+      );
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterWhere> anyDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'deleted'),
       );
     });
   }
@@ -364,6 +425,114 @@ extension WeightEntryQueryWhere
       );
     });
   }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterWhereClause> dirtyEqualTo(
+    bool dirty,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'dirty', value: [dirty]),
+      );
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterWhereClause> dirtyNotEqualTo(
+    bool dirty,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'dirty',
+                lower: [],
+                upper: [dirty],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'dirty',
+                lower: [dirty],
+                includeLower: false,
+                upper: [],
+              ),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'dirty',
+                lower: [dirty],
+                includeLower: false,
+                upper: [],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'dirty',
+                lower: [],
+                upper: [dirty],
+                includeUpper: false,
+              ),
+            );
+      }
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterWhereClause> deletedEqualTo(
+    bool deleted,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'deleted', value: [deleted]),
+      );
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterWhereClause> deletedNotEqualTo(
+    bool deleted,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'deleted',
+                lower: [],
+                upper: [deleted],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'deleted',
+                lower: [deleted],
+                includeLower: false,
+                upper: [],
+              ),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'deleted',
+                lower: [deleted],
+                includeLower: false,
+                upper: [],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'deleted',
+                lower: [],
+                upper: [deleted],
+                includeUpper: false,
+              ),
+            );
+      }
+    });
+  }
 }
 
 extension WeightEntryQueryFilter
@@ -421,6 +590,26 @@ extension WeightEntryQueryFilter
           upper: upper,
           includeUpper: includeUpper,
         ),
+      );
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterFilterCondition> deletedEqualTo(
+    bool value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'deleted', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterFilterCondition> dirtyEqualTo(
+    bool value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'dirty', value: value),
       );
     });
   }
@@ -557,6 +746,61 @@ extension WeightEntryQueryFilter
       );
     });
   }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterFilterCondition>
+  updatedAtEqualTo(DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'updatedAt', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterFilterCondition>
+  updatedAtGreaterThan(DateTime value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'updatedAt',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterFilterCondition>
+  updatedAtLessThan(DateTime value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'updatedAt',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterFilterCondition>
+  updatedAtBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'updatedAt',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
+    });
+  }
 }
 
 extension WeightEntryQueryObject
@@ -579,6 +823,30 @@ extension WeightEntryQuerySortBy
     });
   }
 
+  QueryBuilder<WeightEntry, WeightEntry, QAfterSortBy> sortByDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deleted', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterSortBy> sortByDeletedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deleted', Sort.desc);
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterSortBy> sortByDirty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dirty', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterSortBy> sortByDirtyDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dirty', Sort.desc);
+    });
+  }
+
   QueryBuilder<WeightEntry, WeightEntry, QAfterSortBy> sortByKg() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'kg', Sort.asc);
@@ -588,6 +856,18 @@ extension WeightEntryQuerySortBy
   QueryBuilder<WeightEntry, WeightEntry, QAfterSortBy> sortByKgDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'kg', Sort.desc);
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterSortBy> sortByUpdatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterSortBy> sortByUpdatedAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.desc);
     });
   }
 }
@@ -603,6 +883,30 @@ extension WeightEntryQuerySortThenBy
   QueryBuilder<WeightEntry, WeightEntry, QAfterSortBy> thenByDateKeyDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dateKey', Sort.desc);
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterSortBy> thenByDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deleted', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterSortBy> thenByDeletedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deleted', Sort.desc);
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterSortBy> thenByDirty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dirty', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterSortBy> thenByDirtyDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dirty', Sort.desc);
     });
   }
 
@@ -629,6 +933,18 @@ extension WeightEntryQuerySortThenBy
       return query.addSortBy(r'kg', Sort.desc);
     });
   }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterSortBy> thenByUpdatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QAfterSortBy> thenByUpdatedAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.desc);
+    });
+  }
 }
 
 extension WeightEntryQueryWhereDistinct
@@ -639,9 +955,27 @@ extension WeightEntryQueryWhereDistinct
     });
   }
 
+  QueryBuilder<WeightEntry, WeightEntry, QDistinct> distinctByDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'deleted');
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QDistinct> distinctByDirty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'dirty');
+    });
+  }
+
   QueryBuilder<WeightEntry, WeightEntry, QDistinct> distinctByKg() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'kg');
+    });
+  }
+
+  QueryBuilder<WeightEntry, WeightEntry, QDistinct> distinctByUpdatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'updatedAt');
     });
   }
 }
@@ -660,9 +994,27 @@ extension WeightEntryQueryProperty
     });
   }
 
+  QueryBuilder<WeightEntry, bool, QQueryOperations> deletedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'deleted');
+    });
+  }
+
+  QueryBuilder<WeightEntry, bool, QQueryOperations> dirtyProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'dirty');
+    });
+  }
+
   QueryBuilder<WeightEntry, double, QQueryOperations> kgProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'kg');
+    });
+  }
+
+  QueryBuilder<WeightEntry, DateTime, QQueryOperations> updatedAtProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'updatedAt');
     });
   }
 }

@@ -19,7 +19,7 @@
   "searchOnline": "Search online",
   "searchingOnline": "Searching online…",
   "noResults": "No foods found",
-  "noResultsHint": "Add a custom food or search online.",
+  "noResultsHint": "Add the food yourself, or scan the barcode.",
   "offline": "You're offline. Local foods only.",
   "kcal": "kcal",
   "protein": "Protein",
@@ -64,8 +64,20 @@
   "data": "Data",
   "exportData": "Export data",
   "exportDone": "Export ready",
-  "privacyTitle": "Privacy",
-  "privacyBody": "Everything stays on this device. No account, no tracking, no ads.",
+  "privacyTitle": "Privacy policy",
+  "privacyBody": "An account is required to use Kalorie. Your log stays on this device and syncs to your account. No tracking, no ads.",
+  "privacySub": "what we store and how you delete it",
+  "termsTitle": "Terms",
+  "termsSub": "using the app, not medical advice",
+  "legalDisclaimer": "Kalorie is not medical advice and not a diet treatment. See a doctor if you have questions about food or weight.",
+  "supportContact": "Questions or a request about your data: {email}",
+  "@supportContact": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "about": "About",
   "sources": "Sources",
   "nevoAttribution": "Based on data from NEVO online version 2025/9.0, RIVM, Bilthoven and other data sources.",
@@ -227,7 +239,7 @@
   "searchDatabase": "Search the database",
   "createNewProduct": "Create a new food",
   "nothingFound": "Nothing found",
-  "nothingFoundHint": "Search online or add the food yourself.",
+  "nothingFoundHint": "Add the food yourself, or scan the barcode.",
   "editPortion": "Edit serving",
   "inGrams": "in grams",
   "gramsUnit": "grams",
@@ -284,7 +296,7 @@
   "settingsMoreSub": "theme, display, export",
   "restartOnboarding": "Onboarding again",
   "restartOnboardingSub": "see the first run",
-  "moreFootnote": "Nutrition from NEVO 2025 and Open Food Facts. Everything stays on your phone; export via Settings.",
+  "moreFootnote": "Nutrition from NEVO 2025 and Open Food Facts. Your log stays on your phone and, when signed in, on your account.",
   "weightDeltaIn30": "kg · {delta} in 30 days",
   "@weightDeltaIn30": {
     "placeholders": {
@@ -328,10 +340,209 @@
   "obPaceFast": "Fast · 0.75 kg/week",
   "obDoneTitle": "Done. Logging takes one tap.",
   "obDoneBody": "Your recent foods sit at the top of the log sheet with the serving you picked last time. Tap the plus and it's in.",
-  "obFootnote": "Everything stays on your phone. No account, no tracking.",
+  "obFootnote": "Your account keeps your log. No tracking, no ads.",
   "next": "Next",
   "begin": "Start",
   "deleted": "Deleted",
   "removeEntry": "Remove row",
-  "scanSimulateHint": "Hold the barcode inside the frame. Foods that are found open straight away with the serving you used last."
+  "scanSimulateHint": "Hold the barcode inside the frame. The food goes straight into your log, with the serving you used last.",
+  "account": "Account",
+  "accountSignedOut": "No account",
+  "accountSignedOutSub": "sign in to keep your log safe",
+  "accountSince": "{email} · since {since}",
+  "@accountSince": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      },
+      "since": {
+        "type": "String"
+      }
+    }
+  },
+  "signIn": "Sign in",
+  "signUp": "Create account",
+  "signOut": "Sign out",
+  "deleteAccount": "Delete account",
+  "deleteAccountBody": "Deleting wipes your account and every log from the server. An export stays on your phone.",
+  "deleteAccountConfirm": "Are you sure? This cannot be undone.",
+  "authWelcomeBack": "Welcome back",
+  "authCreateAccount": "Create your account",
+  "authSignInBody": "Sign in and your log, goals and weight come back from the server.",
+  "authSignUpBody": "With an account your log is safe and comes back on every device you sign in on.",
+  "email": "Email",
+  "password": "Password",
+  "displayName": "Name",
+  "emailPlaceholder": "you@example.com",
+  "passwordPlaceholder": "at least 10 characters",
+  "namePlaceholder": "what should we call you?",
+  "authLegal": "By continuing you agree to the terms and the privacy policy.",
+  "forgotPassword": "Forgot your password?",
+  "resetSent": "Check your mail for a link to reset your password.",
+  "errInvalidCredentials": "That email or password isn't right.",
+  "errEmailTaken": "An account with this email already exists.",
+  "errWeakPassword": "Choose a password of at least 10 characters. Not your email, and not the same character over and over.",
+  "errLeakedPassword": "This password appears in a known leak. Choose another, preferably from a password manager.",
+  "errInvalidEmail": "That doesn't look like a valid email address.",
+  "errNeedsConfirmation": "Confirm your email via the link we just sent.",
+  "errNetwork": "No connection. Try again in a moment.",
+  "errRateLimited": "Too many emails in a row. Wait a few minutes and try again, or sign in if the account already exists.",
+  "errUnknown": "Creating the account didn't work. Try again in a moment.",
+  "errCloudUnavailable": "No connection to the server. Try again in a moment.",
+  "syncSection": "Sync",
+  "syncDiary": "Sync the log",
+  "syncDiarySub": "meals and water on all your devices",
+  "syncWeight": "Sync weight",
+  "syncWeightSub": "measurements and trend",
+  "syncNow": "Sync now",
+  "syncRunning": "Syncing…",
+  "syncDone": "Updated at {time}",
+  "@syncDone": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "syncNever": "Not synced yet",
+  "syncOffline": "Offline — it will wait until you're back online.",
+  "syncFailed": "Syncing didn't work.",
+  "securitySection": "Security and data",
+  "changePassword": "Change password",
+  "changePasswordSub": "we'll email you a link",
+  "obAccountTitleUp": "Create your account",
+  "obAccountTitleIn": "Welcome back",
+  "skipForNow": "Continue without an account",
+  "skipForNowSub": "everything then stays on this device only",
+  "recipes": "My recipes",
+  "recipesSub": "fixed combinations in one tap",
+  "recipesIntro": "A recipe is a fixed combination you log in one tap. Tap the plus to log a portion, tap the name to edit it.",
+  "newRecipe": "New recipe",
+  "editRecipe": "Edit recipe",
+  "recipeName": "Name",
+  "recipeNameHint": "e.g. Quark with banana",
+  "recipePortions": "Number of portions",
+  "recipePortionsSub": "sets what one portion costs",
+  "ingredients": "Ingredients",
+  "recipeEmpty": "No ingredients yet. Pick a food below.",
+  "addIngredient": "Add",
+  "saveRecipe": "Save recipe",
+  "recipeTotal": "Total {kcal} kcal · one portion {perPortion} kcal",
+  "@recipeTotal": {
+    "placeholders": {
+      "kcal": {
+        "type": "int"
+      },
+      "perPortion": {
+        "type": "int"
+      }
+    }
+  },
+  "recipePerPortion": "{kcal} kcal per portion · {grams} g",
+  "@recipePerPortion": {
+    "placeholders": {
+      "kcal": {
+        "type": "int"
+      },
+      "grams": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteRecipe": "Delete recipe",
+  "deleteRecipeConfirm": "This recipe leaves your list. Logged portions stay in your diary.",
+  "deleteProduct": "Delete product",
+  "deleteProductConfirm": "{name} leaves your custom foods. Logged days stay as they are.",
+  "@deleteProductConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reminders": "Reminders",
+  "remindersSub": "a nudge when you don't log",
+  "remindersIntro": "Only a nudge when you haven't logged. If the meal is already logged, no notification arrives.",
+  "remindersFootnote": "Tap the time to move it. Notifications only work if you allowed them on your phone.",
+  "remindersEnabledCount": "{count} on",
+  "@remindersEnabledCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderWeighIn": "Weigh-in",
+  "reminderBreakfastSub": "when breakfast is still empty",
+  "reminderLunchSub": "when lunch is still empty",
+  "reminderDinnerSub": "when dinner is still empty",
+  "reminderSnackSub": "when the day isn't wrapped up",
+  "reminderWeighInSub": "weekly at your weigh-in moment",
+  "reminderBody": "Nothing logged for {meal} yet.",
+  "@reminderBody": {
+    "placeholders": {
+      "meal": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderWeighBody": "Time to step on the scale?",
+  "notificationsDenied": "Notifications are off. Turn them on in Settings › Kalorie.",
+  "accountSwitchTitle": "Different account",
+  "accountSwitchBody": "This device still has data from another account. Switching loads this account's log and replaces what's here. The other account stays in the cloud.",
+  "accountSwitchConfirm": "Switch",
+  "signOutStaysLocal": "Your log stays on this device. Sign in again to sync.",
+  "recoverTitle": "New password",
+  "recoverBody": "Pick a password of at least 10 characters. After that you can sign in on all your devices again.",
+  "newPassword": "New password",
+  "confirmPassword": "Confirm password",
+  "savePassword": "Save password",
+  "passwordUpdated": "Your password has been changed.",
+  "errPasswordMismatch": "Those two passwords don't match.",
+  "recipeListEmpty": "No recipes yet. Make one and you log it in a single tap.",
+  "ownProductsIntro": "Foods you added yourself. Tap one to edit it.",
+  "newOwnProduct": "New food",
+  "ownProductsEmpty": "No custom foods yet.",
+  "moreSectionDay": "Day",
+  "moreSectionFood": "Food",
+  "moreSectionApp": "App",
+  "obFootnoteSignedIn": "Your goals stay on this device and also go to the cloud.",
+  "weekdayMonday": "Mon",
+  "weekdayTuesday": "Tue",
+  "weekdayWednesday": "Wed",
+  "weekdayThursday": "Thu",
+  "weekdayFriday": "Fri",
+  "weekdaySaturday": "Sat",
+  "weekdaySunday": "Sun",
+  "feedback": "Feedback",
+  "feedbackSub": "an idea, a bug, or something that feels off",
+  "feedbackIntro": "I read everything. Short is fine. Version and device go with it automatically.",
+  "feedbackIdea": "Idea",
+  "feedbackProblem": "Problem",
+  "feedbackOther": "Other",
+  "feedbackHint": "What would make Kalorie better?",
+  "feedbackSend": "Send",
+  "feedbackSent": "Got it. Thank you.",
+  "feedbackFailed": "Couldn't send. Check your connection and try again.",
+  "updates": "What's new",
+  "updatesSub": "what changed in the app",
+  "updatesIntro": "Every version lands here. After an update you see the notes right away.",
+  "updatesAll": "All versions",
+  "whatsNewVersion": "New in {version}",
+  "@whatsNewVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "whatsNewIntro": "A short look at what changed since you were last here.",
+  "whatsNewOk": "OK",
+  "newBadge": "new",
+  "appLock": "Lock",
+  "appLockSub": "Face ID or passcode when you come back",
+  "appLockReason": "Unlock Kalorie to see your log.",
+  "appLockBody": "Your log is locked.",
+  "appLockUnlock": "Unlock",
+  "appLockUnavailable": "This device has no Face ID or passcode, or you cancelled."
 }

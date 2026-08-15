@@ -21,6 +21,25 @@ class AppSettings {
   String? nevoVersion;
   int catalogVersion = 0;
 
+  /// Naam zoals die op het accountscherm staat.
+  String? displayName;
+
+  /// Cloud-account waarvan de lokale gebruikersdata is. Blijft na uitloggen
+  /// staan, zodat dezelfde gebruiker terugkan zonder data te mengen.
+  String? cloudUserId;
+
+  bool syncDiary = true;
+  bool syncWeight = true;
+
+  /// Laatst bekeken release-notes. Null betekent: nog niets gezien.
+  String? seenReleaseNotes;
+
+  /// `null` = nog niet gekozen, dan staat de vergrendeling aan.
+  bool? appLockEnabled;
+
+  DateTime? updatedAt;
+  bool dirty = false;
+
   static AppSettings defaults() {
     return AppSettings()
       ..id = 1
@@ -30,6 +49,14 @@ class AppSettings {
       ..carbsGoal = 250
       ..fatGoal = 70
       ..theme = ThemeModeSetting.system
-      ..catalogVersion = 0;
+      ..syncDiary = true
+      ..syncWeight = true
+      ..catalogVersion = 0
+      ..appLockEnabled = true;
   }
+}
+
+extension AppSettingsLock on AppSettings {
+  /// Aan tenzij iemand hem bewust uitzet.
+  bool get lockEnabled => appLockEnabled != false;
 }

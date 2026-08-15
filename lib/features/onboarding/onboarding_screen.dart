@@ -8,14 +8,15 @@ import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/macro_goals.dart';
 import '../../core/widgets/kalorie_ui.dart';
 import '../../data/providers.dart';
+import '../account/auth_form.dart';
+import '../legal/legal_screen.dart';
 
 enum _Direction { lose, maintain, gain }
 
 enum _Pace { calm, normal, fast }
 
-/// Onboarding in drie stappen: richting, tempo, en het dagdoel dat daaruit
-/// volgt. De laatste stap laat het cijfer zien zodat je het meteen kunt
-/// bijstellen.
+/// Onboarding in vier stappen: account, richting, tempo, en het dagdoel.
+/// Zonder account kom je de app niet in.
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -24,14 +25,19 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 }
 
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
-  static const _steps = 3;
   static const _minKcal = 1200;
   static const _maxKcal = 6000;
 
+  final _authKey = GlobalKey<AuthFormState>();
+
   int _step = 0;
+  AuthMode _authMode = AuthMode.signUp;
+  bool _initialised = false;
   _Direction _direction = _Direction.lose;
   _Pace _pace = _Pace.normal;
   int? _kcal;
+
+  int get _steps => 4;
 
   /// 1 kg vet ≈ 7700 kcal, dus 0,5 kg/week ≈ 550 kcal/dag.
   int get _suggestedKcal {
@@ -48,23 +54,34 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   int get _goal => _kcal ?? _suggestedKcal;
 
-  void _next() {
-    if (_step < _steps - 1) {
+  Future<void> _next() async {
+    if (_step == 0) {
+      await _authKey.currentState?.submit();
+      return;
+    }
+    if (_step == 1 && _direction == _Direction.maintain) {
+      // Zonder richting is er geen tempo te kiezen.
       setState(() {
-        if (_step == 0 && _direction == _Direction.maintain) {
-          // Zonder richting is er geen tempo te kiezen.
-          _step = 2;
-        } else {
-          _step++;
-        }
+        _step += 2;
         _kcal = null;
       });
       return;
     }
-    _finish();
+    if (_step < 3) {
+      setState(() {
+        _step += 1;
+        _kcal = null;
+      });
+      return;
+    }
+    await _finish();
   }
 
   Future<void> _finish() async {
+    if (!ref.read(isSignedInProvider)) {
+      setState(() => _step = 0);
+      return;
+    }
     final macros = MacroGoals.forKcal(_goal);
     await ref.read(settingsRepositoryProvider).completeOnboarding(
           kcal: _goal,
@@ -72,6 +89,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           carbs: macros.carbs,
           fat: macros.fat,
         );
+    if (ref.read(isSignedInProvider)) {
+      await ref.read(syncEngineProvider).run();
+    }
     if (!mounted) return;
     HapticFeedback.mediumImpact();
     if (context.canPop()) {
@@ -86,42 +106,64 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final tones = context.tones;
+    final signUp = _authMode == AuthMode.signUp;
+
+    // Wie al ingelogd is, hoeft de accountstap niet nog eens te zien.
+    if (!_initialised) {
+      _initialised = true;
+      if (ref.read(isSignedInProvider)) {
+        _step = 1;
+      } else if (ref.read(settingsProvider).value?.cloudUserId != null) {
+        _authMode = AuthMode.signIn;
+      }
+    }
 
     final title = switch (_step) {
-      0 => l10n.obGoalTitle,
-      1 => l10n.obPaceTitle,
+      0 => signUp ? l10n.obAccountTitleUp : l10n.obAccountTitleIn,
+      1 => l10n.obGoalTitle,
+      2 => l10n.obPaceTitle,
       _ => l10n.obDoneTitle,
     };
     final body = switch (_step) {
-      0 => l10n.obGoalBody,
-      1 => l10n.obPaceBody,
+      0 => signUp ? l10n.authSignUpBody : l10n.authSignInBody,
+      1 => l10n.obGoalBody,
+      2 => l10n.obPaceBody,
       _ => l10n.obDoneBody,
+    };
+    final cta = switch (_step) {
+      0 => signUp ? l10n.signUp : l10n.signIn,
+      3 => l10n.begin,
+      _ => l10n.next,
     };
 
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            if (_step > 0)
-              Align(
-                alignment: Alignment.centerLeft,
-                child: KalorieTapTarget(
-                  onTap: () => setState(() => _step -= 1),
-                  child: Icon(
-                    Icons.chevron_left,
-                    color: theme.colorScheme.onSurface,
-                  ),
-                ),
-              )
-            else
-              const SizedBox(height: 44),
+            SizedBox(
+              height: 44,
+              child: _step > 0
+                  ? Align(
+                      alignment: Alignment.centerLeft,
+                      child: KalorieTapTarget(
+                        onTap: () => setState(() => _step -= 1),
+                        child: Icon(
+                          Icons.chevron_left,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                    )
+                  : null,
+            ),
             Expanded(
               child: SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
                 padding: const EdgeInsets.symmetric(horizontal: 32),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 40),
+                    SizedBox(height: _step == 0 ? 12 : 40),
                     Text(
                       l10n.stepOf(_step + 1, _steps).toUpperCase(),
                       style: theme.textTheme.labelSmall,
@@ -130,8 +172,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     Text(title, style: theme.textTheme.headlineLarge),
                     const SizedBox(height: 14),
                     Text(body, style: theme.textTheme.bodyLarge),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 24),
                     if (_step == 0)
+                      AuthForm(
+                        key: _authKey,
+                        mode: _authMode,
+                        onModeChanged: (mode) =>
+                            setState(() => _authMode = mode),
+                        onBusyChanged: (_) => setState(() {}),
+                        onDone: () => setState(() => _step = 1),
+                      )
+                    else if (_step == 1)
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
@@ -141,7 +192,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                           _chip(l10n.obGain, _Direction.gain),
                         ],
                       )
-                    else if (_step == 1)
+                    else if (_step == 2)
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
@@ -160,7 +211,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             filled: false,
                             enabled: _goal > _minKcal,
                             onTap: () => setState(
-                              () => _kcal = (_goal - 50).clamp(_minKcal, _maxKcal),
+                              () =>
+                                  _kcal = (_goal - 50).clamp(_minKcal, _maxKcal),
                             ),
                           ),
                           Expanded(
@@ -185,32 +237,39 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             filled: false,
                             enabled: _goal < _maxKcal,
                             onTap: () => setState(
-                              () => _kcal = (_goal + 50).clamp(_minKcal, _maxKcal),
+                              () =>
+                                  _kcal = (_goal + 50).clamp(_minKcal, _maxKcal),
                             ),
                           ),
                         ],
                       ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 32),
                   ],
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(32, 0, 32, 24),
+              padding: const EdgeInsets.fromLTRB(32, 0, 32, 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   FilledButton(
-                    onPressed: _next,
-                    child: Text(_step < _steps - 1 ? l10n.next : l10n.begin),
+                    onPressed:
+                        (_step == 0 && (_authKey.currentState?.busy ?? false))
+                            ? null
+                            : _next,
+                    child: Text(cta),
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    l10n.obFootnote,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.labelMedium
-                        ?.copyWith(color: tones.hint),
-                  ),
+                  const SizedBox(height: 8),
+                  if (_step == 0)
+                    const AuthLegalFooter()
+                  else
+                    Text(
+                      l10n.obFootnoteSignedIn,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.labelMedium
+                          ?.copyWith(color: tones.hint),
+                    ),
                 ],
               ),
             ),

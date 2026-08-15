@@ -1,7 +1,7 @@
 name: kalorie
-description: Clean, privacy-first calorie tracker. Offline-first, no ads, no accounts.
+description: Clean, privacy-first calorie tracker. Offline-first, optional account, no ads.
 publish_to: "none"
-version: 0.1.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ^3.13.0
@@ -33,12 +33,18 @@ dependencies:
   openfoodfacts: ^3.27.0
   mobile_scanner: ^7.0.0
 
+  supabase_flutter: ^2.17.2
+  flutter_local_notifications: ^22.3.0
+  timezone: ^0.11.1
+  uuid: ^4.6.0
+
   connectivity_plus: ^6.1.0
   collection: ^1.19.0
   freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
   http: ^1.2.2
   share_plus: ^10.1.4
+  local_auth: ^2.3.0
 
 dev_dependencies:
   flutter_test:

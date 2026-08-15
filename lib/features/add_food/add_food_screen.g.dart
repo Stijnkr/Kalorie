@@ -41,7 +41,7 @@ final class FoodSearchProvider
   }
 }
 
-String _$foodSearchHash() => r'1e26b116bd2db1bbe0deff232437810496cef7dd';
+String _$foodSearchHash() => r'3a6587728d631c98d7ef416eb531ec2588961215';
 
 abstract class _$FoodSearch extends $Notifier<FoodSearchState> {
   FoodSearchState build();

@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../core/l10n/generated/app_localizations.dart';
 import '../data/local/collections/enums.dart';
 import '../data/providers.dart';
 import '../data/remote/off_mapper.dart';
+import '../features/security/app_lock.dart';
 import 'router.dart';
 import 'theme.dart';
 
@@ -18,18 +23,33 @@ class KalorieApp extends ConsumerStatefulWidget {
   ConsumerState<KalorieApp> createState() => _KalorieAppState();
 }
 
+class _RouterRefresh extends ChangeNotifier {
+  void ping() => notifyListeners();
+}
+
 class _KalorieAppState extends ConsumerState<KalorieApp>
     with WidgetsBindingObserver {
-  late final router = createRouter(onboardingDone: widget.onboardingDone);
+  final _refresh = _RouterRefresh();
+  late final GoRouter router;
+  bool _started = false;
+  StreamSubscription<AuthState>? _authSub;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    router = createRouter(
+      refresh: _refresh,
+      signedIn: () => ref.read(isSignedInProvider),
+      onboardingDone: () =>
+          ref.read(settingsProvider).value?.onboardingDone ??
+          widget.onboardingDone,
+    );
   }
 
   @override
   void dispose() {
+    _authSub?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     router.dispose();
     super.dispose();
@@ -37,9 +57,27 @@ class _KalorieAppState extends ConsumerState<KalorieApp>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _refreshStaleOff();
+    if (state != AppLifecycleState.resumed) return;
+    _refreshStaleOff();
+    if (ref.read(isSignedInProvider)) {
+      ref.read(syncEngineProvider).run();
     }
+    // Meldingen opnieuw plannen: wat vandaag al gelogd is, slaan we over.
+    ref.read(reminderSchedulerProvider).sync();
+  }
+
+  void _listenForPasswordRecovery() {
+    final auth = ref.read(authRepositoryProvider);
+    if (!auth.isAvailable) return;
+    _authSub?.cancel();
+    _authSub = auth.changes.listen((state) {
+      if (state.event != AuthChangeEvent.passwordRecovery) return;
+      if (!mounted) return;
+      if (router.routeInformationProvider.value.uri.path == '/auth/recover') {
+        return;
+      }
+      router.push('/auth/recover');
+    });
   }
 
   Future<void> _refreshStaleOff() async {
@@ -59,8 +97,28 @@ class _KalorieAppState extends ConsumerState<KalorieApp>
         }
       }
     } catch (_) {
-      // Offline or rate-limited: ignore. Local data stays.
+      // Offline of rate-limited: negeren. Lokale data blijft staan.
     }
+  }
+
+  /// Eén keer per start: synchroniseren en de meldingen bijwerken. Gebeurt
+  /// vanuit `builder` zodat de vertalingen beschikbaar zijn.
+  void _startBackgroundWork(BuildContext context) {
+    if (_started) return;
+    _started = true;
+    final l10n = AppLocalizations.of(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      final scheduler = ref.read(reminderSchedulerProvider)
+        ..localizations = l10n;
+      ref.read(diaryRepositoryProvider).afterWrite = scheduler.sync;
+      ref.read(weightRepositoryProvider).afterWrite = scheduler.sync;
+      _listenForPasswordRecovery();
+      if (ref.read(isSignedInProvider)) {
+        await ref.read(syncEngineProvider).run();
+      }
+      await scheduler.sync();
+    });
   }
 
   @override
@@ -71,6 +129,9 @@ class _KalorieAppState extends ConsumerState<KalorieApp>
       ThemeModeSetting.dark => ThemeMode.dark,
       _ => ThemeMode.system,
     };
+
+    ref.listen(isSignedInProvider, (previous, next) => _refresh.ping());
+    ref.listen(settingsProvider, (previous, next) => _refresh.ping());
 
     return MaterialApp.router(
       title: 'Kalorie',
@@ -87,6 +148,10 @@ class _KalorieAppState extends ConsumerState<KalorieApp>
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
+      builder: (context, child) {
+        _startBackgroundWork(context);
+        return AppLockGate(child: child ?? const SizedBox.shrink());
+      },
     );
   }
 }

@@ -11,6 +11,8 @@ class WaterRepository {
     return _isar.waterEntries
         .filter()
         .dateKeyEqualTo(dateKey)
+        .and()
+        .deletedEqualTo(false)
         .watch(fireImmediately: true)
         .map((rows) => rows.isEmpty ? 0 : rows.first.glasses);
   }
@@ -20,14 +22,13 @@ class WaterRepository {
     return _isar.writeTxn(() async {
       final existing =
           await _isar.waterEntries.filter().dateKeyEqualTo(dateKey).findFirst();
-      if (clamped == 0) {
-        if (existing != null) await _isar.waterEntries.delete(existing.id);
-        return;
-      }
       final entry = existing ?? WaterEntry();
       entry
         ..dateKey = dateKey
-        ..glasses = clamped;
+        ..glasses = clamped
+        ..deleted = false
+        ..dirty = true
+        ..updatedAt = DateTime.now();
       await _isar.waterEntries.put(entry);
     });
   }

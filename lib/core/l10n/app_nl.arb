@@ -19,7 +19,7 @@
   "searchOnline": "Zoek online",
   "searchingOnline": "Online zoeken…",
   "noResults": "Geen producten gevonden",
-  "noResultsHint": "Voeg zelf een product toe of zoek online.",
+  "noResultsHint": "Maak het product zelf aan, of scan de barcode.",
   "offline": "Je bent offline. Alleen lokale producten.",
   "kcal": "kcal",
   "protein": "Eiwit",
@@ -64,8 +64,20 @@
   "data": "Gegevens",
   "exportData": "Exporteer gegevens",
   "exportDone": "Export klaar",
-  "privacyTitle": "Privacy",
-  "privacyBody": "Alles staat op dit apparaat. Geen account, geen tracking, geen reclame.",
+  "privacyTitle": "Privacybeleid",
+  "privacyBody": "Je account is nodig om Kalorie te gebruiken. Het logboek staat op dit toestel en wordt gesynchroniseerd met je account. Geen tracking, geen reclame.",
+  "privacySub": "wat we bewaren en hoe je het wist",
+  "termsTitle": "Voorwaarden",
+  "termsSub": "gebruik van de app, geen medisch advies",
+  "legalDisclaimer": "Kalorie is geen medisch advies en geen dieetbehandeling. Raadpleeg een arts bij vragen over voeding of gewicht.",
+  "supportContact": "Vragen of een verzoek over je gegevens: {email}",
+  "@supportContact": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "about": "Over",
   "sources": "Bronnen",
   "nevoAttribution": "Based on data from NEVO online version 2025/9.0, RIVM, Bilthoven and other data sources.",
@@ -227,7 +239,7 @@
   "searchDatabase": "Zoeken in database",
   "createNewProduct": "Nieuw product aanmaken",
   "nothingFound": "Niets gevonden",
-  "nothingFoundHint": "Zoek online of maak het product zelf aan.",
+  "nothingFoundHint": "Maak het product zelf aan, of scan de barcode.",
   "editPortion": "Portie wijzigen",
   "inGrams": "in gram",
   "gramsUnit": "gram",
@@ -284,7 +296,7 @@
   "settingsMoreSub": "thema, weergave, export",
   "restartOnboarding": "Onboarding opnieuw",
   "restartOnboardingSub": "bekijk de eerste keer",
-  "moreFootnote": "Voedingswaarden uit NEVO 2025 en Open Food Facts. Alles staat op je telefoon; export via Instellingen.",
+  "moreFootnote": "Voedingswaarden uit NEVO 2025 en Open Food Facts. Logboek staat op je telefoon en, als je bent ingelogd, op je account.",
   "weightDeltaIn30": "kg · {delta} in 30 dagen",
   "@weightDeltaIn30": {
     "placeholders": {
@@ -328,10 +340,209 @@
   "obPaceFast": "Snel · 0,75 kg/week",
   "obDoneTitle": "Klaar. Loggen kost één tik.",
   "obDoneBody": "Je recente producten staan bovenaan het logvel met de portie die je vorige keer koos. Tik de plus en het staat erin.",
-  "obFootnote": "Alles blijft op je telefoon. Geen account, geen tracking.",
+  "obFootnote": "Je account bewaart je logboek. Geen tracking, geen reclame.",
   "next": "Verder",
   "begin": "Beginnen",
   "deleted": "Verwijderd",
   "removeEntry": "Regel verwijderen",
-  "scanSimulateHint": "Houd de barcode in het kader. Gevonden producten worden direct geopend met de laatst gebruikte portie."
+  "scanSimulateHint": "Houd de barcode in het kader. Het product gaat meteen het logboek in, met de portie die je de vorige keer koos.",
+  "account": "Account",
+  "accountSignedOut": "Geen account",
+  "accountSignedOutSub": "log in om je logboek veilig te stellen",
+  "accountSince": "{email} · sinds {since}",
+  "@accountSince": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      },
+      "since": {
+        "type": "String"
+      }
+    }
+  },
+  "signIn": "Inloggen",
+  "signUp": "Account aanmaken",
+  "signOut": "Uitloggen",
+  "deleteAccount": "Account verwijderen",
+  "deleteAccountBody": "Verwijderen wist je account en alle logboeken van de server. Een export blijft op je telefoon staan.",
+  "deleteAccountConfirm": "Weet je het zeker? Dit kan niet ongedaan worden gemaakt.",
+  "authWelcomeBack": "Welkom terug",
+  "authCreateAccount": "Maak je account",
+  "authSignInBody": "Log in en je logboek, doelen en gewicht worden van de server gehaald.",
+  "authSignUpBody": "Met een account staat je logboek veilig en komt het terug op elk toestel waarop je inlogt.",
+  "email": "E-mail",
+  "password": "Wachtwoord",
+  "displayName": "Naam",
+  "emailPlaceholder": "jij@voorbeeld.nl",
+  "passwordPlaceholder": "minimaal 10 tekens",
+  "namePlaceholder": "hoe mogen we je noemen?",
+  "authLegal": "Door verder te gaan ga je akkoord met de voorwaarden en het privacybeleid.",
+  "forgotPassword": "Wachtwoord vergeten?",
+  "resetSent": "Check je mail voor een link om je wachtwoord te herstellen.",
+  "errInvalidCredentials": "E-mail of wachtwoord klopt niet.",
+  "errEmailTaken": "Er bestaat al een account met dit e-mailadres.",
+  "errWeakPassword": "Kies een wachtwoord van minimaal 10 tekens. Niet je e-mail, en niet hetzelfde teken achter elkaar.",
+  "errLeakedPassword": "Dit wachtwoord staat in een bekend datalek. Kies een ander, het liefst uit een wachtwoordmanager.",
+  "errInvalidEmail": "Dat lijkt geen geldig e-mailadres.",
+  "errNeedsConfirmation": "Bevestig je e-mailadres via de link die we net stuurden.",
+  "errNetwork": "Geen verbinding. Probeer het zo nog eens.",
+  "errRateLimited": "Te veel mails achter elkaar. Wacht een paar minuten en probeer het opnieuw, of log in als het account al bestaat.",
+  "errUnknown": "Account aanmaken lukte niet. Probeer het zo nog eens.",
+  "errCloudUnavailable": "Geen verbinding met de server. Probeer het zo nog eens.",
+  "syncSection": "Synchronisatie",
+  "syncDiary": "Logboek synchroniseren",
+  "syncDiarySub": "maaltijden en water op al je toestellen",
+  "syncWeight": "Gewicht synchroniseren",
+  "syncWeightSub": "metingen en verloop",
+  "syncNow": "Nu synchroniseren",
+  "syncRunning": "Bezig met synchroniseren…",
+  "syncDone": "Bijgewerkt om {time}",
+  "@syncDone": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "syncNever": "Nog niet gesynchroniseerd",
+  "syncOffline": "Offline — het wacht tot je weer verbinding hebt.",
+  "syncFailed": "Synchroniseren lukte niet.",
+  "securitySection": "Beveiliging en data",
+  "changePassword": "Wachtwoord wijzigen",
+  "changePasswordSub": "we sturen je een link per mail",
+  "obAccountTitleUp": "Maak je account",
+  "obAccountTitleIn": "Welkom terug",
+  "skipForNow": "Zonder account verder",
+  "skipForNowSub": "alles blijft dan alleen op dit toestel",
+  "recipes": "Mijn recepten",
+  "recipesSub": "vaste combinaties in één tik",
+  "recipesIntro": "Een recept is een vaste combinatie die je in één tik logt. Tik de plus om een portie te boeken, tik de naam om hem aan te passen.",
+  "newRecipe": "Nieuw recept",
+  "editRecipe": "Recept aanpassen",
+  "recipeName": "Naam",
+  "recipeNameHint": "bijv. Kwark met banaan",
+  "recipePortions": "Aantal porties",
+  "recipePortionsSub": "bepaalt wat één portie kost",
+  "ingredients": "Ingrediënten",
+  "recipeEmpty": "Nog geen ingrediënten. Kies hieronder een product.",
+  "addIngredient": "Toevoegen",
+  "saveRecipe": "Recept opslaan",
+  "recipeTotal": "Totaal {kcal} kcal · één portie {perPortion} kcal",
+  "@recipeTotal": {
+    "placeholders": {
+      "kcal": {
+        "type": "int"
+      },
+      "perPortion": {
+        "type": "int"
+      }
+    }
+  },
+  "recipePerPortion": "{kcal} kcal per portie · {grams} g",
+  "@recipePerPortion": {
+    "placeholders": {
+      "kcal": {
+        "type": "int"
+      },
+      "grams": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteRecipe": "Recept verwijderen",
+  "deleteRecipeConfirm": "Dit recept verdwijnt uit je lijst. Gelogde porties blijven in je dagboek.",
+  "deleteProduct": "Product verwijderen",
+  "deleteProductConfirm": "{name} verdwijnt uit je eigen producten. Gelogde dagen blijven staan.",
+  "@deleteProductConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reminders": "Herinneringen",
+  "remindersSub": "melding als je iets niet logt",
+  "remindersIntro": "Alleen een zetje als je iets niet gelogd hebt. Heb je de maaltijd al gelogd, dan komt de melding niet.",
+  "remindersFootnote": "Tik op de tijd om hem te verschuiven. Meldingen werken alleen als je ze op je telefoon hebt toegestaan.",
+  "remindersEnabledCount": "{count} aan",
+  "@remindersEnabledCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderWeighIn": "Wegen",
+  "reminderBreakfastSub": "als het ontbijt nog leeg is",
+  "reminderLunchSub": "als de lunch nog leeg is",
+  "reminderDinnerSub": "als het diner nog leeg is",
+  "reminderSnackSub": "als de dag nog niet rond is",
+  "reminderWeighInSub": "wekelijks op je weegmoment",
+  "reminderBody": "Nog niets gelogd voor {meal}.",
+  "@reminderBody": {
+    "placeholders": {
+      "meal": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderWeighBody": "Even op de weegschaal?",
+  "notificationsDenied": "Meldingen staan uit. Zet ze aan bij Instellingen › Kalorie.",
+  "accountSwitchTitle": "Ander account",
+  "accountSwitchBody": "Op dit toestel staan gegevens van een ander account. Wisselen haalt het logboek van dit account op en vervangt wat hier staat. Het andere account blijft in de cloud.",
+  "accountSwitchConfirm": "Wisselen",
+  "signOutStaysLocal": "Je logboek blijft op dit toestel. Log opnieuw in om te synchroniseren.",
+  "recoverTitle": "Nieuw wachtwoord",
+  "recoverBody": "Kies een wachtwoord van minimaal 10 tekens. Daarna kun je weer inloggen op al je toestellen.",
+  "newPassword": "Nieuw wachtwoord",
+  "confirmPassword": "Bevestig wachtwoord",
+  "savePassword": "Wachtwoord opslaan",
+  "passwordUpdated": "Je wachtwoord is gewijzigd.",
+  "errPasswordMismatch": "Die twee wachtwoorden zijn niet hetzelfde.",
+  "recipeListEmpty": "Nog geen recepten. Maak er een en je logt hem in één tik.",
+  "ownProductsIntro": "Producten die je zelf hebt ingevoerd. Tik erop om ze aan te passen.",
+  "newOwnProduct": "Nieuw product",
+  "ownProductsEmpty": "Nog geen eigen producten.",
+  "moreSectionDay": "Dag",
+  "moreSectionFood": "Voeding",
+  "moreSectionApp": "App",
+  "obFootnoteSignedIn": "Je doelen staan op dit toestel en gaan mee naar de cloud.",
+  "weekdayMonday": "ma",
+  "weekdayTuesday": "di",
+  "weekdayWednesday": "wo",
+  "weekdayThursday": "do",
+  "weekdayFriday": "vr",
+  "weekdaySaturday": "za",
+  "weekdaySunday": "zo",
+  "feedback": "Feedback",
+  "feedbackSub": "een idee, een fout, of iets dat wringt",
+  "feedbackIntro": "Ik lees alles. Hoe korter hoe beter, maar schrijf gerust wat je nodig hebt. Versie en toestel gaan automatisch mee.",
+  "feedbackIdea": "Idee",
+  "feedbackProblem": "Probleem",
+  "feedbackOther": "Anders",
+  "feedbackHint": "Wat zou Kalorie beter maken?",
+  "feedbackSend": "Versturen",
+  "feedbackSent": "Binnen. Dank je.",
+  "feedbackFailed": "Kon het niet versturen. Check je verbinding en probeer het zo nog eens.",
+  "updates": "Wat is nieuw",
+  "updatesSub": "wat er in de app is veranderd",
+  "updatesIntro": "Elke versie komt hier te staan. Na een update zie je de punten meteen.",
+  "updatesAll": "Alle versies",
+  "whatsNewVersion": "Nieuw in {version}",
+  "@whatsNewVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "whatsNewIntro": "Kort wat er anders is sinds je hier voor het laatst was.",
+  "whatsNewOk": "Oké",
+  "newBadge": "nieuw",
+  "appLock": "Vergrendelen",
+  "appLockSub": "Face ID of toegangscode als je terugkomt",
+  "appLockReason": "Ontgrendel Kalorie om je logboek te zien.",
+  "appLockBody": "Je logboek is vergrendeld.",
+  "appLockUnlock": "Ontgrendelen",
+  "appLockUnavailable": "Dit toestel heeft geen Face ID of toegangscode, of je hebt geannuleerd."
 }

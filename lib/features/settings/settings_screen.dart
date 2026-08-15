@@ -4,11 +4,25 @@ import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../app/theme.dart';
+import '../../core/constants.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/widgets/kalorie_ui.dart';
 import '../../core/widgets/panel.dart';
+import '../../data/local/collections/app_settings.dart';
 import '../../data/local/collections/enums.dart';
 import '../../data/providers.dart';
+import '../security/app_lock.dart';
+
+Future<void> _setLock(BuildContext context, WidgetRef ref, bool value) async {
+  final l10n = AppLocalizations.of(context);
+  final messenger = ScaffoldMessenger.of(context);
+  final ok = await authenticateAppLock(l10n.appLockReason);
+  if (!ok) {
+    messenger.showSnackBar(SnackBar(content: Text(l10n.appLockUnavailable)));
+    return;
+  }
+  await ref.read(settingsRepositoryProvider).setAppLockEnabled(value);
+}
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -18,8 +32,9 @@ class SettingsScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final tones = context.tones;
-    final selected =
-        ref.watch(settingsProvider).value?.theme ?? ThemeModeSetting.system;
+    final settings = ref.watch(settingsProvider).value;
+    final selected = settings?.theme ?? ThemeModeSetting.system;
+    final lockOn = settings?.lockEnabled ?? true;
 
     return Scaffold(
       body: SafeArea(
@@ -61,6 +76,26 @@ class SettingsScreen extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(4, 24, 4, 10),
                     child: KalorieSectionLabel(
+                      l10n.securitySection,
+                      padding: EdgeInsets.zero,
+                    ),
+                  ),
+                  KaloriePanelList(
+                    children: [
+                      KaloriePanelTile(
+                        title: l10n.appLock,
+                        subtitle: l10n.appLockSub,
+                        minHeight: 64,
+                        trailing: KalorieToggle(
+                          value: lockOn,
+                          onChanged: (value) => _setLock(context, ref, value),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(4, 24, 4, 10),
+                    child: KalorieSectionLabel(
                       l10n.dataSection,
                       padding: EdgeInsets.zero,
                     ),
@@ -81,12 +116,37 @@ class SettingsScreen extends ConsumerWidget {
                     ],
                   ),
                   Padding(
+                    padding: const EdgeInsets.fromLTRB(4, 24, 4, 10),
+                    child: KalorieSectionLabel(
+                      l10n.about,
+                      padding: EdgeInsets.zero,
+                    ),
+                  ),
+                  KaloriePanelList(
+                    children: [
+                      KaloriePanelTile(
+                        title: l10n.privacyTitle,
+                        subtitle: l10n.privacySub,
+                        chevron: true,
+                        minHeight: 64,
+                        onTap: () => context.push('/legal/privacy'),
+                      ),
+                      KaloriePanelTile(
+                        title: l10n.termsTitle,
+                        subtitle: l10n.termsSub,
+                        chevron: true,
+                        minHeight: 64,
+                        onTap: () => context.push('/legal/terms'),
+                      ),
+                    ],
+                  ),
+                  Padding(
                     padding: const EdgeInsets.fromLTRB(4, 24, 4, 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          l10n.privacyBody,
+                          l10n.legalDisclaimer,
                           style: theme.textTheme.labelMedium
                               ?.copyWith(color: tones.hint, height: 1.6),
                         ),
@@ -103,8 +163,14 @@ class SettingsScreen extends ConsumerWidget {
                               ?.copyWith(color: tones.hint, height: 1.6),
                         ),
                         const SizedBox(height: 14),
+                        SelectableText(
+                          l10n.supportContact(AppInfo.supportEmail),
+                          style: theme.textTheme.labelMedium
+                              ?.copyWith(color: tones.hint, height: 1.6),
+                        ),
+                        const SizedBox(height: 14),
                         Text(
-                          l10n.version('0.1.0'),
+                          l10n.version(AppInfo.version),
                           style: theme.textTheme.labelMedium
                               ?.copyWith(color: tones.hint),
                         ),

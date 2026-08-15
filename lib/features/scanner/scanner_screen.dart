@@ -5,17 +5,25 @@ import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../app/theme.dart';
+import '../../core/constants.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/widgets/kalorie_ui.dart';
 import '../../core/widgets/stroke_icon.dart';
+import '../../data/local/collections/enums.dart';
 import '../../data/providers.dart';
 import '../../data/remote/off_mapper.dart';
 import '../../data/remote/rate_limiter.dart';
+import '../add_food/quick_log.dart';
 
 class ScannerScreen extends ConsumerStatefulWidget {
-  const ScannerScreen({super.key, this.popWithFood = false});
+  const ScannerScreen({
+    super.key,
+    this.popWithFood = false,
+    this.initialMeal,
+  });
 
   final bool popWithFood;
+  final String? initialMeal;
 
   @override
   ConsumerState<ScannerScreen> createState() => _ScannerScreenState();
@@ -46,10 +54,24 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
     super.dispose();
   }
 
+  MealType get _meal => widget.initialMeal == null
+      ? mealForNow()
+      : MealType.values.firstWhere(
+          (m) => m.name == widget.initialMeal,
+          orElse: mealForNow,
+        );
+
+  Future<void> _restart() async {
+    if (!mounted) return;
+    setState(() => _busy = false);
+    await _controller.start();
+  }
+
   Future<void> _onCode(String code) async {
     if (_busy || code.isEmpty) return;
     setState(() => _busy = true);
     await _controller.stop();
+    var transient = false;
     try {
       final repo = ref.read(foodRepositoryProvider);
       var food = await repo.getByBarcode(code);
@@ -69,12 +91,14 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
             food = await repo.cacheOffProduct(mapped);
           }
         } on RateLimitedException {
+          transient = true;
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(AppLocalizations.of(context).rateLimited)),
             );
           }
         } catch (_) {
+          transient = true;
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(AppLocalizations.of(context).networkError)),
@@ -84,17 +108,25 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
       }
       if (!mounted) return;
       if (food == null) {
-        context.pushReplacement('/add/custom?barcode=$code');
+        if (transient) {
+          await _restart();
+          return;
+        }
+        context.pushReplacement(
+          '/add/custom?barcode=$code&meal=${_meal.name}&log=1',
+        );
         return;
       }
-      HapticFeedback.mediumImpact();
       if (widget.popWithFood) {
+        HapticFeedback.mediumImpact();
         Navigator.of(context).pop(food);
         return;
       }
-      context.pushReplacement('/add/amount/${food.id}');
+      await quickLogFood(context, ref, food: food, meal: _meal);
+      if (!mounted) return;
+      context.go('/today');
     } finally {
-      if (mounted) setState(() => _busy = false);
+      if (mounted && _busy) setState(() => _busy = false);
     }
   }
 
@@ -115,6 +147,13 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
             onDetect: (capture) {
               final code = capture.barcodes.firstOrNull?.rawValue;
               if (code != null) _onCode(code);
+            },
+            errorBuilder: (context, error) {
+              return _CameraError(
+                message: l10n.cameraDenied,
+                actionLabel: l10n.enterBarcode,
+                onAction: () => setState(() => _manualOpen = true),
+              );
             },
           ),
           const ColoredBox(color: Color(0x59121411)),
@@ -238,6 +277,9 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
                       controller: _manual,
                       autofocus: true,
                       keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.done,
+                      onTapOutside: (_) =>
+                          FocusManager.instance.primaryFocus?.unfocus(),
                       style: const TextStyle(color: paper, fontSize: 15),
                       decoration: InputDecoration(
                         hintText: l10n.enterBarcode,
@@ -271,6 +313,54 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _CameraError extends StatelessWidget {
+  const _CameraError({
+    required this.message,
+    required this.actionLabel,
+    required this.onAction,
+  });
+
+  final String message;
+  final String actionLabel;
+  final VoidCallback onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    const paper = KalorieColors.inkDark;
+    const accent = KalorieColors.sageDark;
+    return ColoredBox(
+      color: KalorieColors.paperDark,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: paper,
+                  fontSize: 16,
+                  height: 1.45,
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextButton(
+                onPressed: onAction,
+                child: Text(
+                  actionLabel,
+                  style: const TextStyle(color: accent),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

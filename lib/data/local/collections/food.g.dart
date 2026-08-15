@@ -39,113 +39,125 @@ const FoodSchema = CollectionSchema(
       name: r'catalogId',
       type: IsarType.string,
     ),
-    r'dataVersion': PropertySchema(
+    r'clientId': PropertySchema(
       id: 6,
+      name: r'clientId',
+      type: IsarType.string,
+    ),
+    r'dataVersion': PropertySchema(
+      id: 7,
       name: r'dataVersion',
       type: IsarType.long,
     ),
-    r'fat100g': PropertySchema(id: 7, name: r'fat100g', type: IsarType.double),
+    r'deleted': PropertySchema(id: 8, name: r'deleted', type: IsarType.bool),
+    r'dirty': PropertySchema(id: 9, name: r'dirty', type: IsarType.bool),
+    r'fat100g': PropertySchema(id: 10, name: r'fat100g', type: IsarType.double),
     r'fiber100g': PropertySchema(
-      id: 8,
+      id: 11,
       name: r'fiber100g',
       type: IsarType.double,
     ),
     r'isFavorite': PropertySchema(
-      id: 9,
+      id: 12,
       name: r'isFavorite',
       type: IsarType.bool,
     ),
     r'kcal100g': PropertySchema(
-      id: 10,
+      id: 13,
       name: r'kcal100g',
       type: IsarType.double,
     ),
     r'kind': PropertySchema(
-      id: 11,
+      id: 14,
       name: r'kind',
       type: IsarType.byte,
       enumMap: _FoodkindEnumValueMap,
     ),
     r'lastAmountG': PropertySchema(
-      id: 12,
+      id: 15,
       name: r'lastAmountG',
       type: IsarType.double,
     ),
     r'lastUsedAt': PropertySchema(
-      id: 13,
+      id: 16,
       name: r'lastUsedAt',
       type: IsarType.dateTime,
     ),
-    r'name': PropertySchema(id: 14, name: r'name', type: IsarType.string),
+    r'name': PropertySchema(id: 17, name: r'name', type: IsarType.string),
     r'nameNormalized': PropertySchema(
-      id: 15,
+      id: 18,
       name: r'nameNormalized',
       type: IsarType.string,
     ),
     r'nevoCode': PropertySchema(
-      id: 16,
+      id: 19,
       name: r'nevoCode',
       type: IsarType.string,
     ),
     r'nlRelevance': PropertySchema(
-      id: 17,
+      id: 20,
       name: r'nlRelevance',
       type: IsarType.long,
     ),
     r'nutrientsJson': PropertySchema(
-      id: 18,
+      id: 21,
       name: r'nutrientsJson',
       type: IsarType.string,
     ),
-    r'offId': PropertySchema(id: 19, name: r'offId', type: IsarType.string),
+    r'offId': PropertySchema(id: 22, name: r'offId', type: IsarType.string),
     r'popularity': PropertySchema(
-      id: 20,
+      id: 23,
       name: r'popularity',
       type: IsarType.long,
     ),
     r'protein100g': PropertySchema(
-      id: 21,
+      id: 24,
       name: r'protein100g',
       type: IsarType.double,
     ),
     r'qualityScore': PropertySchema(
-      id: 22,
+      id: 25,
       name: r'qualityScore',
       type: IsarType.long,
     ),
     r'salt100g': PropertySchema(
-      id: 23,
+      id: 26,
       name: r'salt100g',
       type: IsarType.double,
     ),
     r'satFat100g': PropertySchema(
-      id: 24,
+      id: 27,
       name: r'satFat100g',
       type: IsarType.double,
     ),
     r'servingG': PropertySchema(
-      id: 25,
+      id: 28,
       name: r'servingG',
       type: IsarType.double,
     ),
     r'servingLabel': PropertySchema(
-      id: 26,
+      id: 29,
       name: r'servingLabel',
       type: IsarType.string,
     ),
     r'source': PropertySchema(
-      id: 27,
+      id: 30,
       name: r'source',
       type: IsarType.byte,
       enumMap: _FoodsourceEnumValueMap,
     ),
     r'sugars100g': PropertySchema(
-      id: 28,
+      id: 31,
       name: r'sugars100g',
       type: IsarType.double,
     ),
+    r'updatedAt': PropertySchema(
+      id: 32,
+      name: r'updatedAt',
+      type: IsarType.dateTime,
+    ),
     r'userOverridden': PropertySchema(
-      id: 29,
+      id: 33,
       name: r'userOverridden',
       type: IsarType.bool,
     ),
@@ -261,6 +273,45 @@ const FoodSchema = CollectionSchema(
         ),
       ],
     ),
+    r'clientId': IndexSchema(
+      id: 2639372232964765565,
+      name: r'clientId',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'clientId',
+          type: IndexType.hash,
+          caseSensitive: true,
+        ),
+      ],
+    ),
+    r'dirty': IndexSchema(
+      id: 624608328996418504,
+      name: r'dirty',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'dirty',
+          type: IndexType.value,
+          caseSensitive: false,
+        ),
+      ],
+    ),
+    r'deleted': IndexSchema(
+      id: 2416515181749931262,
+      name: r'deleted',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'deleted',
+          type: IndexType.value,
+          caseSensitive: false,
+        ),
+      ],
+    ),
   },
   links: {},
   embeddedSchemas: {},
@@ -291,6 +342,12 @@ int _foodEstimateSize(
   }
   {
     final value = object.catalogId;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.clientId;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -336,30 +393,34 @@ void _foodSerialize(
   writer.writeDateTime(offsets[3], object.cachedAt);
   writer.writeDouble(offsets[4], object.carbs100g);
   writer.writeString(offsets[5], object.catalogId);
-  writer.writeLong(offsets[6], object.dataVersion);
-  writer.writeDouble(offsets[7], object.fat100g);
-  writer.writeDouble(offsets[8], object.fiber100g);
-  writer.writeBool(offsets[9], object.isFavorite);
-  writer.writeDouble(offsets[10], object.kcal100g);
-  writer.writeByte(offsets[11], object.kind.index);
-  writer.writeDouble(offsets[12], object.lastAmountG);
-  writer.writeDateTime(offsets[13], object.lastUsedAt);
-  writer.writeString(offsets[14], object.name);
-  writer.writeString(offsets[15], object.nameNormalized);
-  writer.writeString(offsets[16], object.nevoCode);
-  writer.writeLong(offsets[17], object.nlRelevance);
-  writer.writeString(offsets[18], object.nutrientsJson);
-  writer.writeString(offsets[19], object.offId);
-  writer.writeLong(offsets[20], object.popularity);
-  writer.writeDouble(offsets[21], object.protein100g);
-  writer.writeLong(offsets[22], object.qualityScore);
-  writer.writeDouble(offsets[23], object.salt100g);
-  writer.writeDouble(offsets[24], object.satFat100g);
-  writer.writeDouble(offsets[25], object.servingG);
-  writer.writeString(offsets[26], object.servingLabel);
-  writer.writeByte(offsets[27], object.source.index);
-  writer.writeDouble(offsets[28], object.sugars100g);
-  writer.writeBool(offsets[29], object.userOverridden);
+  writer.writeString(offsets[6], object.clientId);
+  writer.writeLong(offsets[7], object.dataVersion);
+  writer.writeBool(offsets[8], object.deleted);
+  writer.writeBool(offsets[9], object.dirty);
+  writer.writeDouble(offsets[10], object.fat100g);
+  writer.writeDouble(offsets[11], object.fiber100g);
+  writer.writeBool(offsets[12], object.isFavorite);
+  writer.writeDouble(offsets[13], object.kcal100g);
+  writer.writeByte(offsets[14], object.kind.index);
+  writer.writeDouble(offsets[15], object.lastAmountG);
+  writer.writeDateTime(offsets[16], object.lastUsedAt);
+  writer.writeString(offsets[17], object.name);
+  writer.writeString(offsets[18], object.nameNormalized);
+  writer.writeString(offsets[19], object.nevoCode);
+  writer.writeLong(offsets[20], object.nlRelevance);
+  writer.writeString(offsets[21], object.nutrientsJson);
+  writer.writeString(offsets[22], object.offId);
+  writer.writeLong(offsets[23], object.popularity);
+  writer.writeDouble(offsets[24], object.protein100g);
+  writer.writeLong(offsets[25], object.qualityScore);
+  writer.writeDouble(offsets[26], object.salt100g);
+  writer.writeDouble(offsets[27], object.satFat100g);
+  writer.writeDouble(offsets[28], object.servingG);
+  writer.writeString(offsets[29], object.servingLabel);
+  writer.writeByte(offsets[30], object.source.index);
+  writer.writeDouble(offsets[31], object.sugars100g);
+  writer.writeDateTime(offsets[32], object.updatedAt);
+  writer.writeBool(offsets[33], object.userOverridden);
 }
 
 Food _foodDeserialize(
@@ -375,35 +436,39 @@ Food _foodDeserialize(
   object.cachedAt = reader.readDateTimeOrNull(offsets[3]);
   object.carbs100g = reader.readDouble(offsets[4]);
   object.catalogId = reader.readStringOrNull(offsets[5]);
-  object.dataVersion = reader.readLong(offsets[6]);
-  object.fat100g = reader.readDouble(offsets[7]);
-  object.fiber100g = reader.readDoubleOrNull(offsets[8]);
+  object.clientId = reader.readStringOrNull(offsets[6]);
+  object.dataVersion = reader.readLong(offsets[7]);
+  object.deleted = reader.readBool(offsets[8]);
+  object.dirty = reader.readBool(offsets[9]);
+  object.fat100g = reader.readDouble(offsets[10]);
+  object.fiber100g = reader.readDoubleOrNull(offsets[11]);
   object.id = id;
-  object.isFavorite = reader.readBool(offsets[9]);
-  object.kcal100g = reader.readDouble(offsets[10]);
+  object.isFavorite = reader.readBool(offsets[12]);
+  object.kcal100g = reader.readDouble(offsets[13]);
   object.kind =
-      _FoodkindValueEnumMap[reader.readByteOrNull(offsets[11])] ??
+      _FoodkindValueEnumMap[reader.readByteOrNull(offsets[14])] ??
       FoodKind.generic;
-  object.lastAmountG = reader.readDoubleOrNull(offsets[12]);
-  object.lastUsedAt = reader.readDateTimeOrNull(offsets[13]);
-  object.name = reader.readString(offsets[14]);
-  object.nameNormalized = reader.readString(offsets[15]);
-  object.nevoCode = reader.readStringOrNull(offsets[16]);
-  object.nlRelevance = reader.readLong(offsets[17]);
-  object.nutrientsJson = reader.readStringOrNull(offsets[18]);
-  object.offId = reader.readStringOrNull(offsets[19]);
-  object.popularity = reader.readLong(offsets[20]);
-  object.protein100g = reader.readDouble(offsets[21]);
-  object.qualityScore = reader.readLong(offsets[22]);
-  object.salt100g = reader.readDoubleOrNull(offsets[23]);
-  object.satFat100g = reader.readDoubleOrNull(offsets[24]);
-  object.servingG = reader.readDoubleOrNull(offsets[25]);
-  object.servingLabel = reader.readStringOrNull(offsets[26]);
+  object.lastAmountG = reader.readDoubleOrNull(offsets[15]);
+  object.lastUsedAt = reader.readDateTimeOrNull(offsets[16]);
+  object.name = reader.readString(offsets[17]);
+  object.nameNormalized = reader.readString(offsets[18]);
+  object.nevoCode = reader.readStringOrNull(offsets[19]);
+  object.nlRelevance = reader.readLong(offsets[20]);
+  object.nutrientsJson = reader.readStringOrNull(offsets[21]);
+  object.offId = reader.readStringOrNull(offsets[22]);
+  object.popularity = reader.readLong(offsets[23]);
+  object.protein100g = reader.readDouble(offsets[24]);
+  object.qualityScore = reader.readLong(offsets[25]);
+  object.salt100g = reader.readDoubleOrNull(offsets[26]);
+  object.satFat100g = reader.readDoubleOrNull(offsets[27]);
+  object.servingG = reader.readDoubleOrNull(offsets[28]);
+  object.servingLabel = reader.readStringOrNull(offsets[29]);
   object.source =
-      _FoodsourceValueEnumMap[reader.readByteOrNull(offsets[27])] ??
+      _FoodsourceValueEnumMap[reader.readByteOrNull(offsets[30])] ??
       FoodSource.off;
-  object.sugars100g = reader.readDoubleOrNull(offsets[28]);
-  object.userOverridden = reader.readBool(offsets[29]);
+  object.sugars100g = reader.readDoubleOrNull(offsets[31]);
+  object.updatedAt = reader.readDateTimeOrNull(offsets[32]);
+  object.userOverridden = reader.readBool(offsets[33]);
   return object;
 }
 
@@ -427,56 +492,64 @@ P _foodDeserializeProp<P>(
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
-      return (reader.readLong(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 7:
-      return (reader.readDouble(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 8:
-      return (reader.readDoubleOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 9:
       return (reader.readBool(offset)) as P;
     case 10:
       return (reader.readDouble(offset)) as P;
     case 11:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 12:
+      return (reader.readBool(offset)) as P;
+    case 13:
+      return (reader.readDouble(offset)) as P;
+    case 14:
       return (_FoodkindValueEnumMap[reader.readByteOrNull(offset)] ??
               FoodKind.generic)
           as P;
-    case 12:
-      return (reader.readDoubleOrNull(offset)) as P;
-    case 13:
-      return (reader.readDateTimeOrNull(offset)) as P;
-    case 14:
-      return (reader.readString(offset)) as P;
     case 15:
-      return (reader.readString(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 16:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 17:
-      return (reader.readLong(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 18:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 19:
       return (reader.readStringOrNull(offset)) as P;
     case 20:
       return (reader.readLong(offset)) as P;
     case 21:
-      return (reader.readDouble(offset)) as P;
-    case 22:
-      return (reader.readLong(offset)) as P;
-    case 23:
-      return (reader.readDoubleOrNull(offset)) as P;
-    case 24:
-      return (reader.readDoubleOrNull(offset)) as P;
-    case 25:
-      return (reader.readDoubleOrNull(offset)) as P;
-    case 26:
       return (reader.readStringOrNull(offset)) as P;
+    case 22:
+      return (reader.readStringOrNull(offset)) as P;
+    case 23:
+      return (reader.readLong(offset)) as P;
+    case 24:
+      return (reader.readDouble(offset)) as P;
+    case 25:
+      return (reader.readLong(offset)) as P;
+    case 26:
+      return (reader.readDoubleOrNull(offset)) as P;
     case 27:
-      return (_FoodsourceValueEnumMap[reader.readByteOrNull(offset)] ??
-              FoodSource.off)
-          as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 28:
       return (reader.readDoubleOrNull(offset)) as P;
     case 29:
+      return (reader.readStringOrNull(offset)) as P;
+    case 30:
+      return (_FoodsourceValueEnumMap[reader.readByteOrNull(offset)] ??
+              FoodSource.off)
+          as P;
+    case 31:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 32:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 33:
       return (reader.readBool(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -539,6 +612,22 @@ extension FoodQueryWhereSort on QueryBuilder<Food, Food, QWhere> {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'lastUsedAt'),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterWhere> anyDirty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'dirty'),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterWhere> anyDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'deleted'),
       );
     });
   }
@@ -1395,6 +1484,181 @@ extension FoodQueryWhere on QueryBuilder<Food, Food, QWhereClause> {
       );
     });
   }
+
+  QueryBuilder<Food, Food, QAfterWhereClause> clientIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'clientId', value: [null]),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterWhereClause> clientIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.between(
+          indexName: r'clientId',
+          lower: [null],
+          includeLower: false,
+          upper: [],
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterWhereClause> clientIdEqualTo(
+    String? clientId,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'clientId', value: [clientId]),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterWhereClause> clientIdNotEqualTo(
+    String? clientId,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'clientId',
+                lower: [],
+                upper: [clientId],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'clientId',
+                lower: [clientId],
+                includeLower: false,
+                upper: [],
+              ),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'clientId',
+                lower: [clientId],
+                includeLower: false,
+                upper: [],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'clientId',
+                lower: [],
+                upper: [clientId],
+                includeUpper: false,
+              ),
+            );
+      }
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterWhereClause> dirtyEqualTo(bool dirty) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'dirty', value: [dirty]),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterWhereClause> dirtyNotEqualTo(bool dirty) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'dirty',
+                lower: [],
+                upper: [dirty],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'dirty',
+                lower: [dirty],
+                includeLower: false,
+                upper: [],
+              ),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'dirty',
+                lower: [dirty],
+                includeLower: false,
+                upper: [],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'dirty',
+                lower: [],
+                upper: [dirty],
+                includeUpper: false,
+              ),
+            );
+      }
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterWhereClause> deletedEqualTo(bool deleted) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'deleted', value: [deleted]),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterWhereClause> deletedNotEqualTo(bool deleted) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'deleted',
+                lower: [],
+                upper: [deleted],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'deleted',
+                lower: [deleted],
+                includeLower: false,
+                upper: [],
+              ),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'deleted',
+                lower: [deleted],
+                includeLower: false,
+                upper: [],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'deleted',
+                lower: [],
+                upper: [deleted],
+                includeUpper: false,
+              ),
+            );
+      }
+    });
+  }
 }
 
 extension FoodQueryFilter on QueryBuilder<Food, Food, QFilterCondition> {
@@ -2123,6 +2387,168 @@ extension FoodQueryFilter on QueryBuilder<Food, Food, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Food, Food, QAfterFilterCondition> clientIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'clientId'),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> clientIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'clientId'),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> clientIdEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'clientId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> clientIdGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'clientId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> clientIdLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'clientId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> clientIdBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'clientId',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> clientIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'clientId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> clientIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'clientId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> clientIdContains(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'clientId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> clientIdMatches(
+    String pattern, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'clientId',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> clientIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'clientId', value: ''),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> clientIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'clientId', value: ''),
+      );
+    });
+  }
+
   QueryBuilder<Food, Food, QAfterFilterCondition> dataVersionEqualTo(
     int value,
   ) {
@@ -2178,6 +2604,22 @@ extension FoodQueryFilter on QueryBuilder<Food, Food, QFilterCondition> {
           upper: upper,
           includeUpper: includeUpper,
         ),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> deletedEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'deleted', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> dirtyEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'dirty', value: value),
       );
     });
   }
@@ -4317,6 +4759,81 @@ extension FoodQueryFilter on QueryBuilder<Food, Food, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Food, Food, QAfterFilterCondition> updatedAtIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'updatedAt'),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> updatedAtIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'updatedAt'),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> updatedAtEqualTo(
+    DateTime? value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'updatedAt', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> updatedAtGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'updatedAt',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> updatedAtLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'updatedAt',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterFilterCondition> updatedAtBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'updatedAt',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
+    });
+  }
+
   QueryBuilder<Food, Food, QAfterFilterCondition> userOverriddenEqualTo(
     bool value,
   ) {
@@ -4405,6 +4922,18 @@ extension FoodQuerySortBy on QueryBuilder<Food, Food, QSortBy> {
     });
   }
 
+  QueryBuilder<Food, Food, QAfterSortBy> sortByClientId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'clientId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterSortBy> sortByClientIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'clientId', Sort.desc);
+    });
+  }
+
   QueryBuilder<Food, Food, QAfterSortBy> sortByDataVersion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataVersion', Sort.asc);
@@ -4414,6 +4943,30 @@ extension FoodQuerySortBy on QueryBuilder<Food, Food, QSortBy> {
   QueryBuilder<Food, Food, QAfterSortBy> sortByDataVersionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataVersion', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterSortBy> sortByDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deleted', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterSortBy> sortByDeletedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deleted', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterSortBy> sortByDirty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dirty', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterSortBy> sortByDirtyDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dirty', Sort.desc);
     });
   }
 
@@ -4681,6 +5234,18 @@ extension FoodQuerySortBy on QueryBuilder<Food, Food, QSortBy> {
     });
   }
 
+  QueryBuilder<Food, Food, QAfterSortBy> sortByUpdatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterSortBy> sortByUpdatedAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.desc);
+    });
+  }
+
   QueryBuilder<Food, Food, QAfterSortBy> sortByUserOverridden() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'userOverridden', Sort.asc);
@@ -4767,6 +5332,18 @@ extension FoodQuerySortThenBy on QueryBuilder<Food, Food, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Food, Food, QAfterSortBy> thenByClientId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'clientId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterSortBy> thenByClientIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'clientId', Sort.desc);
+    });
+  }
+
   QueryBuilder<Food, Food, QAfterSortBy> thenByDataVersion() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataVersion', Sort.asc);
@@ -4776,6 +5353,30 @@ extension FoodQuerySortThenBy on QueryBuilder<Food, Food, QSortThenBy> {
   QueryBuilder<Food, Food, QAfterSortBy> thenByDataVersionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dataVersion', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterSortBy> thenByDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deleted', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterSortBy> thenByDeletedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deleted', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterSortBy> thenByDirty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dirty', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterSortBy> thenByDirtyDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dirty', Sort.desc);
     });
   }
 
@@ -5055,6 +5656,18 @@ extension FoodQuerySortThenBy on QueryBuilder<Food, Food, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Food, Food, QAfterSortBy> thenByUpdatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Food, Food, QAfterSortBy> thenByUpdatedAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.desc);
+    });
+  }
+
   QueryBuilder<Food, Food, QAfterSortBy> thenByUserOverridden() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'userOverridden', Sort.asc);
@@ -5111,9 +5724,29 @@ extension FoodQueryWhereDistinct on QueryBuilder<Food, Food, QDistinct> {
     });
   }
 
+  QueryBuilder<Food, Food, QDistinct> distinctByClientId({
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'clientId', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Food, Food, QDistinct> distinctByDataVersion() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'dataVersion');
+    });
+  }
+
+  QueryBuilder<Food, Food, QDistinct> distinctByDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'deleted');
+    });
+  }
+
+  QueryBuilder<Food, Food, QDistinct> distinctByDirty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'dirty');
     });
   }
 
@@ -5267,6 +5900,12 @@ extension FoodQueryWhereDistinct on QueryBuilder<Food, Food, QDistinct> {
     });
   }
 
+  QueryBuilder<Food, Food, QDistinct> distinctByUpdatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'updatedAt');
+    });
+  }
+
   QueryBuilder<Food, Food, QDistinct> distinctByUserOverridden() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'userOverridden');
@@ -5317,9 +5956,27 @@ extension FoodQueryProperty on QueryBuilder<Food, Food, QQueryProperty> {
     });
   }
 
+  QueryBuilder<Food, String?, QQueryOperations> clientIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'clientId');
+    });
+  }
+
   QueryBuilder<Food, int, QQueryOperations> dataVersionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'dataVersion');
+    });
+  }
+
+  QueryBuilder<Food, bool, QQueryOperations> deletedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'deleted');
+    });
+  }
+
+  QueryBuilder<Food, bool, QQueryOperations> dirtyProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'dirty');
     });
   }
 
@@ -5452,6 +6109,12 @@ extension FoodQueryProperty on QueryBuilder<Food, Food, QQueryProperty> {
   QueryBuilder<Food, double?, QQueryOperations> sugars100gProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'sugars100g');
+    });
+  }
+
+  QueryBuilder<Food, DateTime?, QQueryOperations> updatedAtProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'updatedAt');
     });
   }
 

@@ -37,4 +37,21 @@ class DiaryEntry {
   double? salt;
 
   late DateTime createdAt;
+
+  /// Stabiele sleutel die dit toestel genereert, zodat een regel die offline is
+  /// gemaakt bij de eerste push aan de juiste serverrij wordt gekoppeld.
+  /// Niet uniek in Isar: bestaande rijen starten leeg en mogen niet
+  /// in elkaar worden gevouwen bij de eerste put.
+  @Index()
+  late String clientId;
+
+  late DateTime updatedAt;
+
+  /// Wacht op een push naar de server.
+  @Index()
+  bool dirty = true;
+
+  /// Tombstone: lokaal weg, maar blijft staan tot de server hem kent.
+  @Index()
+  bool deleted = false;
 }

@@ -10,4 +10,12 @@ class WeightEntry {
   late int dateKey;
 
   late double kg;
+
+  late DateTime updatedAt;
+
+  @Index()
+  bool dirty = true;
+
+  @Index()
+  bool deleted = false;
 }

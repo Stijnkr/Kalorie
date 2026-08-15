@@ -67,7 +67,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noResults => 'No foods found';
 
   @override
-  String get noResultsHint => 'Add a custom food or search online.';
+  String get noResultsHint => 'Add the food yourself, or scan the barcode.';
 
   @override
   String get offline => 'You\'re offline. Local foods only.';
@@ -184,11 +184,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportDone => 'Export ready';
 
   @override
-  String get privacyTitle => 'Privacy';
+  String get privacyTitle => 'Privacy policy';
 
   @override
   String get privacyBody =>
-      'Everything stays on this device. No account, no tracking, no ads.';
+      'An account is required to use Kalorie. Your log stays on this device and syncs to your account. No tracking, no ads.';
+
+  @override
+  String get privacySub => 'what we store and how you delete it';
+
+  @override
+  String get termsTitle => 'Terms';
+
+  @override
+  String get termsSub => 'using the app, not medical advice';
+
+  @override
+  String get legalDisclaimer =>
+      'Kalorie is not medical advice and not a diet treatment. See a doctor if you have questions about food or weight.';
+
+  @override
+  String supportContact(String email) {
+    return 'Questions or a request about your data: $email';
+  }
 
   @override
   String get about => 'About';
@@ -482,7 +500,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nothingFound => 'Nothing found';
 
   @override
-  String get nothingFoundHint => 'Search online or add the food yourself.';
+  String get nothingFoundHint => 'Add the food yourself, or scan the barcode.';
 
   @override
   String get editPortion => 'Edit serving';
@@ -552,7 +570,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moreFootnote =>
-      'Nutrition from NEVO 2025 and Open Food Facts. Everything stays on your phone; export via Settings.';
+      'Nutrition from NEVO 2025 and Open Food Facts. Your log stays on your phone and, when signed in, on your account.';
 
   @override
   String weightDeltaIn30(String delta) {
@@ -621,8 +639,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your recent foods sit at the top of the log sheet with the serving you picked last time. Tap the plus and it\'s in.';
 
   @override
-  String get obFootnote =>
-      'Everything stays on your phone. No account, no tracking.';
+  String get obFootnote => 'Your account keeps your log. No tracking, no ads.';
 
   @override
   String get next => 'Next';
@@ -638,5 +655,450 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scanSimulateHint =>
-      'Hold the barcode inside the frame. Foods that are found open straight away with the serving you used last.';
+      'Hold the barcode inside the frame. The food goes straight into your log, with the serving you used last.';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get accountSignedOut => 'No account';
+
+  @override
+  String get accountSignedOutSub => 'sign in to keep your log safe';
+
+  @override
+  String accountSince(String email, String since) {
+    return '$email · since $since';
+  }
+
+  @override
+  String get signIn => 'Sign in';
+
+  @override
+  String get signUp => 'Create account';
+
+  @override
+  String get signOut => 'Sign out';
+
+  @override
+  String get deleteAccount => 'Delete account';
+
+  @override
+  String get deleteAccountBody =>
+      'Deleting wipes your account and every log from the server. An export stays on your phone.';
+
+  @override
+  String get deleteAccountConfirm => 'Are you sure? This cannot be undone.';
+
+  @override
+  String get authWelcomeBack => 'Welcome back';
+
+  @override
+  String get authCreateAccount => 'Create your account';
+
+  @override
+  String get authSignInBody =>
+      'Sign in and your log, goals and weight come back from the server.';
+
+  @override
+  String get authSignUpBody =>
+      'With an account your log is safe and comes back on every device you sign in on.';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get displayName => 'Name';
+
+  @override
+  String get emailPlaceholder => 'you@example.com';
+
+  @override
+  String get passwordPlaceholder => 'at least 10 characters';
+
+  @override
+  String get namePlaceholder => 'what should we call you?';
+
+  @override
+  String get authLegal =>
+      'By continuing you agree to the terms and the privacy policy.';
+
+  @override
+  String get forgotPassword => 'Forgot your password?';
+
+  @override
+  String get resetSent => 'Check your mail for a link to reset your password.';
+
+  @override
+  String get errInvalidCredentials => 'That email or password isn\'t right.';
+
+  @override
+  String get errEmailTaken => 'An account with this email already exists.';
+
+  @override
+  String get errWeakPassword =>
+      'Choose a password of at least 10 characters. Not your email, and not the same character over and over.';
+
+  @override
+  String get errLeakedPassword =>
+      'This password appears in a known leak. Choose another, preferably from a password manager.';
+
+  @override
+  String get errInvalidEmail =>
+      'That doesn\'t look like a valid email address.';
+
+  @override
+  String get errNeedsConfirmation =>
+      'Confirm your email via the link we just sent.';
+
+  @override
+  String get errNetwork => 'No connection. Try again in a moment.';
+
+  @override
+  String get errRateLimited =>
+      'Too many emails in a row. Wait a few minutes and try again, or sign in if the account already exists.';
+
+  @override
+  String get errUnknown =>
+      'Creating the account didn\'t work. Try again in a moment.';
+
+  @override
+  String get errCloudUnavailable =>
+      'No connection to the server. Try again in a moment.';
+
+  @override
+  String get syncSection => 'Sync';
+
+  @override
+  String get syncDiary => 'Sync the log';
+
+  @override
+  String get syncDiarySub => 'meals and water on all your devices';
+
+  @override
+  String get syncWeight => 'Sync weight';
+
+  @override
+  String get syncWeightSub => 'measurements and trend';
+
+  @override
+  String get syncNow => 'Sync now';
+
+  @override
+  String get syncRunning => 'Syncing…';
+
+  @override
+  String syncDone(String time) {
+    return 'Updated at $time';
+  }
+
+  @override
+  String get syncNever => 'Not synced yet';
+
+  @override
+  String get syncOffline => 'Offline — it will wait until you\'re back online.';
+
+  @override
+  String get syncFailed => 'Syncing didn\'t work.';
+
+  @override
+  String get securitySection => 'Security and data';
+
+  @override
+  String get changePassword => 'Change password';
+
+  @override
+  String get changePasswordSub => 'we\'ll email you a link';
+
+  @override
+  String get obAccountTitleUp => 'Create your account';
+
+  @override
+  String get obAccountTitleIn => 'Welcome back';
+
+  @override
+  String get skipForNow => 'Continue without an account';
+
+  @override
+  String get skipForNowSub => 'everything then stays on this device only';
+
+  @override
+  String get recipes => 'My recipes';
+
+  @override
+  String get recipesSub => 'fixed combinations in one tap';
+
+  @override
+  String get recipesIntro =>
+      'A recipe is a fixed combination you log in one tap. Tap the plus to log a portion, tap the name to edit it.';
+
+  @override
+  String get newRecipe => 'New recipe';
+
+  @override
+  String get editRecipe => 'Edit recipe';
+
+  @override
+  String get recipeName => 'Name';
+
+  @override
+  String get recipeNameHint => 'e.g. Quark with banana';
+
+  @override
+  String get recipePortions => 'Number of portions';
+
+  @override
+  String get recipePortionsSub => 'sets what one portion costs';
+
+  @override
+  String get ingredients => 'Ingredients';
+
+  @override
+  String get recipeEmpty => 'No ingredients yet. Pick a food below.';
+
+  @override
+  String get addIngredient => 'Add';
+
+  @override
+  String get saveRecipe => 'Save recipe';
+
+  @override
+  String recipeTotal(int kcal, int perPortion) {
+    return 'Total $kcal kcal · one portion $perPortion kcal';
+  }
+
+  @override
+  String recipePerPortion(int kcal, int grams) {
+    return '$kcal kcal per portion · $grams g';
+  }
+
+  @override
+  String get deleteRecipe => 'Delete recipe';
+
+  @override
+  String get deleteRecipeConfirm =>
+      'This recipe leaves your list. Logged portions stay in your diary.';
+
+  @override
+  String get deleteProduct => 'Delete product';
+
+  @override
+  String deleteProductConfirm(String name) {
+    return '$name leaves your custom foods. Logged days stay as they are.';
+  }
+
+  @override
+  String get reminders => 'Reminders';
+
+  @override
+  String get remindersSub => 'a nudge when you don\'t log';
+
+  @override
+  String get remindersIntro =>
+      'Only a nudge when you haven\'t logged. If the meal is already logged, no notification arrives.';
+
+  @override
+  String get remindersFootnote =>
+      'Tap the time to move it. Notifications only work if you allowed them on your phone.';
+
+  @override
+  String remindersEnabledCount(int count) {
+    return '$count on';
+  }
+
+  @override
+  String get reminderWeighIn => 'Weigh-in';
+
+  @override
+  String get reminderBreakfastSub => 'when breakfast is still empty';
+
+  @override
+  String get reminderLunchSub => 'when lunch is still empty';
+
+  @override
+  String get reminderDinnerSub => 'when dinner is still empty';
+
+  @override
+  String get reminderSnackSub => 'when the day isn\'t wrapped up';
+
+  @override
+  String get reminderWeighInSub => 'weekly at your weigh-in moment';
+
+  @override
+  String reminderBody(String meal) {
+    return 'Nothing logged for $meal yet.';
+  }
+
+  @override
+  String get reminderWeighBody => 'Time to step on the scale?';
+
+  @override
+  String get notificationsDenied =>
+      'Notifications are off. Turn them on in Settings › Kalorie.';
+
+  @override
+  String get accountSwitchTitle => 'Different account';
+
+  @override
+  String get accountSwitchBody =>
+      'This device still has data from another account. Switching loads this account\'s log and replaces what\'s here. The other account stays in the cloud.';
+
+  @override
+  String get accountSwitchConfirm => 'Switch';
+
+  @override
+  String get signOutStaysLocal =>
+      'Your log stays on this device. Sign in again to sync.';
+
+  @override
+  String get recoverTitle => 'New password';
+
+  @override
+  String get recoverBody =>
+      'Pick a password of at least 10 characters. After that you can sign in on all your devices again.';
+
+  @override
+  String get newPassword => 'New password';
+
+  @override
+  String get confirmPassword => 'Confirm password';
+
+  @override
+  String get savePassword => 'Save password';
+
+  @override
+  String get passwordUpdated => 'Your password has been changed.';
+
+  @override
+  String get errPasswordMismatch => 'Those two passwords don\'t match.';
+
+  @override
+  String get recipeListEmpty =>
+      'No recipes yet. Make one and you log it in a single tap.';
+
+  @override
+  String get ownProductsIntro =>
+      'Foods you added yourself. Tap one to edit it.';
+
+  @override
+  String get newOwnProduct => 'New food';
+
+  @override
+  String get ownProductsEmpty => 'No custom foods yet.';
+
+  @override
+  String get moreSectionDay => 'Day';
+
+  @override
+  String get moreSectionFood => 'Food';
+
+  @override
+  String get moreSectionApp => 'App';
+
+  @override
+  String get obFootnoteSignedIn =>
+      'Your goals stay on this device and also go to the cloud.';
+
+  @override
+  String get weekdayMonday => 'Mon';
+
+  @override
+  String get weekdayTuesday => 'Tue';
+
+  @override
+  String get weekdayWednesday => 'Wed';
+
+  @override
+  String get weekdayThursday => 'Thu';
+
+  @override
+  String get weekdayFriday => 'Fri';
+
+  @override
+  String get weekdaySaturday => 'Sat';
+
+  @override
+  String get weekdaySunday => 'Sun';
+
+  @override
+  String get feedback => 'Feedback';
+
+  @override
+  String get feedbackSub => 'an idea, a bug, or something that feels off';
+
+  @override
+  String get feedbackIntro =>
+      'I read everything. Short is fine. Version and device go with it automatically.';
+
+  @override
+  String get feedbackIdea => 'Idea';
+
+  @override
+  String get feedbackProblem => 'Problem';
+
+  @override
+  String get feedbackOther => 'Other';
+
+  @override
+  String get feedbackHint => 'What would make Kalorie better?';
+
+  @override
+  String get feedbackSend => 'Send';
+
+  @override
+  String get feedbackSent => 'Got it. Thank you.';
+
+  @override
+  String get feedbackFailed =>
+      'Couldn\'t send. Check your connection and try again.';
+
+  @override
+  String get updates => 'What\'s new';
+
+  @override
+  String get updatesSub => 'what changed in the app';
+
+  @override
+  String get updatesIntro =>
+      'Every version lands here. After an update you see the notes right away.';
+
+  @override
+  String get updatesAll => 'All versions';
+
+  @override
+  String whatsNewVersion(String version) {
+    return 'New in $version';
+  }
+
+  @override
+  String get whatsNewIntro =>
+      'A short look at what changed since you were last here.';
+
+  @override
+  String get whatsNewOk => 'OK';
+
+  @override
+  String get newBadge => 'new';
+
+  @override
+  String get appLock => 'Lock';
+
+  @override
+  String get appLockSub => 'Face ID or passcode when you come back';
+
+  @override
+  String get appLockReason => 'Unlock Kalorie to see your log.';
+
+  @override
+  String get appLockBody => 'Your log is locked.';
+
+  @override
+  String get appLockUnlock => 'Unlock';
+
+  @override
+  String get appLockUnavailable =>
+      'This device has no Face ID or passcode, or you cancelled.';
 }

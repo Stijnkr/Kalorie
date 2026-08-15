@@ -407,6 +407,6 @@ ThemeData kalorieTheme({required Brightness brightness}) {
       color: sage,
       linearTrackColor: tones.track,
     ),
-    splashFactory: InkSparkle.splashFactory,
+    splashFactory: InkRipple.splashFactory,
   );
 }

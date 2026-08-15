@@ -215,7 +215,7 @@ abstract class AppLocalizations {
   /// No description provided for @noResultsHint.
   ///
   /// In nl, this message translates to:
-  /// **'Voeg zelf een product toe of zoek online.'**
+  /// **'Maak het product zelf aan, of scan de barcode.'**
   String get noResultsHint;
 
   /// No description provided for @offline.
@@ -443,14 +443,44 @@ abstract class AppLocalizations {
   /// No description provided for @privacyTitle.
   ///
   /// In nl, this message translates to:
-  /// **'Privacy'**
+  /// **'Privacybeleid'**
   String get privacyTitle;
 
   /// No description provided for @privacyBody.
   ///
   /// In nl, this message translates to:
-  /// **'Alles staat op dit apparaat. Geen account, geen tracking, geen reclame.'**
+  /// **'Je account is nodig om Kalorie te gebruiken. Het logboek staat op dit toestel en wordt gesynchroniseerd met je account. Geen tracking, geen reclame.'**
   String get privacyBody;
+
+  /// No description provided for @privacySub.
+  ///
+  /// In nl, this message translates to:
+  /// **'wat we bewaren en hoe je het wist'**
+  String get privacySub;
+
+  /// No description provided for @termsTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Voorwaarden'**
+  String get termsTitle;
+
+  /// No description provided for @termsSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'gebruik van de app, geen medisch advies'**
+  String get termsSub;
+
+  /// No description provided for @legalDisclaimer.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kalorie is geen medisch advies en geen dieetbehandeling. Raadpleeg een arts bij vragen over voeding of gewicht.'**
+  String get legalDisclaimer;
+
+  /// No description provided for @supportContact.
+  ///
+  /// In nl, this message translates to:
+  /// **'Vragen of een verzoek over je gegevens: {email}'**
+  String supportContact(String email);
 
   /// No description provided for @about.
   ///
@@ -989,7 +1019,7 @@ abstract class AppLocalizations {
   /// No description provided for @nothingFoundHint.
   ///
   /// In nl, this message translates to:
-  /// **'Zoek online of maak het product zelf aan.'**
+  /// **'Maak het product zelf aan, of scan de barcode.'**
   String get nothingFoundHint;
 
   /// No description provided for @editPortion.
@@ -1109,7 +1139,7 @@ abstract class AppLocalizations {
   /// No description provided for @moreFootnote.
   ///
   /// In nl, this message translates to:
-  /// **'Voedingswaarden uit NEVO 2025 en Open Food Facts. Alles staat op je telefoon; export via Instellingen.'**
+  /// **'Voedingswaarden uit NEVO 2025 en Open Food Facts. Logboek staat op je telefoon en, als je bent ingelogd, op je account.'**
   String get moreFootnote;
 
   /// No description provided for @weightDeltaIn30.
@@ -1229,7 +1259,7 @@ abstract class AppLocalizations {
   /// No description provided for @obFootnote.
   ///
   /// In nl, this message translates to:
-  /// **'Alles blijft op je telefoon. Geen account, geen tracking.'**
+  /// **'Je account bewaart je logboek. Geen tracking, geen reclame.'**
   String get obFootnote;
 
   /// No description provided for @next.
@@ -1259,8 +1289,812 @@ abstract class AppLocalizations {
   /// No description provided for @scanSimulateHint.
   ///
   /// In nl, this message translates to:
-  /// **'Houd de barcode in het kader. Gevonden producten worden direct geopend met de laatst gebruikte portie.'**
+  /// **'Houd de barcode in het kader. Het product gaat meteen het logboek in, met de portie die je de vorige keer koos.'**
   String get scanSimulateHint;
+
+  /// No description provided for @account.
+  ///
+  /// In nl, this message translates to:
+  /// **'Account'**
+  String get account;
+
+  /// No description provided for @accountSignedOut.
+  ///
+  /// In nl, this message translates to:
+  /// **'Geen account'**
+  String get accountSignedOut;
+
+  /// No description provided for @accountSignedOutSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'log in om je logboek veilig te stellen'**
+  String get accountSignedOutSub;
+
+  /// No description provided for @accountSince.
+  ///
+  /// In nl, this message translates to:
+  /// **'{email} · sinds {since}'**
+  String accountSince(String email, String since);
+
+  /// No description provided for @signIn.
+  ///
+  /// In nl, this message translates to:
+  /// **'Inloggen'**
+  String get signIn;
+
+  /// No description provided for @signUp.
+  ///
+  /// In nl, this message translates to:
+  /// **'Account aanmaken'**
+  String get signUp;
+
+  /// No description provided for @signOut.
+  ///
+  /// In nl, this message translates to:
+  /// **'Uitloggen'**
+  String get signOut;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In nl, this message translates to:
+  /// **'Account verwijderen'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteAccountBody.
+  ///
+  /// In nl, this message translates to:
+  /// **'Verwijderen wist je account en alle logboeken van de server. Een export blijft op je telefoon staan.'**
+  String get deleteAccountBody;
+
+  /// No description provided for @deleteAccountConfirm.
+  ///
+  /// In nl, this message translates to:
+  /// **'Weet je het zeker? Dit kan niet ongedaan worden gemaakt.'**
+  String get deleteAccountConfirm;
+
+  /// No description provided for @authWelcomeBack.
+  ///
+  /// In nl, this message translates to:
+  /// **'Welkom terug'**
+  String get authWelcomeBack;
+
+  /// No description provided for @authCreateAccount.
+  ///
+  /// In nl, this message translates to:
+  /// **'Maak je account'**
+  String get authCreateAccount;
+
+  /// No description provided for @authSignInBody.
+  ///
+  /// In nl, this message translates to:
+  /// **'Log in en je logboek, doelen en gewicht worden van de server gehaald.'**
+  String get authSignInBody;
+
+  /// No description provided for @authSignUpBody.
+  ///
+  /// In nl, this message translates to:
+  /// **'Met een account staat je logboek veilig en komt het terug op elk toestel waarop je inlogt.'**
+  String get authSignUpBody;
+
+  /// No description provided for @email.
+  ///
+  /// In nl, this message translates to:
+  /// **'E-mail'**
+  String get email;
+
+  /// No description provided for @password.
+  ///
+  /// In nl, this message translates to:
+  /// **'Wachtwoord'**
+  String get password;
+
+  /// No description provided for @displayName.
+  ///
+  /// In nl, this message translates to:
+  /// **'Naam'**
+  String get displayName;
+
+  /// No description provided for @emailPlaceholder.
+  ///
+  /// In nl, this message translates to:
+  /// **'jij@voorbeeld.nl'**
+  String get emailPlaceholder;
+
+  /// No description provided for @passwordPlaceholder.
+  ///
+  /// In nl, this message translates to:
+  /// **'minimaal 10 tekens'**
+  String get passwordPlaceholder;
+
+  /// No description provided for @namePlaceholder.
+  ///
+  /// In nl, this message translates to:
+  /// **'hoe mogen we je noemen?'**
+  String get namePlaceholder;
+
+  /// No description provided for @authLegal.
+  ///
+  /// In nl, this message translates to:
+  /// **'Door verder te gaan ga je akkoord met de voorwaarden en het privacybeleid.'**
+  String get authLegal;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In nl, this message translates to:
+  /// **'Wachtwoord vergeten?'**
+  String get forgotPassword;
+
+  /// No description provided for @resetSent.
+  ///
+  /// In nl, this message translates to:
+  /// **'Check je mail voor een link om je wachtwoord te herstellen.'**
+  String get resetSent;
+
+  /// No description provided for @errInvalidCredentials.
+  ///
+  /// In nl, this message translates to:
+  /// **'E-mail of wachtwoord klopt niet.'**
+  String get errInvalidCredentials;
+
+  /// No description provided for @errEmailTaken.
+  ///
+  /// In nl, this message translates to:
+  /// **'Er bestaat al een account met dit e-mailadres.'**
+  String get errEmailTaken;
+
+  /// No description provided for @errWeakPassword.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kies een wachtwoord van minimaal 10 tekens. Niet je e-mail, en niet hetzelfde teken achter elkaar.'**
+  String get errWeakPassword;
+
+  /// No description provided for @errLeakedPassword.
+  ///
+  /// In nl, this message translates to:
+  /// **'Dit wachtwoord staat in een bekend datalek. Kies een ander, het liefst uit een wachtwoordmanager.'**
+  String get errLeakedPassword;
+
+  /// No description provided for @errInvalidEmail.
+  ///
+  /// In nl, this message translates to:
+  /// **'Dat lijkt geen geldig e-mailadres.'**
+  String get errInvalidEmail;
+
+  /// No description provided for @errNeedsConfirmation.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bevestig je e-mailadres via de link die we net stuurden.'**
+  String get errNeedsConfirmation;
+
+  /// No description provided for @errNetwork.
+  ///
+  /// In nl, this message translates to:
+  /// **'Geen verbinding. Probeer het zo nog eens.'**
+  String get errNetwork;
+
+  /// No description provided for @errRateLimited.
+  ///
+  /// In nl, this message translates to:
+  /// **'Te veel mails achter elkaar. Wacht een paar minuten en probeer het opnieuw, of log in als het account al bestaat.'**
+  String get errRateLimited;
+
+  /// No description provided for @errUnknown.
+  ///
+  /// In nl, this message translates to:
+  /// **'Account aanmaken lukte niet. Probeer het zo nog eens.'**
+  String get errUnknown;
+
+  /// No description provided for @errCloudUnavailable.
+  ///
+  /// In nl, this message translates to:
+  /// **'Geen verbinding met de server. Probeer het zo nog eens.'**
+  String get errCloudUnavailable;
+
+  /// No description provided for @syncSection.
+  ///
+  /// In nl, this message translates to:
+  /// **'Synchronisatie'**
+  String get syncSection;
+
+  /// No description provided for @syncDiary.
+  ///
+  /// In nl, this message translates to:
+  /// **'Logboek synchroniseren'**
+  String get syncDiary;
+
+  /// No description provided for @syncDiarySub.
+  ///
+  /// In nl, this message translates to:
+  /// **'maaltijden en water op al je toestellen'**
+  String get syncDiarySub;
+
+  /// No description provided for @syncWeight.
+  ///
+  /// In nl, this message translates to:
+  /// **'Gewicht synchroniseren'**
+  String get syncWeight;
+
+  /// No description provided for @syncWeightSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'metingen en verloop'**
+  String get syncWeightSub;
+
+  /// No description provided for @syncNow.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nu synchroniseren'**
+  String get syncNow;
+
+  /// No description provided for @syncRunning.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bezig met synchroniseren…'**
+  String get syncRunning;
+
+  /// No description provided for @syncDone.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bijgewerkt om {time}'**
+  String syncDone(String time);
+
+  /// No description provided for @syncNever.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nog niet gesynchroniseerd'**
+  String get syncNever;
+
+  /// No description provided for @syncOffline.
+  ///
+  /// In nl, this message translates to:
+  /// **'Offline — het wacht tot je weer verbinding hebt.'**
+  String get syncOffline;
+
+  /// No description provided for @syncFailed.
+  ///
+  /// In nl, this message translates to:
+  /// **'Synchroniseren lukte niet.'**
+  String get syncFailed;
+
+  /// No description provided for @securitySection.
+  ///
+  /// In nl, this message translates to:
+  /// **'Beveiliging en data'**
+  String get securitySection;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In nl, this message translates to:
+  /// **'Wachtwoord wijzigen'**
+  String get changePassword;
+
+  /// No description provided for @changePasswordSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'we sturen je een link per mail'**
+  String get changePasswordSub;
+
+  /// No description provided for @obAccountTitleUp.
+  ///
+  /// In nl, this message translates to:
+  /// **'Maak je account'**
+  String get obAccountTitleUp;
+
+  /// No description provided for @obAccountTitleIn.
+  ///
+  /// In nl, this message translates to:
+  /// **'Welkom terug'**
+  String get obAccountTitleIn;
+
+  /// No description provided for @skipForNow.
+  ///
+  /// In nl, this message translates to:
+  /// **'Zonder account verder'**
+  String get skipForNow;
+
+  /// No description provided for @skipForNowSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'alles blijft dan alleen op dit toestel'**
+  String get skipForNowSub;
+
+  /// No description provided for @recipes.
+  ///
+  /// In nl, this message translates to:
+  /// **'Mijn recepten'**
+  String get recipes;
+
+  /// No description provided for @recipesSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'vaste combinaties in één tik'**
+  String get recipesSub;
+
+  /// No description provided for @recipesIntro.
+  ///
+  /// In nl, this message translates to:
+  /// **'Een recept is een vaste combinatie die je in één tik logt. Tik de plus om een portie te boeken, tik de naam om hem aan te passen.'**
+  String get recipesIntro;
+
+  /// No description provided for @newRecipe.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nieuw recept'**
+  String get newRecipe;
+
+  /// No description provided for @editRecipe.
+  ///
+  /// In nl, this message translates to:
+  /// **'Recept aanpassen'**
+  String get editRecipe;
+
+  /// No description provided for @recipeName.
+  ///
+  /// In nl, this message translates to:
+  /// **'Naam'**
+  String get recipeName;
+
+  /// No description provided for @recipeNameHint.
+  ///
+  /// In nl, this message translates to:
+  /// **'bijv. Kwark met banaan'**
+  String get recipeNameHint;
+
+  /// No description provided for @recipePortions.
+  ///
+  /// In nl, this message translates to:
+  /// **'Aantal porties'**
+  String get recipePortions;
+
+  /// No description provided for @recipePortionsSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'bepaalt wat één portie kost'**
+  String get recipePortionsSub;
+
+  /// No description provided for @ingredients.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ingrediënten'**
+  String get ingredients;
+
+  /// No description provided for @recipeEmpty.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nog geen ingrediënten. Kies hieronder een product.'**
+  String get recipeEmpty;
+
+  /// No description provided for @addIngredient.
+  ///
+  /// In nl, this message translates to:
+  /// **'Toevoegen'**
+  String get addIngredient;
+
+  /// No description provided for @saveRecipe.
+  ///
+  /// In nl, this message translates to:
+  /// **'Recept opslaan'**
+  String get saveRecipe;
+
+  /// No description provided for @recipeTotal.
+  ///
+  /// In nl, this message translates to:
+  /// **'Totaal {kcal} kcal · één portie {perPortion} kcal'**
+  String recipeTotal(int kcal, int perPortion);
+
+  /// No description provided for @recipePerPortion.
+  ///
+  /// In nl, this message translates to:
+  /// **'{kcal} kcal per portie · {grams} g'**
+  String recipePerPortion(int kcal, int grams);
+
+  /// No description provided for @deleteRecipe.
+  ///
+  /// In nl, this message translates to:
+  /// **'Recept verwijderen'**
+  String get deleteRecipe;
+
+  /// No description provided for @deleteRecipeConfirm.
+  ///
+  /// In nl, this message translates to:
+  /// **'Dit recept verdwijnt uit je lijst. Gelogde porties blijven in je dagboek.'**
+  String get deleteRecipeConfirm;
+
+  /// No description provided for @deleteProduct.
+  ///
+  /// In nl, this message translates to:
+  /// **'Product verwijderen'**
+  String get deleteProduct;
+
+  /// No description provided for @deleteProductConfirm.
+  ///
+  /// In nl, this message translates to:
+  /// **'{name} verdwijnt uit je eigen producten. Gelogde dagen blijven staan.'**
+  String deleteProductConfirm(String name);
+
+  /// No description provided for @reminders.
+  ///
+  /// In nl, this message translates to:
+  /// **'Herinneringen'**
+  String get reminders;
+
+  /// No description provided for @remindersSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'melding als je iets niet logt'**
+  String get remindersSub;
+
+  /// No description provided for @remindersIntro.
+  ///
+  /// In nl, this message translates to:
+  /// **'Alleen een zetje als je iets niet gelogd hebt. Heb je de maaltijd al gelogd, dan komt de melding niet.'**
+  String get remindersIntro;
+
+  /// No description provided for @remindersFootnote.
+  ///
+  /// In nl, this message translates to:
+  /// **'Tik op de tijd om hem te verschuiven. Meldingen werken alleen als je ze op je telefoon hebt toegestaan.'**
+  String get remindersFootnote;
+
+  /// No description provided for @remindersEnabledCount.
+  ///
+  /// In nl, this message translates to:
+  /// **'{count} aan'**
+  String remindersEnabledCount(int count);
+
+  /// No description provided for @reminderWeighIn.
+  ///
+  /// In nl, this message translates to:
+  /// **'Wegen'**
+  String get reminderWeighIn;
+
+  /// No description provided for @reminderBreakfastSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'als het ontbijt nog leeg is'**
+  String get reminderBreakfastSub;
+
+  /// No description provided for @reminderLunchSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'als de lunch nog leeg is'**
+  String get reminderLunchSub;
+
+  /// No description provided for @reminderDinnerSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'als het diner nog leeg is'**
+  String get reminderDinnerSub;
+
+  /// No description provided for @reminderSnackSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'als de dag nog niet rond is'**
+  String get reminderSnackSub;
+
+  /// No description provided for @reminderWeighInSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'wekelijks op je weegmoment'**
+  String get reminderWeighInSub;
+
+  /// No description provided for @reminderBody.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nog niets gelogd voor {meal}.'**
+  String reminderBody(String meal);
+
+  /// No description provided for @reminderWeighBody.
+  ///
+  /// In nl, this message translates to:
+  /// **'Even op de weegschaal?'**
+  String get reminderWeighBody;
+
+  /// No description provided for @notificationsDenied.
+  ///
+  /// In nl, this message translates to:
+  /// **'Meldingen staan uit. Zet ze aan bij Instellingen › Kalorie.'**
+  String get notificationsDenied;
+
+  /// No description provided for @accountSwitchTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ander account'**
+  String get accountSwitchTitle;
+
+  /// No description provided for @accountSwitchBody.
+  ///
+  /// In nl, this message translates to:
+  /// **'Op dit toestel staan gegevens van een ander account. Wisselen haalt het logboek van dit account op en vervangt wat hier staat. Het andere account blijft in de cloud.'**
+  String get accountSwitchBody;
+
+  /// No description provided for @accountSwitchConfirm.
+  ///
+  /// In nl, this message translates to:
+  /// **'Wisselen'**
+  String get accountSwitchConfirm;
+
+  /// No description provided for @signOutStaysLocal.
+  ///
+  /// In nl, this message translates to:
+  /// **'Je logboek blijft op dit toestel. Log opnieuw in om te synchroniseren.'**
+  String get signOutStaysLocal;
+
+  /// No description provided for @recoverTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nieuw wachtwoord'**
+  String get recoverTitle;
+
+  /// No description provided for @recoverBody.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kies een wachtwoord van minimaal 10 tekens. Daarna kun je weer inloggen op al je toestellen.'**
+  String get recoverBody;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nieuw wachtwoord'**
+  String get newPassword;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bevestig wachtwoord'**
+  String get confirmPassword;
+
+  /// No description provided for @savePassword.
+  ///
+  /// In nl, this message translates to:
+  /// **'Wachtwoord opslaan'**
+  String get savePassword;
+
+  /// No description provided for @passwordUpdated.
+  ///
+  /// In nl, this message translates to:
+  /// **'Je wachtwoord is gewijzigd.'**
+  String get passwordUpdated;
+
+  /// No description provided for @errPasswordMismatch.
+  ///
+  /// In nl, this message translates to:
+  /// **'Die twee wachtwoorden zijn niet hetzelfde.'**
+  String get errPasswordMismatch;
+
+  /// No description provided for @recipeListEmpty.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nog geen recepten. Maak er een en je logt hem in één tik.'**
+  String get recipeListEmpty;
+
+  /// No description provided for @ownProductsIntro.
+  ///
+  /// In nl, this message translates to:
+  /// **'Producten die je zelf hebt ingevoerd. Tik erop om ze aan te passen.'**
+  String get ownProductsIntro;
+
+  /// No description provided for @newOwnProduct.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nieuw product'**
+  String get newOwnProduct;
+
+  /// No description provided for @ownProductsEmpty.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nog geen eigen producten.'**
+  String get ownProductsEmpty;
+
+  /// No description provided for @moreSectionDay.
+  ///
+  /// In nl, this message translates to:
+  /// **'Dag'**
+  String get moreSectionDay;
+
+  /// No description provided for @moreSectionFood.
+  ///
+  /// In nl, this message translates to:
+  /// **'Voeding'**
+  String get moreSectionFood;
+
+  /// No description provided for @moreSectionApp.
+  ///
+  /// In nl, this message translates to:
+  /// **'App'**
+  String get moreSectionApp;
+
+  /// No description provided for @obFootnoteSignedIn.
+  ///
+  /// In nl, this message translates to:
+  /// **'Je doelen staan op dit toestel en gaan mee naar de cloud.'**
+  String get obFootnoteSignedIn;
+
+  /// No description provided for @weekdayMonday.
+  ///
+  /// In nl, this message translates to:
+  /// **'ma'**
+  String get weekdayMonday;
+
+  /// No description provided for @weekdayTuesday.
+  ///
+  /// In nl, this message translates to:
+  /// **'di'**
+  String get weekdayTuesday;
+
+  /// No description provided for @weekdayWednesday.
+  ///
+  /// In nl, this message translates to:
+  /// **'wo'**
+  String get weekdayWednesday;
+
+  /// No description provided for @weekdayThursday.
+  ///
+  /// In nl, this message translates to:
+  /// **'do'**
+  String get weekdayThursday;
+
+  /// No description provided for @weekdayFriday.
+  ///
+  /// In nl, this message translates to:
+  /// **'vr'**
+  String get weekdayFriday;
+
+  /// No description provided for @weekdaySaturday.
+  ///
+  /// In nl, this message translates to:
+  /// **'za'**
+  String get weekdaySaturday;
+
+  /// No description provided for @weekdaySunday.
+  ///
+  /// In nl, this message translates to:
+  /// **'zo'**
+  String get weekdaySunday;
+
+  /// No description provided for @feedback.
+  ///
+  /// In nl, this message translates to:
+  /// **'Feedback'**
+  String get feedback;
+
+  /// No description provided for @feedbackSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'een idee, een fout, of iets dat wringt'**
+  String get feedbackSub;
+
+  /// No description provided for @feedbackIntro.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ik lees alles. Hoe korter hoe beter, maar schrijf gerust wat je nodig hebt. Versie en toestel gaan automatisch mee.'**
+  String get feedbackIntro;
+
+  /// No description provided for @feedbackIdea.
+  ///
+  /// In nl, this message translates to:
+  /// **'Idee'**
+  String get feedbackIdea;
+
+  /// No description provided for @feedbackProblem.
+  ///
+  /// In nl, this message translates to:
+  /// **'Probleem'**
+  String get feedbackProblem;
+
+  /// No description provided for @feedbackOther.
+  ///
+  /// In nl, this message translates to:
+  /// **'Anders'**
+  String get feedbackOther;
+
+  /// No description provided for @feedbackHint.
+  ///
+  /// In nl, this message translates to:
+  /// **'Wat zou Kalorie beter maken?'**
+  String get feedbackHint;
+
+  /// No description provided for @feedbackSend.
+  ///
+  /// In nl, this message translates to:
+  /// **'Versturen'**
+  String get feedbackSend;
+
+  /// No description provided for @feedbackSent.
+  ///
+  /// In nl, this message translates to:
+  /// **'Binnen. Dank je.'**
+  String get feedbackSent;
+
+  /// No description provided for @feedbackFailed.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kon het niet versturen. Check je verbinding en probeer het zo nog eens.'**
+  String get feedbackFailed;
+
+  /// No description provided for @updates.
+  ///
+  /// In nl, this message translates to:
+  /// **'Wat is nieuw'**
+  String get updates;
+
+  /// No description provided for @updatesSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'wat er in de app is veranderd'**
+  String get updatesSub;
+
+  /// No description provided for @updatesIntro.
+  ///
+  /// In nl, this message translates to:
+  /// **'Elke versie komt hier te staan. Na een update zie je de punten meteen.'**
+  String get updatesIntro;
+
+  /// No description provided for @updatesAll.
+  ///
+  /// In nl, this message translates to:
+  /// **'Alle versies'**
+  String get updatesAll;
+
+  /// No description provided for @whatsNewVersion.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nieuw in {version}'**
+  String whatsNewVersion(String version);
+
+  /// No description provided for @whatsNewIntro.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kort wat er anders is sinds je hier voor het laatst was.'**
+  String get whatsNewIntro;
+
+  /// No description provided for @whatsNewOk.
+  ///
+  /// In nl, this message translates to:
+  /// **'Oké'**
+  String get whatsNewOk;
+
+  /// No description provided for @newBadge.
+  ///
+  /// In nl, this message translates to:
+  /// **'nieuw'**
+  String get newBadge;
+
+  /// No description provided for @appLock.
+  ///
+  /// In nl, this message translates to:
+  /// **'Vergrendelen'**
+  String get appLock;
+
+  /// No description provided for @appLockSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'Face ID of toegangscode als je terugkomt'**
+  String get appLockSub;
+
+  /// No description provided for @appLockReason.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ontgrendel Kalorie om je logboek te zien.'**
+  String get appLockReason;
+
+  /// No description provided for @appLockBody.
+  ///
+  /// In nl, this message translates to:
+  /// **'Je logboek is vergrendeld.'**
+  String get appLockBody;
+
+  /// No description provided for @appLockUnlock.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ontgrendelen'**
+  String get appLockUnlock;
+
+  /// No description provided for @appLockUnavailable.
+  ///
+  /// In nl, this message translates to:
+  /// **'Dit toestel heeft geen Face ID of toegangscode, of je hebt geannuleerd.'**
+  String get appLockUnavailable;
 }
 
 class _AppLocalizationsDelegate

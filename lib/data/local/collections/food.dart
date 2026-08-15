@@ -64,4 +64,18 @@ class Food {
 
   DateTime? cachedAt;
   bool userOverridden = false;
+
+  /// Alleen eigen producten gaan mee naar de server; catalogusproducten staan
+  /// er al. Null voor alles wat uit NEVO of Open Food Facts komt. Niet uniek:
+  /// catalogusrijen delen `null` en mogen elkaar niet vervangen.
+  @Index()
+  String? clientId;
+
+  DateTime? updatedAt;
+
+  @Index()
+  bool dirty = false;
+
+  @Index()
+  bool deleted = false;
 }

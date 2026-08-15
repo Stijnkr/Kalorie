@@ -45,6 +45,14 @@ void main() {
       expect(NutrientMath.roundMacro(12.34), 12.3);
       expect(NutrientMath.roundMacro(12.35), 12.4);
     });
+
+    test('rescales a snapshot from one amount to another', () {
+      expect(NutrientMath.rescale(200, 100, 150), 300);
+      expect(NutrientMath.rescale(10, 200, 100), 5);
+      expect(NutrientMath.rescale(40, 0, 100), 40);
+      expect(NutrientMath.rescaleOrNull(null, 100, 50), isNull);
+      expect(NutrientMath.rescaleOrNull(8, 100, 50), 4);
+    });
   });
 
   group('DaySummary', () {

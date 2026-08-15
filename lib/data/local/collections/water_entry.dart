@@ -14,4 +14,12 @@ class WaterEntry {
   late int dateKey;
 
   late int glasses;
+
+  late DateTime updatedAt;
+
+  @Index()
+  bool dirty = true;
+
+  @Index()
+  bool deleted = false;
 }

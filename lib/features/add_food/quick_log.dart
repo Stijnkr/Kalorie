@@ -19,14 +19,20 @@ Future<void> quickLogFood(
   final l10n = AppLocalizations.of(context);
   final messenger = ScaffoldMessenger.of(context);
   final diary = ref.read(diaryRepositoryProvider);
+  final liquid = ServingMath.looksLiquid(
+    name: food.name,
+    servingLabel: food.servingLabel,
+  );
   final grams = ServingMath.defaultGrams(
     lastAmountG: food.lastAmountG,
     servingG: food.servingG,
+    liquid: liquid,
   );
   final amount = ServingMath.describeShort(
     grams: grams,
     servingG: food.servingG,
     servingLabel: food.servingLabel,
+    liquid: liquid,
   );
 
   final id = await diary.add(

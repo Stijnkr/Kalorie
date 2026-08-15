@@ -1,24 +1,35 @@
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar_community/isar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' show Session, User;
 
 import '../app/bootstrap.dart';
 import '../core/constants.dart';
 import '../core/day_summary.dart';
 import '../core/macro_goals.dart';
 import 'export/data_exporter.dart';
+import 'notifications/reminder_scheduler.dart';
+import 'notifications/reminder_service.dart';
 import 'local/collections/app_settings.dart';
 import 'local/collections/diary_entry.dart';
 import 'local/collections/enums.dart';
 import 'local/collections/food.dart';
+import 'local/collections/recipe.dart';
+import 'local/collections/reminder.dart';
 import 'local/collections/weight_entry.dart';
 import 'remote/catalog_client.dart';
 import 'remote/off_client.dart';
 import 'repositories/catalog_repository.dart';
 import 'repositories/diary_repository.dart';
 import 'repositories/food_repository.dart';
+import 'repositories/auth_repository.dart';
+import 'repositories/feedback_repository.dart';
+import 'repositories/recipe_repository.dart';
+import 'repositories/reminder_repository.dart';
 import 'repositories/settings_repository.dart';
 import 'repositories/water_repository.dart';
 import 'repositories/weight_repository.dart';
+import 'sync/sync_engine.dart';
 
 final isarProvider = Provider<Isar>((ref) => KalorieBootstrap.isar);
 
@@ -146,12 +157,98 @@ final favoriteFoodsProvider = FutureProvider<List<Food>>((ref) {
   return ref.watch(foodRepositoryProvider).favorites();
 });
 
-/// Aantal producten dat je zelf hebt ingevoerd, voor de rij in Meer.
-final customFoodCountProvider = FutureProvider<int>((ref) {
+final customFoodsProvider = StreamProvider<List<Food>>((ref) {
   return ref
       .watch(isarProvider)
       .foods
       .filter()
       .sourceEqualTo(FoodSource.custom)
-      .count();
+      .and()
+      .deletedEqualTo(false)
+      .sortByName()
+      .watch(fireImmediately: true);
+});
+
+/// Aantal producten dat je zelf hebt ingevoerd, voor de rij in Meer.
+final customFoodCountProvider = Provider<int>((ref) {
+  return ref.watch(customFoodsProvider).value?.length ?? 0;
+});
+
+// ----------------------------------------------------------------- account
+
+final authRepositoryProvider = Provider<AuthRepository>(
+  (ref) => AuthRepository(),
+);
+
+final feedbackRepositoryProvider = Provider<FeedbackRepository>(
+  (ref) => FeedbackRepository(),
+);
+
+/// Volgt in- en uitloggen. `null` betekent: niet ingelogd, alles blijft lokaal.
+final authStateProvider = StreamProvider<Session?>((ref) {
+  final auth = ref.watch(authRepositoryProvider);
+  if (!auth.isAvailable) return Stream.value(null);
+  return auth.changes.map((event) => event.session);
+});
+
+final currentUserProvider = Provider<User?>((ref) {
+  final session = ref.watch(authStateProvider).value;
+  if (session != null) return session.user;
+  return ref.watch(authRepositoryProvider).user;
+});
+
+final isSignedInProvider = Provider<bool>(
+  (ref) => ref.watch(currentUserProvider) != null,
+);
+
+// -------------------------------------------------------------------- sync
+
+final syncEngineProvider = Provider<SyncEngine>((ref) {
+  final engine = SyncEngine(ref.watch(isarProvider));
+  ref.onDispose(engine.dispose);
+  return engine;
+});
+
+final syncStatusProvider = StreamProvider<SyncStatus>((ref) {
+  final engine = ref.watch(syncEngineProvider);
+  return engine.statusStream;
+});
+
+// --------------------------------------------------------------- recepten
+
+final recipeRepositoryProvider = Provider<RecipeRepository>(
+  (ref) => RecipeRepository(ref.watch(isarProvider)),
+);
+
+final recipesProvider = StreamProvider<List<Recipe>>((ref) {
+  return ref.watch(recipeRepositoryProvider).watchAll();
+});
+
+// ----------------------------------------------------------- herinneringen
+
+final reminderRepositoryProvider = Provider<ReminderRepository>(
+  (ref) => ReminderRepository(ref.watch(isarProvider)),
+);
+
+final remindersProvider = StreamProvider<List<Reminder>>((ref) {
+  return ref.watch(reminderRepositoryProvider).watchAll();
+});
+
+final reminderServiceProvider = Provider<ReminderService>(
+  (ref) => ReminderService(FlutterLocalNotificationsPlugin()),
+);
+
+final reminderSchedulerProvider = Provider<ReminderScheduler>(
+  (ref) => ReminderScheduler(
+    ref.watch(reminderServiceProvider),
+    ref.watch(reminderRepositoryProvider),
+    ref.watch(diaryRepositoryProvider),
+    ref.watch(weightRepositoryProvider),
+  ),
+);
+
+/// Hoeveel herinneringen aanstaan, voor de rij in Meer.
+final enabledRemindersProvider = Provider<int>((ref) {
+  final reminders = ref.watch(remindersProvider).value ?? const <Reminder>[];
+  return reminders.where((r) => r.enabled).length;
 });

@@ -2,35 +2,65 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/theme.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/widgets/stroke_icon.dart';
+import '../../data/providers.dart';
+import '../updates/release_notes.dart';
+import '../updates/updates_screen.dart';
 
-class AppShell extends StatelessWidget {
+class AppShell extends ConsumerStatefulWidget {
   const AppShell({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
 
   @override
+  ConsumerState<AppShell> createState() => _AppShellState();
+}
+
+class _AppShellState extends ConsumerState<AppShell> {
+  bool _promptedNotes = false;
+
+  void _maybeShowNotes() {
+    if (_promptedNotes) return;
+    final settings = ref.read(settingsProvider).value;
+    if (settings == null || !settings.onboardingDone) return;
+    if (!hasUnseenReleaseNotes(settings.seenReleaseNotes)) return;
+    _promptedNotes = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      showWhatsNewSheet(context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final unseen = hasUnseenReleaseNotes(
+      ref.watch(settingsProvider).value?.seenReleaseNotes,
+    );
+    ref.listen(settingsProvider, (previous, next) {
+      _maybeShowNotes();
+    });
+    _maybeShowNotes();
     return Scaffold(
-      body: navigationShell,
+      body: widget.navigationShell,
       bottomNavigationBar: _TabBar(
-        currentIndex: navigationShell.currentIndex,
+        currentIndex: widget.navigationShell.currentIndex,
         onSelect: (index) {
           HapticFeedback.selectionClick();
-          navigationShell.goBranch(
+          widget.navigationShell.goBranch(
             index,
-            initialLocation: index == navigationShell.currentIndex,
+            initialLocation: index == widget.navigationShell.currentIndex,
           );
         },
         items: [
-          (StrokeShape.ring, l10n.tabToday),
-          (StrokeShape.square, l10n.tabHistory),
-          (StrokeShape.dots, l10n.tabMore),
+          (StrokeShape.home, l10n.tabToday, false),
+          (StrokeShape.calendar, l10n.tabHistory, false),
+          (StrokeShape.dots, l10n.tabMore, unseen),
         ],
       ),
     );
@@ -47,7 +77,7 @@ class _TabBar extends StatelessWidget {
 
   final int currentIndex;
   final ValueChanged<int> onSelect;
-  final List<(StrokeShape, String)> items;
+  final List<(StrokeShape, String, bool)> items;
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +107,7 @@ class _TabBar extends StatelessWidget {
                         shape: items[i].$1,
                         label: items[i].$2,
                         selected: i == currentIndex,
+                        badge: items[i].$3,
                         onTap: () => onSelect(i),
                         activeColor: theme.colorScheme.primary,
                         idleColor: theme.textTheme.bodySmall?.color ??
@@ -99,6 +130,7 @@ class _Tab extends StatelessWidget {
     required this.shape,
     required this.label,
     required this.selected,
+    required this.badge,
     required this.onTap,
     required this.activeColor,
     required this.idleColor,
@@ -108,6 +140,7 @@ class _Tab extends StatelessWidget {
   final StrokeShape shape;
   final String label;
   final bool selected;
+  final bool badge;
   final VoidCallback onTap;
   final Color activeColor;
   final Color idleColor;
@@ -128,11 +161,29 @@ class _Tab extends StatelessWidget {
             SizedBox(
               height: 20,
               child: Center(
-                child: StrokeIcon(
-                  shape,
-                  size: shape == StrokeShape.dots ? 20 : 16,
-                  color: color,
-                  strokeWidth: 2,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    StrokeIcon(
+                      shape,
+                      size: shape == StrokeShape.dots ? 18 : 17,
+                      color: color,
+                      strokeWidth: 1.8,
+                    ),
+                    if (badge)
+                      Positioned(
+                        top: -2,
+                        right: -5,
+                        child: Container(
+                          width: 7,
+                          height: 7,
+                          decoration: BoxDecoration(
+                            color: activeColor,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),

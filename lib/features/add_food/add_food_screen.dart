@@ -9,6 +9,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../app/theme.dart';
 import '../../core/constants.dart';
 import '../../core/day_summary.dart';
+import '../../core/food_search_rank.dart';
 import '../../core/l10n/generated/app_localizations.dart';
 import '../../core/widgets/kalorie_ui.dart';
 import '../../core/widgets/panel.dart';
@@ -59,15 +60,51 @@ class FoodSearchState {
       error: clearError ? null : (error ?? this.error),
     );
   }
+
+  /// Eén lijst: recente/NEVO eerst, daarna extra hits uit de catalogus en OFF.
+  List<Food> get results {
+    if (query.trim().isEmpty) return local;
+    final merged = <Food>[...local];
+    for (final food in remote) {
+      if (merged.any((existing) => _sameFood(existing, food))) continue;
+      merged.add(food);
+    }
+    merged.sort((a, b) => compareFoodSearch(a, b, query));
+    return merged;
+  }
+}
+
+bool _sameFood(Food a, Food b) {
+  if (a.id != 0 && a.id == b.id) return true;
+  if (a.barcode != null &&
+      a.barcode!.isNotEmpty &&
+      a.barcode == b.barcode) {
+    return true;
+  }
+  if (a.catalogId != null &&
+      a.catalogId!.isNotEmpty &&
+      a.catalogId == b.catalogId) {
+    return true;
+  }
+  if (a.offId != null && a.offId!.isNotEmpty && a.offId == b.offId) {
+    return true;
+  }
+  return a.nameNormalized == b.nameNormalized &&
+      (a.brand ?? '') == (b.brand ?? '');
 }
 
 @riverpod
 class FoodSearch extends _$FoodSearch {
   Timer? _debounce;
+  Timer? _remoteDebounce;
+  int _remoteToken = 0;
 
   @override
   FoodSearchState build() {
-    ref.onDispose(() => _debounce?.cancel());
+    ref.onDispose(() {
+      _debounce?.cancel();
+      _remoteDebounce?.cancel();
+    });
     Future.microtask(reload);
     return const FoodSearchState();
   }
@@ -88,6 +125,7 @@ class FoodSearch extends _$FoodSearch {
   }
 
   void setFilter(FoodFilter filter) {
+    _remoteDebounce?.cancel();
     state = state.copyWith(filter: filter, remote: const []);
     reload();
   }
@@ -95,41 +133,56 @@ class FoodSearch extends _$FoodSearch {
   void setQuery(String query) {
     state = state.copyWith(query: query, remote: const [], clearError: true);
     _debounce?.cancel();
+    _remoteDebounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 100), reload);
+    if (query.trim().length >= 2) {
+      _remoteDebounce =
+          Timer(const Duration(milliseconds: 450), _enrichFromNetwork);
+    }
   }
 
   void reset() {
     _debounce?.cancel();
+    _remoteDebounce?.cancel();
+    _remoteToken++;
     state = const FoodSearchState();
     reload();
   }
 
-  Future<void> searchOnline() async {
+  Future<void> _enrichFromNetwork() async {
     final q = state.query.trim();
-    if (q.length < 3) return;
+    if (q.length < 2) return;
     final connectivity = await Connectivity().checkConnectivity();
     if (connectivity.contains(ConnectivityResult.none) ||
         connectivity.isEmpty) {
-      state = state.copyWith(error: 'offline');
       return;
     }
+    final token = ++_remoteToken;
     state = state.copyWith(onlineLoading: true, clearError: true);
     try {
-      final catalog = ref.read(catalogRepositoryProvider);
-      var mapped = List<Food>.from(await catalog.searchRemote(q));
-      if (mapped.isEmpty) {
+      final catalogHits =
+          await ref.read(catalogRepositoryProvider).searchRemote(q);
+      final extra = <Food>[...catalogHits];
+      try {
         final products = await ref.read(offRemoteProvider).search(q);
         for (final product in products) {
           final food = mapOffProduct(product);
           if (food == null) continue;
-          mapped.add(await ref.read(foodRepositoryProvider).cacheOffProduct(food));
+          extra.add(
+            await ref.read(foodRepositoryProvider).cacheOffProduct(food),
+          );
         }
+      } on RateLimitedException {
+        // Catalogushits blijven staan.
       }
-      state = state.copyWith(remote: mapped, onlineLoading: false);
+      if (token != _remoteToken || state.query.trim() != q) return;
+      state = state.copyWith(remote: extra, onlineLoading: false);
     } on RateLimitedException {
+      if (token != _remoteToken) return;
       state = state.copyWith(onlineLoading: false, error: 'rate');
     } catch (_) {
-      state = state.copyWith(onlineLoading: false, error: 'network');
+      if (token != _remoteToken) return;
+      state = state.copyWith(onlineLoading: false);
     }
   }
 }
@@ -187,10 +240,7 @@ class _AddFoodScreenState extends ConsumerState<AddFoodScreen> {
     final theme = Theme.of(context);
     final search = ref.watch(foodSearchProvider);
     final querying = search.query.trim().isNotEmpty;
-    final items = [
-      ...search.local,
-      ...search.remote.where((r) => search.local.every((l) => l.id != r.id)),
-    ];
+    final items = search.results;
 
     return Scaffold(
       body: SafeArea(
@@ -216,11 +266,18 @@ class _AddFoodScreenState extends ConsumerState<AddFoodScreen> {
                 controller: _query,
                 autofocus: true,
                 textInputAction: TextInputAction.search,
+                onTapOutside: (_) =>
+                    FocusManager.instance.primaryFocus?.unfocus(),
                 decoration: InputDecoration(hintText: l10n.searchHint),
                 onChanged: (v) =>
                     ref.read(foodSearchProvider.notifier).setQuery(v),
               ),
             ),
+            if (search.onlineLoading)
+              const Padding(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 8),
+                child: LinearProgressIndicator(minHeight: 2),
+              ),
             if (!querying)
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
@@ -295,35 +352,17 @@ class _AddFoodScreenState extends ConsumerState<AddFoodScreen> {
                         ],
                       ),
                     ),
-                  if (search.query.trim().length >= 3) ...[
-                    const SizedBox(height: 12),
-                    if (search.onlineLoading)
-                      const Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Center(child: CircularProgressIndicator()),
-                      )
-                    else
-                      TextButton(
-                        onPressed: () =>
-                            ref.read(foodSearchProvider.notifier).searchOnline(),
-                        child: Text(l10n.searchOnline),
-                      ),
-                  ],
-                  if (search.error != null)
+                  if (search.error == 'rate')
                     Padding(
                       padding: const EdgeInsets.fromLTRB(4, 12, 4, 0),
                       child: Text(
-                        switch (search.error) {
-                          'offline' => l10n.offline,
-                          'rate' => l10n.rateLimited,
-                          _ => l10n.networkError,
-                        },
+                        l10n.rateLimited,
                         style: theme.textTheme.bodySmall,
                       ),
                     ),
                   const SizedBox(height: 4),
                   TextButton(
-                    onPressed: () => context.push('/add/custom'),
+                    onPressed: () => context.push('/add/custom$_mealQuery'),
                     child: Text(l10n.createNewProduct),
                   ),
                 ],

@@ -16,7 +16,7 @@ import '../../data/local/collections/food.dart';
 import '../../data/providers.dart';
 import '../today/today_screen.dart' show mealLabel;
 
-enum _Unit { portions, grams }
+enum _AmountUnit { g, ml }
 
 class AmountScreen extends ConsumerStatefulWidget {
   const AmountScreen({
@@ -38,15 +38,11 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
   Food? _food;
   DiaryEntry? _entry;
   bool _loaded = false;
+  bool _busy = false;
   late double _grams;
   late MealType _meal;
-  _Unit _unit = _Unit.grams;
+  _AmountUnit _unit = _AmountUnit.g;
   late final TextEditingController _input;
-
-  bool get _hasServing =>
-      _food?.servingG != null &&
-      _food!.servingG! > 0 &&
-      (_food?.servingLabel?.isNotEmpty ?? false);
 
   @override
   void initState() {
@@ -80,24 +76,27 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
         _grams = ServingMath.defaultGrams(
           lastAmountG: food?.lastAmountG,
           servingG: food?.servingG,
+          liquid: _isLiquid(food),
         );
       }
-      _unit = (food?.servingG != null && food!.servingG! > 0)
-          ? _Unit.portions
-          : _Unit.grams;
+      _unit = (_isLiquid(food) ||
+              ServingMath.looksLiquid(
+                name: entry?.foodName,
+                servingLabel: entry?.servingLabel,
+              ))
+          ? _AmountUnit.ml
+          : _AmountUnit.g;
       _syncInput();
     });
   }
 
-  void _syncInput() {
-    final food = _food;
-    if (_unit == _Unit.portions && food?.servingG != null) {
-      _input.text = ServingMath.formatCount(
-        ServingMath.portionsFromGrams(_grams, food!.servingG!),
+  bool _isLiquid(Food? food) => ServingMath.looksLiquid(
+        name: food?.name,
+        servingLabel: food?.servingLabel,
       );
-    } else {
-      _input.text = '${_grams.round()}';
-    }
+
+  void _syncInput() {
+    _input.text = '${_grams.round()}';
   }
 
   void _setGrams(double value, {bool syncInput = true}) {
@@ -110,54 +109,68 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
     _setGrams(_grams + delta);
   }
 
-  double get _step {
-    final servingG = _food?.servingG;
-    if (_unit == _Unit.portions && servingG != null && servingG > 0) {
-      return servingG * 0.5;
+  double get _step => _unit == _AmountUnit.ml ? 25 : 10;
+
+  List<HouseholdPortion> get _chips {
+    final food = _food;
+    if (food != null) {
+      return ServingMath.suggestionsFor(
+        name: food.name,
+        servingG: food.servingG,
+        servingLabel: food.servingLabel,
+      );
     }
-    return 10;
+    final entry = _entry;
+    if (entry == null) return const [];
+    return ServingMath.suggestionsFor(
+      name: entry.foodName,
+      servingG: null,
+      servingLabel: entry.servingLabel,
+    );
+  }
+
+  double _per100(double total) {
+    final grams = _entry?.amountG ?? 0;
+    if (grams <= 0) return 0;
+    return total * 100 / grams;
   }
 
   Future<void> _save() async {
+    if (_busy) return;
     final food = _food;
-    if (food == null) return;
     final entry = _entry;
-    if (entry != null) {
-      await ref.read(diaryRepositoryProvider).update(
-            entry: entry,
-            food: food,
-            amountG: _grams,
-            meal: _meal,
-          );
-    } else {
-      await ref.read(diaryRepositoryProvider).add(
-            food: food,
-            amountG: _grams,
-            meal: _meal,
-            dateKey: ref.read(selectedDateKeyProvider),
-          );
+    if (food == null && entry == null) return;
+    setState(() => _busy = true);
+    try {
+      final diary = ref.read(diaryRepositoryProvider);
+      if (entry != null && food == null) {
+        await diary.updateRaw(entry: entry, amountG: _grams, meal: _meal);
+      } else if (entry != null && food != null) {
+        await diary.update(
+          entry: entry,
+          food: food,
+          amountG: _grams,
+          meal: _meal,
+        );
+      } else if (food != null) {
+        await diary.add(
+          food: food,
+          amountG: _grams,
+          meal: _meal,
+          dateKey: ref.read(selectedDateKeyProvider),
+        );
+      }
+      if (!mounted) return;
+      HapticFeedback.mediumImpact();
+      context.go('/today');
+    } finally {
+      if (mounted) setState(() => _busy = false);
     }
-    if (!mounted) return;
-    HapticFeedback.mediumImpact();
-    context.go('/today');
   }
 
   Future<void> _editFood() async {
     await context.push('/food/${widget.foodId}/edit');
     await _load();
-  }
-
-  Future<void> _editServing() async {
-    final food = _food;
-    if (food == null) return;
-    final saved = await showModalBottomSheet<bool>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      showDragHandle: true,
-      builder: (context) => _ServingSheet(food: food),
-    );
-    if (saved == true) await _load();
   }
 
   @override
@@ -176,7 +189,8 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     final food = _food;
-    if (food == null) {
+    final entry = _entry;
+    if (food == null && entry == null) {
       return Scaffold(
         body: SafeArea(
           child: Column(
@@ -194,19 +208,22 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
       );
     }
 
-    final servingG = food.servingG;
-    final kcal = NutrientMath.scale(food.kcal100g, _grams);
-    final brand = food.brand;
-    final per100 = '${displayKcal(food.kcal100g)} kcal / 100 g';
+    final name = food?.name ?? entry!.foodName;
+    final brand = food?.brand ?? entry?.brand;
+    final kcal100g = food?.kcal100g ?? _per100(entry!.kcal);
+    final servingG = food?.servingG;
+    final servingLabel = food?.servingLabel ?? entry?.servingLabel;
+    final kcal = NutrientMath.scale(kcal100g, _grams);
+    final per100 = '${displayKcal(kcal100g)} kcal / 100 g';
     final subtitle =
         brand != null && brand.isNotEmpty ? '$brand · $per100' : per100;
-    final amountHint = _unit == _Unit.portions && _hasServing
-        ? l10n.portionTotal(
-            food.servingLabel!,
-            servingG!.round(),
-            _grams.round(),
-          )
-        : l10n.gramsUnit;
+    final unitLabel = _unit == _AmountUnit.ml ? 'ml' : 'g';
+    final amountHint = ServingMath.describe(
+      grams: _grams,
+      servingG: servingG,
+      servingLabel: servingLabel,
+      liquid: _unit == _AmountUnit.ml,
+    );
 
     return Scaffold(
       body: SafeArea(
@@ -221,9 +238,11 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
               child: Stack(
                 children: [
                   ListView(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
                     padding: const EdgeInsets.fromLTRB(20, 6, 20, 120),
                     children: [
-                      Text(food.name, style: theme.textTheme.headlineMedium),
+                      Text(name, style: theme.textTheme.headlineMedium),
                       const SizedBox(height: 4),
                       Text(
                         subtitle,
@@ -248,6 +267,13 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
                                     const TextInputType.numberWithOptions(
                                   decimal: true,
                                 ),
+                                textInputAction: TextInputAction.done,
+                                onTapOutside: (_) => FocusManager
+                                    .instance.primaryFocus
+                                    ?.unfocus(),
+                                onSubmitted: (_) => FocusManager
+                                    .instance.primaryFocus
+                                    ?.unfocus(),
                                 style: theme.textTheme.headlineSmall,
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.zero,
@@ -277,18 +303,7 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
                                   final n =
                                       double.tryParse(v.replaceAll(',', '.'));
                                   if (n == null || n <= 0) return;
-                                  if (_unit == _Unit.portions &&
-                                      servingG != null) {
-                                    _setGrams(
-                                      ServingMath.gramsFromPortions(
-                                        n,
-                                        servingG,
-                                      ),
-                                      syncInput: false,
-                                    );
-                                  } else {
-                                    _setGrams(n, syncInput: false);
-                                  }
+                                  _setGrams(n, syncInput: false);
                                 },
                               ),
                             ),
@@ -297,6 +312,27 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
                           KalorieStepButton(
                             plus: true,
                             onTap: () => _nudge(_step),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          KaloriePill(
+                            label: 'g',
+                            selected: _unit == _AmountUnit.g,
+                            onTap: () {
+                              setState(() => _unit = _AmountUnit.g);
+                            },
+                          ),
+                          const SizedBox(width: 8),
+                          KaloriePill(
+                            label: 'ml',
+                            selected: _unit == _AmountUnit.ml,
+                            onTap: () {
+                              setState(() => _unit = _AmountUnit.ml);
+                            },
                           ),
                         ],
                       ),
@@ -312,45 +348,25 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
                         spacing: 8,
                         runSpacing: 8,
                         children: [
-                          if (_hasServing && servingG != null)
-                            ...[0.5, 1.0, 1.5, 2.0].map((p) {
-                              final selected = _unit == _Unit.portions &&
-                                  (ServingMath.portionsFromGrams(
-                                            _grams,
-                                            servingG,
-                                          ) -
-                                          p)
-                                          .abs() <
-                                      0.05;
-                              return KaloriePill(
-                                label:
-                                    '${ServingMath.formatCount(p)} × ${food.servingLabel}',
-                                selected: selected,
-                                onTap: () {
-                                  setState(() => _unit = _Unit.portions);
-                                  _setGrams(
-                                    ServingMath.gramsFromPortions(p, servingG),
-                                  );
-                                },
-                              );
-                            }),
-                          if (_hasServing)
+                          for (final portion in _chips)
                             KaloriePill(
-                              label: l10n.inGrams,
-                              selected: _unit == _Unit.grams,
+                              label: portion.chipLabel,
+                              selected: (_grams - portion.grams).abs() < 1,
                               onTap: () {
-                                setState(() => _unit = _Unit.grams);
-                                _syncInput();
+                                setState(() {
+                                  _unit = portion.liquid
+                                      ? _AmountUnit.ml
+                                      : _AmountUnit.g;
+                                });
+                                _setGrams(portion.grams);
                               },
-                            )
-                          else
-                            ...[50, 100, 150, 200].map(
-                              (g) => KaloriePill(
-                                label: '$g g',
-                                selected: _grams.round() == g,
-                                onTap: () => _setGrams(g.toDouble()),
-                              ),
                             ),
+                          KaloriePill(
+                            label: '100 $unitLabel',
+                            selected: _grams.round() == 100 &&
+                                !_chips.any((p) => (p.grams - 100).abs() < 1),
+                            onTap: () => _setGrams(100),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 24),
@@ -376,37 +392,49 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
                       const SizedBox(height: 20),
                       _NutrientRow(
                         label: l10n.protein,
-                        per100g: food.protein100g,
+                        per100g: food?.protein100g ?? _per100(entry!.protein),
                         grams: _grams,
                       ),
                       _NutrientRow(
                         label: l10n.carbs,
-                        per100g: food.carbs100g,
+                        per100g: food?.carbs100g ?? _per100(entry!.carbs),
                         grams: _grams,
                       ),
                       _NutrientRow(
                         label: l10n.sugarsLower,
-                        per100g: food.sugars100g,
+                        per100g: food?.sugars100g ??
+                            (entry?.sugars == null
+                                ? null
+                                : _per100(entry!.sugars!)),
                         grams: _grams,
                       ),
                       _NutrientRow(
                         label: l10n.fat,
-                        per100g: food.fat100g,
+                        per100g: food?.fat100g ?? _per100(entry!.fat),
                         grams: _grams,
                       ),
                       _NutrientRow(
                         label: l10n.satFatLower,
-                        per100g: food.satFat100g,
+                        per100g: food?.satFat100g ??
+                            (entry?.satFat == null
+                                ? null
+                                : _per100(entry!.satFat!)),
                         grams: _grams,
                       ),
                       _NutrientRow(
                         label: l10n.fiber,
-                        per100g: food.fiber100g,
+                        per100g: food?.fiber100g ??
+                            (entry?.fiber == null
+                                ? null
+                                : _per100(entry!.fiber!)),
                         grams: _grams,
                       ),
                       _NutrientRow(
                         label: l10n.salt,
-                        per100g: food.salt100g,
+                        per100g: food?.salt100g ??
+                            (entry?.salt == null
+                                ? null
+                                : _per100(entry!.salt!)),
                         grams: _grams,
                       ),
                       const SizedBox(height: 28),
@@ -424,25 +452,19 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
                             )
                             .toList(),
                       ),
-                      const SizedBox(height: 28),
-                      KaloriePanelList(
-                        children: [
-                          KaloriePanelTile(
-                            title: _hasServing
-                                ? l10n.editServing
-                                : l10n.defineServing,
-                            subtitle: l10n.servingSheetHint,
-                            chevron: true,
-                            onTap: _editServing,
-                          ),
-                          KaloriePanelTile(
-                            title: l10n.fixFood,
-                            subtitle: l10n.fixFoodHint,
-                            chevron: true,
-                            onTap: _editFood,
-                          ),
-                        ],
-                      ),
+                      if (food != null) ...[
+                        const SizedBox(height: 28),
+                        KaloriePanelList(
+                          children: [
+                            KaloriePanelTile(
+                              title: l10n.fixFood,
+                              subtitle: l10n.fixFoodHint,
+                              chevron: true,
+                              onTap: _editFood,
+                            ),
+                          ],
+                        ),
+                      ],
                     ],
                   ),
                   Positioned(
@@ -451,7 +473,7 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
                     bottom: 0,
                     child: KalorieFooterAction(
                       child: FilledButton(
-                        onPressed: _save,
+                        onPressed: _busy ? null : _save,
                         child: Text(
                           _entry == null
                               ? l10n.logInMeal(
@@ -522,108 +544,6 @@ class _NutrientRow extends StatelessWidget {
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ServingSheet extends ConsumerStatefulWidget {
-  const _ServingSheet({required this.food});
-
-  final Food food;
-
-  @override
-  ConsumerState<_ServingSheet> createState() => _ServingSheetState();
-}
-
-class _ServingSheetState extends ConsumerState<_ServingSheet> {
-  late final TextEditingController _label;
-  late final TextEditingController _grams;
-
-  @override
-  void initState() {
-    super.initState();
-    _label = TextEditingController(
-      text: widget.food.servingLabel ?? '1 portie',
-    );
-    _grams = TextEditingController(
-      text: widget.food.servingG == null
-          ? '100'
-          : '${widget.food.servingG!.round()}',
-    );
-  }
-
-  @override
-  void dispose() {
-    _label.dispose();
-    _grams.dispose();
-    super.dispose();
-  }
-
-  Future<void> _save() async {
-    final g = double.tryParse(_grams.text.replaceAll(',', '.'));
-    if (g == null || g <= 0) return;
-    final food = widget.food
-      ..servingG = g
-      ..servingLabel =
-          _label.text.trim().isEmpty ? '1 portie' : _label.text.trim();
-    await ref.read(foodRepositoryProvider).upsert(food);
-    if (mounted) Navigator.pop(context, true);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(
-        24,
-        4,
-        24,
-        24 + MediaQuery.viewInsetsOf(context).bottom,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(l10n.defineServing, style: theme.textTheme.titleMedium),
-          const SizedBox(height: 8),
-          Text(l10n.servingSheetHint, style: theme.textTheme.bodySmall),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: servingPresets
-                .map(
-                  (preset) => KaloriePill(
-                    label: '${preset.label} (${preset.grams.round()} g)',
-                    selected: _label.text.trim() == preset.label,
-                    onTap: () {
-                      _label.text = preset.label;
-                      _grams.text = '${preset.grams.round()}';
-                      setState(() {});
-                    },
-                  ),
-                )
-                .toList(),
-          ),
-          const SizedBox(height: 20),
-          KalorieSectionLabel(l10n.servingName),
-          TextField(
-            controller: _label,
-            textCapitalization: TextCapitalization.sentences,
-            onChanged: (_) => setState(() {}),
-          ),
-          const SizedBox(height: 16),
-          KalorieSectionLabel(l10n.servingGrams),
-          TextField(
-            controller: _grams,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(suffixText: l10n.gram),
-          ),
-          const SizedBox(height: 24),
-          FilledButton(onPressed: _save, child: Text(l10n.save)),
         ],
       ),
     );
