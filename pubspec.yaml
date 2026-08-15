@@ -1,0 +1,61 @@
+name: kalorie
+description: Clean, privacy-first calorie tracker. Offline-first, no ads, no accounts.
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.13.0
+
+isar_version: &isar_version 3.3.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+
+  cupertino_icons: ^1.0.8
+
+  flutter_riverpod: ^3.0.3
+  riverpod_annotation: ^3.0.3
+
+  go_router: ^17.0.0
+
+  isar_community:
+    version: *isar_version
+  isar_community_flutter_libs:
+    version: *isar_version
+
+  path_provider: ^2.1.5
+  path: ^1.9.0
+
+  openfoodfacts: ^3.27.0
+  mobile_scanner: ^7.0.0
+  fl_chart: ^1.0.0
+
+  connectivity_plus: ^6.1.0
+  collection: ^1.19.0
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.9.0
+  share_plus: ^10.1.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.14
+  riverpod_generator: ^3.0.3
+  riverpod_lint: ^3.0.3
+  custom_lint: ^0.8.1
+  isar_community_generator:
+    version: *isar_version
+  freezed: ^3.0.0
+  json_serializable: ^6.9.0
+
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/nevo/
+    - assets/legal/

@@ -1,0 +1,162 @@
+{
+  "@@locale": "nl",
+  "appName": "Kalorie",
+  "tabToday": "Vandaag",
+  "tabHistory": "Geschiedenis",
+  "tabMore": "Meer",
+  "add": "Toevoegen",
+  "save": "Opslaan",
+  "cancel": "Annuleren",
+  "delete": "Verwijderen",
+  "edit": "Bewerken",
+  "search": "Zoeken",
+  "searchHint": "Zoek een product",
+  "scanBarcode": "Barcode scannen",
+  "newProduct": "Nieuw product",
+  "recents": "Recent",
+  "favorites": "Favorieten",
+  "allFoods": "Alles",
+  "searchOnline": "Zoek online",
+  "searchingOnline": "Online zoeken…",
+  "noResults": "Geen producten gevonden",
+  "noResultsHint": "Voeg zelf een product toe of zoek online.",
+  "offline": "Je bent offline. Alleen lokale producten.",
+  "kcal": "kcal",
+  "protein": "Eiwit",
+  "carbs": "Koolhydraten",
+  "carbsMid": "Koolh.",
+  "fat": "Vet",
+  "gram": "g",
+  "per100g": "per 100 g",
+  "amount": "Hoeveelheid",
+  "meal": "Maaltijd",
+  "breakfast": "Ontbijt",
+  "lunch": "Lunch",
+  "dinner": "Diner",
+  "snack": "Snacks",
+  "addToMeal": "Toevoegen aan {meal}",
+  "@addToMeal": {
+    "placeholders": {
+      "meal": { "type": "String" }
+    }
+  },
+  "todayEmpty": "Nog niets gelogd",
+  "todayEmptyHint": "Voeg je eerste product toe.",
+  "addToSection": "Toevoegen",
+  "onboardingTitle": "Stel je doelen in",
+  "onboardingSubtitle": "Je kunt dit later altijd aanpassen. Geen account nodig.",
+  "kcalGoal": "Calorieën per dag",
+  "start": "Aan de slag",
+  "goals": "Doelen",
+  "goalsSubtitle": "Dagelijkse richtwaarden",
+  "weight": "Gewicht",
+  "weightSubtitle": "Optioneel, alleen op dit apparaat",
+  "addWeight": "Gewicht loggen",
+  "kg": "kg",
+  "noWeight": "Nog geen gewicht gelogd",
+  "settings": "Instellingen",
+  "appearance": "Weergave",
+  "themeSystem": "Systeem",
+  "themeLight": "Licht",
+  "themeDark": "Donker",
+  "data": "Gegevens",
+  "exportData": "Exporteer gegevens",
+  "exportDone": "Export klaar",
+  "privacyTitle": "Privacy",
+  "privacyBody": "Alles staat op dit apparaat. Geen account, geen tracking, geen reclame.",
+  "about": "Over",
+  "sources": "Bronnen",
+  "nevoAttribution": "Based on data from NEVO online version 2025/9.0, RIVM, Bilthoven and other data sources.",
+  "offAttribution": "Merkproducten via Open Food Facts (ODbL).",
+  "version": "Versie {version}",
+  "@version": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  },
+  "name": "Naam",
+  "brand": "Merk",
+  "barcode": "Barcode",
+  "serving": "Portie",
+  "servingOptional": "Portie (optioneel, gram)",
+  "foodNameHint": "Bijv. havermout",
+  "incompleteProduct": "Onvolledige voedingswaarden. Vul ze zelf aan.",
+  "productNotFound": "Product niet gevonden",
+  "productNotFoundHint": "Voeg het zelf toe. De barcode is al ingevuld.",
+  "scanHint": "Richt de camera op de barcode",
+  "enterBarcode": "Of vul een barcode in",
+  "favorite": "Favoriet",
+  "sourceOff": "OFF",
+  "sourceNevo": "NEVO",
+  "sourceCustom": "Eigen",
+  "overGoal": "boven doel",
+  "remaining": "resterend",
+  "ofGoal": "van {goal} kcal",
+  "@ofGoal": {
+    "placeholders": {
+      "goal": { "type": "int" }
+    }
+  },
+  "historyEmpty": "Nog geen dagen gelogd",
+  "historyEmptyHint": "Log een paar dagen om je week te zien.",
+  "thisWeek": "Deze week",
+  "month": "Maand",
+  "today": "Vandaag",
+  "yesterday": "Gisteren",
+  "deleteEntryTitle": "Verwijderen?",
+  "deleteEntryBody": "{name} wordt uit deze dag gehaald.",
+  "@deleteEntryBody": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "copied": "Aangepast",
+  "rateLimited": "Even wachten — te veel online-zoekopdrachten.",
+  "networkError": "Kon online niet zoeken.",
+  "more": "Meer",
+  "moreSection": "App",
+  "customFood": "Eigen product",
+  "kcalShort": "kcal",
+  "proteinShort": "E",
+  "carbsShort": "K",
+  "fatShort": "V",
+  "saveProduct": "Product opslaan",
+  "log": "Loggen",
+  "portie": "1 portie",
+  "cameraDenied": "Camera-toegang is nodig om te scannen.",
+  "openSettings": "Open instellingen",
+  "unitPortion": "Portie",
+  "unitGrams": "Gram",
+  "portions": "Aantal",
+  "defineServing": "Stel een portie in",
+  "editServing": "Portie aanpassen",
+  "servingName": "Wat is één portie?",
+  "servingGrams": "Hoeveel gram is dat?",
+  "servingSheetHint": "Bijv. 1 snee brood = 35 g. Daarna log je in sneeën.",
+  "fixFood": "Kloppen de waarden niet?",
+  "fixFoodHint": "Pas naam, portie of voedingswaarden aan. Alleen voor jou, op dit apparaat.",
+  "editDoesNotRewrite": "Eerder gelogde dagen blijven hetzelfde. Nieuwe logs gebruiken de nieuwe waarden.",
+  "per100gHint": "Zoals op het etiket: calorieën en macro’s per 100 gram.",
+  "editAmount": "Hoeveelheid aanpassen",
+  "undo": "Ongedaan",
+  "loggedSnack": "{name} · {amount}",
+  "@loggedSnack": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "amount": { "type": "String" }
+    }
+  },
+  "adjust": "Aanpassen",
+  "servingEquals": "1 portie = {grams} g",
+  "@servingEquals": {
+    "placeholders": {
+      "grams": { "type": "int" }
+    }
+  },
+  "logKcal": "Log {kcal} kcal",
+  "@logKcal": {
+    "placeholders": {
+      "kcal": { "type": "int" }
+    }
+  }
+}

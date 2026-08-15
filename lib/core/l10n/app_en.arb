@@ -1,0 +1,162 @@
+{
+  "@@locale": "en",
+  "appName": "Kalorie",
+  "tabToday": "Today",
+  "tabHistory": "History",
+  "tabMore": "More",
+  "add": "Add",
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "edit": "Edit",
+  "search": "Search",
+  "searchHint": "Search a food",
+  "scanBarcode": "Scan barcode",
+  "newProduct": "New food",
+  "recents": "Recent",
+  "favorites": "Favorites",
+  "allFoods": "All",
+  "searchOnline": "Search online",
+  "searchingOnline": "Searching online…",
+  "noResults": "No foods found",
+  "noResultsHint": "Add a custom food or search online.",
+  "offline": "You're offline. Local foods only.",
+  "kcal": "kcal",
+  "protein": "Protein",
+  "carbs": "Carbs",
+  "carbsMid": "Carbs",
+  "fat": "Fat",
+  "gram": "g",
+  "per100g": "per 100 g",
+  "amount": "Amount",
+  "meal": "Meal",
+  "breakfast": "Breakfast",
+  "lunch": "Lunch",
+  "dinner": "Dinner",
+  "snack": "Snacks",
+  "addToMeal": "Add to {meal}",
+  "@addToMeal": {
+    "placeholders": {
+      "meal": { "type": "String" }
+    }
+  },
+  "todayEmpty": "Nothing logged yet",
+  "todayEmptyHint": "Add your first food.",
+  "addToSection": "Add",
+  "onboardingTitle": "Set your goals",
+  "onboardingSubtitle": "You can change this later. No account needed.",
+  "kcalGoal": "Calories per day",
+  "start": "Get started",
+  "goals": "Goals",
+  "goalsSubtitle": "Daily targets",
+  "weight": "Weight",
+  "weightSubtitle": "Optional, stored on this device only",
+  "addWeight": "Log weight",
+  "kg": "kg",
+  "noWeight": "No weight logged yet",
+  "settings": "Settings",
+  "appearance": "Appearance",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "data": "Data",
+  "exportData": "Export data",
+  "exportDone": "Export ready",
+  "privacyTitle": "Privacy",
+  "privacyBody": "Everything stays on this device. No account, no tracking, no ads.",
+  "about": "About",
+  "sources": "Sources",
+  "nevoAttribution": "Based on data from NEVO online version 2025/9.0, RIVM, Bilthoven and other data sources.",
+  "offAttribution": "Branded products via Open Food Facts (ODbL).",
+  "version": "Version {version}",
+  "@version": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  },
+  "name": "Name",
+  "brand": "Brand",
+  "barcode": "Barcode",
+  "serving": "Serving",
+  "servingOptional": "Serving (optional, grams)",
+  "foodNameHint": "e.g. oats",
+  "incompleteProduct": "Incomplete nutrition. Fill in the values.",
+  "productNotFound": "Product not found",
+  "productNotFoundHint": "Add it yourself. The barcode is already filled in.",
+  "scanHint": "Point the camera at the barcode",
+  "enterBarcode": "Or enter a barcode",
+  "favorite": "Favorite",
+  "sourceOff": "OFF",
+  "sourceNevo": "NEVO",
+  "sourceCustom": "Custom",
+  "overGoal": "over goal",
+  "remaining": "remaining",
+  "ofGoal": "of {goal} kcal",
+  "@ofGoal": {
+    "placeholders": {
+      "goal": { "type": "int" }
+    }
+  },
+  "historyEmpty": "No days logged yet",
+  "historyEmptyHint": "Log a few days to see your week.",
+  "thisWeek": "This week",
+  "month": "Month",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "deleteEntryTitle": "Delete?",
+  "deleteEntryBody": "{name} will be removed from this day.",
+  "@deleteEntryBody": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "copied": "Updated",
+  "rateLimited": "Please wait — too many online searches.",
+  "networkError": "Couldn't search online.",
+  "more": "More",
+  "moreSection": "App",
+  "customFood": "Custom food",
+  "kcalShort": "kcal",
+  "proteinShort": "P",
+  "carbsShort": "C",
+  "fatShort": "F",
+  "saveProduct": "Save food",
+  "log": "Log",
+  "portie": "1 serving",
+  "cameraDenied": "Camera access is needed to scan.",
+  "openSettings": "Open settings",
+  "unitPortion": "Serving",
+  "unitGrams": "Grams",
+  "portions": "Count",
+  "defineServing": "Set a serving",
+  "editServing": "Edit serving",
+  "servingName": "What is one serving?",
+  "servingGrams": "How many grams is that?",
+  "servingSheetHint": "E.g. 1 slice of bread = 35 g. Then you log in slices.",
+  "fixFood": "Values look wrong?",
+  "fixFoodHint": "Edit name, serving or nutrition. Only for you, on this device.",
+  "editDoesNotRewrite": "Earlier logged days stay the same. New logs use the new values.",
+  "per100gHint": "As on the label: calories and macros per 100 grams.",
+  "editAmount": "Edit amount",
+  "undo": "Undo",
+  "loggedSnack": "{name} · {amount}",
+  "@loggedSnack": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "amount": { "type": "String" }
+    }
+  },
+  "adjust": "Adjust",
+  "servingEquals": "1 serving = {grams} g",
+  "@servingEquals": {
+    "placeholders": {
+      "grams": { "type": "int" }
+    }
+  },
+  "logKcal": "Log {kcal} kcal",
+  "@logKcal": {
+    "placeholders": {
+      "kcal": { "type": "int" }
+    }
+  }
+}

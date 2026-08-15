@@ -1,0 +1,6 @@
+Based on data from NEVO online version 2025/9.0, RIVM, Bilthoven and other data sources.
+
+NEVO data is used unchanged. Additional app fields (favorites, last used)
+are Kalorie metadata and are not modifications of NEVO values.
+
+Merkproducten: Open Food Facts, Open Database License (ODbL).
