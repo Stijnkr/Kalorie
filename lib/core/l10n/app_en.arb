@@ -55,6 +55,7 @@
   "weightSubtitle": "Optional, stored on this device only",
   "addWeight": "Log weight",
   "kg": "kg",
+  "cm": "cm",
   "noWeight": "No weight logged yet",
   "settings": "Settings",
   "appearance": "Appearance",
@@ -329,7 +330,7 @@
     }
   },
   "obGoalTitle": "Where are you heading?",
-  "obGoalBody": "Kalorie works out your daily goal and keeps it simple after that: one number on the home screen, the rest below it.",
+  "obGoalBody": "Direction and pace set the estimate. You still pick the number yourself on the next screen.",
   "obLose": "Lose weight",
   "obMaintain": "Stay the same",
   "obGain": "Gain weight",
@@ -338,8 +339,38 @@
   "obPaceCalm": "Easy · 0.25 kg/week",
   "obPaceNormal": "Normal · 0.5 kg/week",
   "obPaceFast": "Fast · 0.75 kg/week",
-  "obDoneTitle": "Done. Logging takes one tap.",
-  "obDoneBody": "Your recent foods sit at the top of the log sheet with the serving you picked last time. Tap the plus and it's in.",
+  "obBodyTitle": "About you",
+  "obBodyBody": "Age, height and weight. Only to work out a starting number. Nothing is shared with a scale.",
+  "obSexFemale": "Woman",
+  "obSexMale": "Man",
+  "obAge": "Age",
+  "obYears": "years",
+  "obHeight": "Height",
+  "obWeight": "Weight",
+  "obMoveTitle": "How do you move?",
+  "obMoveBody": "No sport counts too. Pick what a normal week looks like.",
+  "obMoveNone": "Little movement",
+  "obMoveNoneSub": "desk work, almost no sport",
+  "obMoveLight": "Lightly active",
+  "obMoveLightSub": "walking, cycling, sport 1–2 times",
+  "obMoveSport": "Regular sport",
+  "obMoveSportSub": "3–5 sessions a week",
+  "obMoveMuch": "A lot of sport",
+  "obMoveMuchSub": "almost daily, or a physical job",
+  "obDoneTitle": "Your daily goal",
+  "obDoneBody": "This is an estimate. Set it to a number you can keep. You can change it later in Goals.",
+  "obAdjustHint": "Plus and minus in steps of 50. The estimate stays next to it.",
+  "obEstimateLine": "Estimate {target} · maintain {maintain}",
+  "@obEstimateLine": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      },
+      "maintain": {
+        "type": "int"
+      }
+    }
+  },
   "obFootnote": "Your account keeps your log. No tracking, no ads.",
   "next": "Next",
   "begin": "Start",

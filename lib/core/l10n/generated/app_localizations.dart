@@ -386,6 +386,12 @@ abstract class AppLocalizations {
   /// **'kg'**
   String get kg;
 
+  /// No description provided for @cm.
+  ///
+  /// In nl, this message translates to:
+  /// **'cm'**
+  String get cm;
+
   /// No description provided for @noWeight.
   ///
   /// In nl, this message translates to:
@@ -1193,7 +1199,7 @@ abstract class AppLocalizations {
   /// No description provided for @obGoalBody.
   ///
   /// In nl, this message translates to:
-  /// **'Kalorie rekent je dagdoel uit en houdt het daarna simpel: één cijfer op het startscherm, de rest eronder.'**
+  /// **'Richting en tempo bepalen de schatting. Het getal zelf stel je daarna nog bij.'**
   String get obGoalBody;
 
   /// No description provided for @obLose.
@@ -1244,17 +1250,137 @@ abstract class AppLocalizations {
   /// **'Snel · 0,75 kg/week'**
   String get obPaceFast;
 
+  /// No description provided for @obBodyTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Over jou'**
+  String get obBodyTitle;
+
+  /// No description provided for @obBodyBody.
+  ///
+  /// In nl, this message translates to:
+  /// **'Leeftijd, lengte en gewicht. Alleen om een startgetal te rekenen, niets wordt met een weegschaal gedeeld.'**
+  String get obBodyBody;
+
+  /// No description provided for @obSexFemale.
+  ///
+  /// In nl, this message translates to:
+  /// **'Vrouw'**
+  String get obSexFemale;
+
+  /// No description provided for @obSexMale.
+  ///
+  /// In nl, this message translates to:
+  /// **'Man'**
+  String get obSexMale;
+
+  /// No description provided for @obAge.
+  ///
+  /// In nl, this message translates to:
+  /// **'Leeftijd'**
+  String get obAge;
+
+  /// No description provided for @obYears.
+  ///
+  /// In nl, this message translates to:
+  /// **'jaar'**
+  String get obYears;
+
+  /// No description provided for @obHeight.
+  ///
+  /// In nl, this message translates to:
+  /// **'Lengte'**
+  String get obHeight;
+
+  /// No description provided for @obWeight.
+  ///
+  /// In nl, this message translates to:
+  /// **'Gewicht'**
+  String get obWeight;
+
+  /// No description provided for @obMoveTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Hoe beweeg je?'**
+  String get obMoveTitle;
+
+  /// No description provided for @obMoveBody.
+  ///
+  /// In nl, this message translates to:
+  /// **'Geen sport telt ook. Kies wat het dichtst bij een gewone week komt.'**
+  String get obMoveBody;
+
+  /// No description provided for @obMoveNone.
+  ///
+  /// In nl, this message translates to:
+  /// **'Weinig beweging'**
+  String get obMoveNone;
+
+  /// No description provided for @obMoveNoneSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'zittend werk, bijna geen sport'**
+  String get obMoveNoneSub;
+
+  /// No description provided for @obMoveLight.
+  ///
+  /// In nl, this message translates to:
+  /// **'Licht actief'**
+  String get obMoveLight;
+
+  /// No description provided for @obMoveLightSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'wandelen, fietsen, 1–2 keer sporten'**
+  String get obMoveLightSub;
+
+  /// No description provided for @obMoveSport.
+  ///
+  /// In nl, this message translates to:
+  /// **'Regelmatig sport'**
+  String get obMoveSport;
+
+  /// No description provided for @obMoveSportSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'3–5 keer per week een training'**
+  String get obMoveSportSub;
+
+  /// No description provided for @obMoveMuch.
+  ///
+  /// In nl, this message translates to:
+  /// **'Veel sport'**
+  String get obMoveMuch;
+
+  /// No description provided for @obMoveMuchSub.
+  ///
+  /// In nl, this message translates to:
+  /// **'bijna elke dag, of een zwaar beroep'**
+  String get obMoveMuchSub;
+
   /// No description provided for @obDoneTitle.
   ///
   /// In nl, this message translates to:
-  /// **'Klaar. Loggen kost één tik.'**
+  /// **'Je dagdoel'**
   String get obDoneTitle;
 
   /// No description provided for @obDoneBody.
   ///
   /// In nl, this message translates to:
-  /// **'Je recente producten staan bovenaan het logvel met de portie die je vorige keer koos. Tik de plus en het staat erin.'**
+  /// **'Dit is een schatting. Zet het op een getal dat je volhoudt. Later pas je het in Doelen bij.'**
   String get obDoneBody;
+
+  /// No description provided for @obAdjustHint.
+  ///
+  /// In nl, this message translates to:
+  /// **'Plus en min in stappen van 50. De schatting blijft ernaast staan.'**
+  String get obAdjustHint;
+
+  /// No description provided for @obEstimateLine.
+  ///
+  /// In nl, this message translates to:
+  /// **'Schatting {target} · onderhoud {maintain}'**
+  String obEstimateLine(int target, int maintain);
 
   /// No description provided for @obFootnote.
   ///

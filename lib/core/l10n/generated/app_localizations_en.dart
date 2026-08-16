@@ -157,6 +157,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kg => 'kg';
 
   @override
+  String get cm => 'cm';
+
+  @override
   String get noWeight => 'No weight logged yet';
 
   @override
@@ -604,7 +607,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get obGoalBody =>
-      'Kalorie works out your daily goal and keeps it simple after that: one number on the home screen, the rest below it.';
+      'Direction and pace set the estimate. You still pick the number yourself on the next screen.';
 
   @override
   String get obLose => 'Lose weight';
@@ -632,11 +635,76 @@ class AppLocalizationsEn extends AppLocalizations {
   String get obPaceFast => 'Fast · 0.75 kg/week';
 
   @override
-  String get obDoneTitle => 'Done. Logging takes one tap.';
+  String get obBodyTitle => 'About you';
+
+  @override
+  String get obBodyBody =>
+      'Age, height and weight. Only to work out a starting number. Nothing is shared with a scale.';
+
+  @override
+  String get obSexFemale => 'Woman';
+
+  @override
+  String get obSexMale => 'Man';
+
+  @override
+  String get obAge => 'Age';
+
+  @override
+  String get obYears => 'years';
+
+  @override
+  String get obHeight => 'Height';
+
+  @override
+  String get obWeight => 'Weight';
+
+  @override
+  String get obMoveTitle => 'How do you move?';
+
+  @override
+  String get obMoveBody =>
+      'No sport counts too. Pick what a normal week looks like.';
+
+  @override
+  String get obMoveNone => 'Little movement';
+
+  @override
+  String get obMoveNoneSub => 'desk work, almost no sport';
+
+  @override
+  String get obMoveLight => 'Lightly active';
+
+  @override
+  String get obMoveLightSub => 'walking, cycling, sport 1–2 times';
+
+  @override
+  String get obMoveSport => 'Regular sport';
+
+  @override
+  String get obMoveSportSub => '3–5 sessions a week';
+
+  @override
+  String get obMoveMuch => 'A lot of sport';
+
+  @override
+  String get obMoveMuchSub => 'almost daily, or a physical job';
+
+  @override
+  String get obDoneTitle => 'Your daily goal';
 
   @override
   String get obDoneBody =>
-      'Your recent foods sit at the top of the log sheet with the serving you picked last time. Tap the plus and it\'s in.';
+      'This is an estimate. Set it to a number you can keep. You can change it later in Goals.';
+
+  @override
+  String get obAdjustHint =>
+      'Plus and minus in steps of 50. The estimate stays next to it.';
+
+  @override
+  String obEstimateLine(int target, int maintain) {
+    return 'Estimate $target · maintain $maintain';
+  }
 
   @override
   String get obFootnote => 'Your account keeps your log. No tracking, no ads.';

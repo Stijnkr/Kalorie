@@ -157,6 +157,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get kg => 'kg';
 
   @override
+  String get cm => 'cm';
+
+  @override
   String get noWeight => 'Nog geen gewicht gelogd';
 
   @override
@@ -606,7 +609,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get obGoalBody =>
-      'Kalorie rekent je dagdoel uit en houdt het daarna simpel: één cijfer op het startscherm, de rest eronder.';
+      'Richting en tempo bepalen de schatting. Het getal zelf stel je daarna nog bij.';
 
   @override
   String get obLose => 'Afvallen';
@@ -634,11 +637,76 @@ class AppLocalizationsNl extends AppLocalizations {
   String get obPaceFast => 'Snel · 0,75 kg/week';
 
   @override
-  String get obDoneTitle => 'Klaar. Loggen kost één tik.';
+  String get obBodyTitle => 'Over jou';
+
+  @override
+  String get obBodyBody =>
+      'Leeftijd, lengte en gewicht. Alleen om een startgetal te rekenen, niets wordt met een weegschaal gedeeld.';
+
+  @override
+  String get obSexFemale => 'Vrouw';
+
+  @override
+  String get obSexMale => 'Man';
+
+  @override
+  String get obAge => 'Leeftijd';
+
+  @override
+  String get obYears => 'jaar';
+
+  @override
+  String get obHeight => 'Lengte';
+
+  @override
+  String get obWeight => 'Gewicht';
+
+  @override
+  String get obMoveTitle => 'Hoe beweeg je?';
+
+  @override
+  String get obMoveBody =>
+      'Geen sport telt ook. Kies wat het dichtst bij een gewone week komt.';
+
+  @override
+  String get obMoveNone => 'Weinig beweging';
+
+  @override
+  String get obMoveNoneSub => 'zittend werk, bijna geen sport';
+
+  @override
+  String get obMoveLight => 'Licht actief';
+
+  @override
+  String get obMoveLightSub => 'wandelen, fietsen, 1–2 keer sporten';
+
+  @override
+  String get obMoveSport => 'Regelmatig sport';
+
+  @override
+  String get obMoveSportSub => '3–5 keer per week een training';
+
+  @override
+  String get obMoveMuch => 'Veel sport';
+
+  @override
+  String get obMoveMuchSub => 'bijna elke dag, of een zwaar beroep';
+
+  @override
+  String get obDoneTitle => 'Je dagdoel';
 
   @override
   String get obDoneBody =>
-      'Je recente producten staan bovenaan het logvel met de portie die je vorige keer koos. Tik de plus en het staat erin.';
+      'Dit is een schatting. Zet het op een getal dat je volhoudt. Later pas je het in Doelen bij.';
+
+  @override
+  String get obAdjustHint =>
+      'Plus en min in stappen van 50. De schatting blijft ernaast staan.';
+
+  @override
+  String obEstimateLine(int target, int maintain) {
+    return 'Schatting $target · onderhoud $maintain';
+  }
 
   @override
   String get obFootnote =>

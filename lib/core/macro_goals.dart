@@ -58,5 +58,7 @@ class MacroGoals {
     );
   }
 
-  static double _round(double grams) => (grams * 2).roundToDouble() / 2;
+  static double roundGrams(double grams) => (grams * 2).roundToDouble() / 2;
+
+  static double _round(double grams) => roundGrams(grams);
 }

@@ -55,6 +55,7 @@
   "weightSubtitle": "Optioneel, alleen op dit apparaat",
   "addWeight": "Gewicht loggen",
   "kg": "kg",
+  "cm": "cm",
   "noWeight": "Nog geen gewicht gelogd",
   "settings": "Instellingen",
   "appearance": "Weergave",
@@ -329,7 +330,7 @@
     }
   },
   "obGoalTitle": "Waar wil je naartoe?",
-  "obGoalBody": "Kalorie rekent je dagdoel uit en houdt het daarna simpel: één cijfer op het startscherm, de rest eronder.",
+  "obGoalBody": "Richting en tempo bepalen de schatting. Het getal zelf stel je daarna nog bij.",
   "obLose": "Afvallen",
   "obMaintain": "Op gewicht blijven",
   "obGain": "Aankomen",
@@ -338,8 +339,38 @@
   "obPaceCalm": "Rustig · 0,25 kg/week",
   "obPaceNormal": "Normaal · 0,5 kg/week",
   "obPaceFast": "Snel · 0,75 kg/week",
-  "obDoneTitle": "Klaar. Loggen kost één tik.",
-  "obDoneBody": "Je recente producten staan bovenaan het logvel met de portie die je vorige keer koos. Tik de plus en het staat erin.",
+  "obBodyTitle": "Over jou",
+  "obBodyBody": "Leeftijd, lengte en gewicht. Alleen om een startgetal te rekenen, niets wordt met een weegschaal gedeeld.",
+  "obSexFemale": "Vrouw",
+  "obSexMale": "Man",
+  "obAge": "Leeftijd",
+  "obYears": "jaar",
+  "obHeight": "Lengte",
+  "obWeight": "Gewicht",
+  "obMoveTitle": "Hoe beweeg je?",
+  "obMoveBody": "Geen sport telt ook. Kies wat het dichtst bij een gewone week komt.",
+  "obMoveNone": "Weinig beweging",
+  "obMoveNoneSub": "zittend werk, bijna geen sport",
+  "obMoveLight": "Licht actief",
+  "obMoveLightSub": "wandelen, fietsen, 1–2 keer sporten",
+  "obMoveSport": "Regelmatig sport",
+  "obMoveSportSub": "3–5 keer per week een training",
+  "obMoveMuch": "Veel sport",
+  "obMoveMuchSub": "bijna elke dag, of een zwaar beroep",
+  "obDoneTitle": "Je dagdoel",
+  "obDoneBody": "Dit is een schatting. Zet het op een getal dat je volhoudt. Later pas je het in Doelen bij.",
+  "obAdjustHint": "Plus en min in stappen van 50. De schatting blijft ernaast staan.",
+  "obEstimateLine": "Schatting {target} · onderhoud {maintain}",
+  "@obEstimateLine": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      },
+      "maintain": {
+        "type": "int"
+      }
+    }
+  },
   "obFootnote": "Je account bewaart je logboek. Geen tracking, geen reclame.",
   "next": "Verder",
   "begin": "Beginnen",
