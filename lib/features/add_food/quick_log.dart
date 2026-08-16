@@ -27,11 +27,14 @@ Future<void> quickLogFood(
     lastAmountG: food.lastAmountG,
     servingG: food.servingG,
     liquid: liquid,
+    name: food.name,
+    servingLabel: food.servingLabel,
   );
   final amount = ServingMath.describeShort(
     grams: grams,
     servingG: food.servingG,
     servingLabel: food.servingLabel,
+    name: food.name,
     liquid: liquid,
   );
 

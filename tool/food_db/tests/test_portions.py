@@ -32,6 +32,7 @@ class PortionRulesTest(unittest.TestCase):
             ("Kaas 30+ jong", "Kaas", "1 plak", 20),
             ("Melk halfvolle", "Melk en melkproducten", "1 glas", 200),
             ("Yoghurt magere", "Melk en melkproducten", "1 schaaltje", 150),
+            ("Omelet/roerei", "Samengestelde gerechten", "1 omelet", 120),
         ]
         for name, category, label, grams in cases:
             with self.subTest(name=name):
@@ -52,6 +53,18 @@ class PortionRulesTest(unittest.TestCase):
 
     def test_unknown_category_has_no_portion(self):
         self.assertIsNone(resolve_portion("Iets nieuws", "Onbekende groep", self.rules))
+
+    def test_snapshot_omelet_is_120g(self):
+        from pathlib import Path
+        import json
+
+        snapshot = Path(__file__).resolve().parents[3] / "assets" / "food" / "nevo_snapshot.min.json"
+        if not snapshot.exists():
+            self.skipTest("geen snapshot in deze checkout")
+        data = json.loads(snapshot.read_text())
+        omelet = next(i for i in data["items"] if i.get("nevoCode") == "5321")
+        self.assertEqual(omelet["servingLabel"], "1 omelet")
+        self.assertEqual(omelet["servingG"], 120)
 
 
 class NaturalNameTest(unittest.TestCase):

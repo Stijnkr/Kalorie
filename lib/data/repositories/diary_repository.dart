@@ -76,6 +76,7 @@ class DiaryRepository {
         grams: amountG,
         servingG: food.servingG,
         servingLabel: food.servingLabel,
+        name: food.name,
         liquid: ServingMath.looksLiquid(
           name: food.name,
           servingLabel: food.servingLabel,
@@ -158,6 +159,7 @@ class DiaryRepository {
         grams: amountG,
         servingG: food.servingG,
         servingLabel: food.servingLabel,
+        name: food.name,
         liquid: ServingMath.looksLiquid(
           name: food.name,
           servingLabel: food.servingLabel,

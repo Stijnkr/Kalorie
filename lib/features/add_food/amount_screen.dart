@@ -77,6 +77,8 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
           lastAmountG: food?.lastAmountG,
           servingG: food?.servingG,
           liquid: _isLiquid(food),
+          name: food?.name,
+          servingLabel: food?.servingLabel,
         );
       }
       _unit = (_isLiquid(food) ||
@@ -111,6 +113,17 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
 
   double get _step => _unit == _AmountUnit.ml ? 25 : 10;
 
+  /// Dagboek slaat `1 ei (50 g)` op; dat is geen catalogus-eenheid.
+  String? _catalogUnit(String? label) {
+    if (label == null) return null;
+    final trimmed = label.trim();
+    if (trimmed.contains('(') ||
+        RegExp(r'\d+[.,]?\d*\s*(g|ml)$').hasMatch(trimmed)) {
+      return null;
+    }
+    return trimmed;
+  }
+
   List<HouseholdPortion> get _chips {
     final food = _food;
     if (food != null) {
@@ -125,7 +138,7 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
     return ServingMath.suggestionsFor(
       name: entry.foodName,
       servingG: null,
-      servingLabel: entry.servingLabel,
+      servingLabel: _catalogUnit(entry.servingLabel),
     );
   }
 
@@ -222,6 +235,7 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
       grams: _grams,
       servingG: servingG,
       servingLabel: servingLabel,
+      name: name,
       liquid: _unit == _AmountUnit.ml,
     );
 
@@ -361,12 +375,12 @@ class _AmountScreenState extends ConsumerState<AmountScreen> {
                                 _setGrams(portion.grams);
                               },
                             ),
-                          KaloriePill(
-                            label: '100 $unitLabel',
-                            selected: _grams.round() == 100 &&
-                                !_chips.any((p) => (p.grams - 100).abs() < 1),
-                            onTap: () => _setGrams(100),
-                          ),
+                          if (!_chips.any((p) => (p.grams - 100).abs() < 1))
+                            KaloriePill(
+                              label: '100 $unitLabel',
+                              selected: _grams.round() == 100,
+                              onTap: () => _setGrams(100),
+                            ),
                         ],
                       ),
                       const SizedBox(height: 24),
