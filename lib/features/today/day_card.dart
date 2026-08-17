@@ -142,28 +142,34 @@ class _Macro extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Flexible(
-                child: Text(
-                  displayMacro(value),
+          // Hele grammen: de dagkaart is om te scannen, niet om op te tellen.
+          // Met een cijfer achter de komma past "203,3 /358,5g" niet in een
+          // derde van de kaart en kapte de tekst af. De precieze waarden staan
+          // in Doelen en op het portiescherm.
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Text(
+                  '${value.round()}',
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.headlineSmall,
                 ),
-              ),
-              const SizedBox(width: 4),
-              Text(
-                '/${displayMacro(goal)}g',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  fontSize: 12,
-                  height: 1,
-                  color: tones.hint,
+                const SizedBox(width: 4),
+                Text(
+                  '/${goal.round()}g',
+                  maxLines: 1,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontSize: 12,
+                    height: 1,
+                    color: tones.hint,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(height: 7),
           KalorieBar(

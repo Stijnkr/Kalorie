@@ -316,7 +316,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get copied => 'Updated';
 
   @override
-  String get rateLimited => 'Please wait — too many online searches.';
+  String get rateLimited => 'Please wait. Too many online searches.';
 
   @override
   String get networkError => 'Couldn\'t search online.';
@@ -535,7 +535,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get nothingLoggedTap => 'nothing logged — tap to fill in';
+  String get nothingLoggedTap => 'nothing logged, tap to fill in';
 
   @override
   String get notYetHappened => 'not yet';
@@ -867,7 +867,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get syncNever => 'Not synced yet';
 
   @override
-  String get syncOffline => 'Offline — it will wait until you\'re back online.';
+  String get syncOffline => 'Offline. It will wait until you are back online.';
 
   @override
   String get syncFailed => 'Syncing didn\'t work.';

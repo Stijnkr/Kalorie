@@ -132,7 +132,7 @@
     }
   },
   "copied": "Updated",
-  "rateLimited": "Please wait — too many online searches.",
+  "rateLimited": "Please wait. Too many online searches.",
   "networkError": "Couldn't search online.",
   "more": "More",
   "moreSection": "App",
@@ -285,7 +285,7 @@
       }
     }
   },
-  "nothingLoggedTap": "nothing logged — tap to fill in",
+  "nothingLoggedTap": "nothing logged, tap to fill in",
   "notYetHappened": "not yet",
   "goalsIntro": "Your macros add up to your kcal goal. Change the goal and the rest follows.",
   "dayGoal": "Daily goal",
@@ -436,7 +436,7 @@
     }
   },
   "syncNever": "Not synced yet",
-  "syncOffline": "Offline — it will wait until you're back online.",
+  "syncOffline": "Offline. It will wait until you are back online.",
   "syncFailed": "Syncing didn't work.",
   "securitySection": "Security and data",
   "changePassword": "Change password",

@@ -317,7 +317,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get copied => 'Aangepast';
 
   @override
-  String get rateLimited => 'Even wachten — te veel online-zoekopdrachten.';
+  String get rateLimited => 'Even wachten. Te veel online-zoekopdrachten.';
 
   @override
   String get networkError => 'Kon online niet zoeken.';
@@ -537,7 +537,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get nothingLoggedTap => 'niets gelogd — tik om aan te vullen';
+  String get nothingLoggedTap => 'niets gelogd, tik om aan te vullen';
 
   @override
   String get notYetHappened => 'nog niet geweest';
@@ -871,7 +871,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get syncNever => 'Nog niet gesynchroniseerd';
 
   @override
-  String get syncOffline => 'Offline — het wacht tot je weer verbinding hebt.';
+  String get syncOffline => 'Offline. Het wacht tot je weer verbinding hebt.';
 
   @override
   String get syncFailed => 'Synchroniseren lukte niet.';

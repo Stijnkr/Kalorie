@@ -683,7 +683,7 @@ abstract class AppLocalizations {
   /// No description provided for @rateLimited.
   ///
   /// In nl, this message translates to:
-  /// **'Even wachten — te veel online-zoekopdrachten.'**
+  /// **'Even wachten. Te veel online-zoekopdrachten.'**
   String get rateLimited;
 
   /// No description provided for @networkError.
@@ -1073,7 +1073,7 @@ abstract class AppLocalizations {
   /// No description provided for @nothingLoggedTap.
   ///
   /// In nl, this message translates to:
-  /// **'niets gelogd — tik om aan te vullen'**
+  /// **'niets gelogd, tik om aan te vullen'**
   String get nothingLoggedTap;
 
   /// No description provided for @notYetHappened.
@@ -1673,7 +1673,7 @@ abstract class AppLocalizations {
   /// No description provided for @syncOffline.
   ///
   /// In nl, this message translates to:
-  /// **'Offline — het wacht tot je weer verbinding hebt.'**
+  /// **'Offline. Het wacht tot je weer verbinding hebt.'**
   String get syncOffline;
 
   /// No description provided for @syncFailed.

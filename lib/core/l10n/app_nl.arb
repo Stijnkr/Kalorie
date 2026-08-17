@@ -132,7 +132,7 @@
     }
   },
   "copied": "Aangepast",
-  "rateLimited": "Even wachten — te veel online-zoekopdrachten.",
+  "rateLimited": "Even wachten. Te veel online-zoekopdrachten.",
   "networkError": "Kon online niet zoeken.",
   "more": "Meer",
   "moreSection": "App",
@@ -285,7 +285,7 @@
       }
     }
   },
-  "nothingLoggedTap": "niets gelogd — tik om aan te vullen",
+  "nothingLoggedTap": "niets gelogd, tik om aan te vullen",
   "notYetHappened": "nog niet geweest",
   "goalsIntro": "Je macro’s tellen op tot je kcal-doel. Pas het doel aan, de rest schuift mee.",
   "dayGoal": "Dagdoel",
@@ -436,7 +436,7 @@
     }
   },
   "syncNever": "Nog niet gesynchroniseerd",
-  "syncOffline": "Offline — het wacht tot je weer verbinding hebt.",
+  "syncOffline": "Offline. Het wacht tot je weer verbinding hebt.",
   "syncFailed": "Synchroniseren lukte niet.",
   "securitySection": "Beveiliging en data",
   "changePassword": "Wachtwoord wijzigen",
