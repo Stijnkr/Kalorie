@@ -38,7 +38,12 @@ recente producten met de portie die je vorige keer koos.
 * Export van al je gegevens als JSON.
 * Nederlands en Engels, licht en donker thema.
 
-> Screenshots volgen. Zet ze in `docs/screenshots/` en verwijs ze hier.
+## Zo ziet het eruit
+
+<img src="docs/screenshots/vandaag-donker.png" alt="Vandaag-scherm in donker thema" width="320">
+
+Het Vandaag-scherm in donker thema: kcal over, de macro's met hun doel, water,
+en daaronder de maaltijden.
 
 ## Onder de motorkap
 
@@ -77,15 +82,26 @@ dart run build_runner build
 flutter run
 ```
 
-De app draait meteen tegen het bestaande Supabase-project. Wil je je eigen
-backend, geef die dan mee:
+Zo draait de app volledig lokaal. Er zitten geen sleutels in deze repo, dus een
+verse kloon praat met geen enkele server: geen account, geen synchronisatie,
+geen online zoeken. Alles wat je logt blijft in de Isar-database op je toestel.
+
+Wil je een account en synchronisatie, zet dan je eigen Supabase-project ernaast.
+Draai eerst de migraties uit `supabase/migrations/`, kopieer daarna het
+voorbeeldbestand en vul je sleutels in:
 
 ```bash
-flutter run --dart-define=KALORIE_SUPABASE_URL=https://jouwproject.supabase.co --dart-define=KALORIE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+cp kalorie.env.example.json kalorie.env.json
+flutter run --dart-define-from-file=kalorie.env.json
 ```
 
-Zonder geldige sleutels start de app gewoon op en werkt alles lokaal. Account
-en synchronisatie zijn dan uitgeschakeld.
+`kalorie.env.json` staat in `.gitignore`. Losse vlaggen werken ook:
+
+```bash
+flutter run \
+  --dart-define=KALORIE_SUPABASE_URL=https://jouwproject.supabase.co \
+  --dart-define=KALORIE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+```
 
 ### Codegeneratie
 

@@ -1,3 +1,9 @@
+# Sleutels voor een eigen Supabase-project. Het voorbeeldbestand
+# (kalorie.env.example.json) hoort er wel in, dit niet.
+kalorie.env.json
+*.env.json
+!*.env.example.json
+
 # Python
 __pycache__/
 *.py[cod]

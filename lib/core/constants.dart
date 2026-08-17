@@ -13,28 +13,29 @@ abstract final class OffConfig {
   static const appVersion = AppInfo.version;
 }
 
+/// Verbinding met een Supabase-project, voor de productcatalogus en voor
+/// account en synchronisatie.
+///
+/// Bewust zonder standaardwaarden: wie deze repo kloont en `flutter run` doet,
+/// praat met niemand. De app start dan gewoon op en werkt volledig lokaal.
+/// Geef je eigen project mee met `--dart-define-from-file=kalorie.env.json`
+/// of met losse `--dart-define`-vlaggen. Zie de README.
 abstract final class CatalogConfig {
-  /// Public catalog only (anon). Override with `--dart-define`.
-  static const supabaseUrl = String.fromEnvironment(
-    'KALORIE_SUPABASE_URL',
-    defaultValue: 'https://ugtxzaitggkhqsqbzgaz.supabase.co',
-  );
-  static const supabaseAnonKey = String.fromEnvironment(
-    'KALORIE_SUPABASE_ANON_KEY',
-    defaultValue:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVndHh6YWl0Z2draHFzcWJ6Z2F6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3OTU4ODcsImV4cCI6MjEwMjM3MTg4N30.KXEuuk0antxivyrqc_vCshp7QOIYrq95XCAj4_uWhbI',
-  );
+  static const supabaseUrl = String.fromEnvironment('KALORIE_SUPABASE_URL');
+
+  /// Legacy anon-sleutel, gebruikt door de catalogus-HTTP.
+  static const supabaseAnonKey =
+      String.fromEnvironment('KALORIE_SUPABASE_ANON_KEY');
 
   /// Publiceerbare sleutel voor de Supabase-client (auth en synchronisatie).
-  /// De legacy anon-key hierboven blijft in gebruik voor de catalogus-HTTP.
-  static const supabasePublishableKey = String.fromEnvironment(
-    'KALORIE_SUPABASE_PUBLISHABLE_KEY',
-    defaultValue: 'sb_publishable_4KvT2x8gwF4d4iBugM6sLw_ruQX4dff',
-  );
+  static const supabasePublishableKey =
+      String.fromEnvironment('KALORIE_SUPABASE_PUBLISHABLE_KEY');
 
+  /// Kan de app de online productcatalogus bevragen?
   static bool get isConfigured =>
       supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty;
 
+  /// Kan de app een account gebruiken en synchroniseren?
   static bool get isCloudConfigured =>
       supabaseUrl.isNotEmpty && supabasePublishableKey.isNotEmpty;
 }
